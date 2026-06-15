@@ -295,6 +295,16 @@ canvas{width:100%;max-height:260px}
 .scroll-top.show{display:flex}
 
 @media print{.header-right,.filter-bar,.tabs,.scroll-top,.fav-panel,.overlay,.year-timeline,.calc-section,.stack-section,.rank-section{display:none!important}.platform-grid,.category-grid,.bank-grid{grid-template-columns:repeat(2,1fr)}body{background:#fff;color:#000}}
+@media(max-width:1024px){
+.container{padding:14px}
+.platform-grid,.category-grid,.bank-grid{grid-template-columns:1fr}
+.chart-row,.chart-row-v2{grid-template-columns:1fr}
+.fav-panel{width:100%}
+.stats-row{grid-template-columns:repeat(3,1fr)}
+.filter-row{flex-wrap:wrap;gap:4px}
+.header-right{flex-wrap:wrap;gap:6px}
+.compare-table{font-size:12px}
+}
 @media(max-width:768px){
 .container{padding:10px;overflow-x:hidden}
 .header{padding:10px 0;gap:8px;flex-wrap:wrap}
