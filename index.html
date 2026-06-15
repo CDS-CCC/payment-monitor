@@ -297,27 +297,38 @@ canvas{width:100%;max-height:260px}
 @media print{.header-right,.filter-bar,.tabs,.scroll-top,.fav-panel,.overlay,.year-timeline,.calc-section,.stack-section,.rank-section{display:none!important}.platform-grid,.category-grid,.bank-grid{grid-template-columns:repeat(2,1fr)}body{background:#fff;color:#000}}
 @media(max-width:768px){
 .container{padding:10px;overflow-x:hidden}
-.header{padding:10px 0;gap:8px}
+.header{padding:10px 0;gap:8px;flex-wrap:wrap}
 .header-left h1{font-size:17px}
-.header-right{width:100%;justify-content:flex-start;gap:6px}
+.header-right{width:100%;justify-content:flex-start;gap:6px;flex-wrap:wrap}
 .stats-row{grid-template-columns:repeat(2,1fr);gap:8px}
 .stat-card{padding:12px}
+.stat-label{font-size:13px}
 .stat-value{font-size:20px}
 .stat-sub{font-size:10px;word-break:break-all}
 .platform-grid,.category-grid,.bank-grid{grid-template-columns:1fr}
-.filter-bar{gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
-.filter-btn{padding:4px 10px;font-size:11px;flex-shrink:0}
+.filter-bar{gap:4px;flex-wrap:wrap;overflow-x:visible;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.filter-btn{padding:5px 10px;font-size:11px;flex-shrink:0}
+.filter-row{flex-wrap:wrap;gap:4px}
+.filter-row .label{min-width:auto;font-size:12px;margin-right:2px}
 .chart-row{grid-template-columns:1fr}
 .chart-card{min-width:0;overflow:hidden}
 .chart-card canvas{max-height:200px}
-.year-timeline{padding:12px 14px}.yt-track-wrap{margin:0 12px;height:78px}.yt-node-label{font-size:8px;max-width:40px}.yt-node-dot{width:20px;height:20px;font-size:9px}.yt-cd-row{gap:10px;font-size:11px}
-.cd-card{padding:10px 12px}
+.year-timeline{padding:12px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.yt-track-wrap{margin:0 8px;min-width:600px;height:78px}
+.yt-months{min-width:600px}
+.yt-header{margin-bottom:8px}
+.yt-title{font-size:13px}
+.yt-node-label{font-size:8px;max-width:40px}
+.yt-node-dot{width:20px;height:20px;font-size:9px}
+.yt-cd-row{gap:10px;font-size:11px;flex-wrap:wrap}
+.cd-card{padding:10px 12px;flex:1;min-width:140px}
 .cd-time{font-size:15px}
 .calc-grid{grid-template-columns:1fr}
 .fav-panel{width:100%}
 .stack-flow{flex-direction:column}
 .stack-arrow{transform:rotate(90deg)}
 .compare-section{margin-left:-10px;margin-right:-10px;border-radius:0}
+.compare-table{font-size:11px}
 .ticker{padding:8px 12px}
 .ticker-content{margin-left:50px;font-size:12px}
 .search-box{max-width:100%}
@@ -326,21 +337,32 @@ canvas{width:100%;max-height:260px}
 .calc-section,.stack-section,.rank-section,.heatmap-section,.trend-section,.tips{padding:14px}
 .stack-step{min-width:100px;padding:10px 12px}
 .stack-result .price{font-size:22px}
-.offer-row{flex-wrap:wrap;gap:4px}
+.offer-row{flex-wrap:wrap;gap:4px;padding:10px}
 .offer-bank{min-width:60px}
 .offer-amount{width:100%;text-align:left}
+.offer-platform{font-size:11px}
+.offer-type{font-size:10px}
 .heatmap-section{overflow-x:auto}
 .rank-item{gap:6px}
 .rank-save{font-size:14px}
+.pc-body{padding:10px}
+.offer-row .offer-detail{flex-direction:column;gap:2px}
 }
 @media(max-width:400px){
-.stats-row{grid-template-columns:1fr}
-.year-timeline{padding:10px 12px}
-.yt-track-wrap{margin:0 8px;height:72px}
+.stats-row{grid-template-columns:1fr 1fr}
+.stat-label{font-size:12px}
+.stat-value{font-size:18px}
+.year-timeline{padding:10px 8px}
+.yt-track-wrap{min-width:500px;height:72px}
+.yt-months{min-width:500px}
 .yt-node-dot{width:18px;height:18px;font-size:8px}
 .yt-node-label{font-size:7px;max-width:34px}
 .yt-cd-row{flex-direction:column;gap:6px}
 .header-left h1{font-size:15px}
+.filter-btn{padding:4px 8px;font-size:10px}
+.tab-btn{font-size:11px;padding:5px 10px}
+.offer-row{padding:8px}
+.offer-bank{min-width:50px;font-size:11px}
 }
 </style>
 </head>
