@@ -871,12 +871,18 @@ canvas{width:100%;max-height:260px}
 <div class="rag-api-hint">密钥仅存储在浏览器本地，不会上传到任何服务器</div>
 </div>
 <div class="ai-form-group">
+<label>🌐 API代理地址</label>
+<input type="text" id="apiProxyInput" class="rag-api-input" placeholder="https://your-proxy.example.com/proxy?url=">
+<div class="rag-api-hint">可选。若浏览器直接调用API报CORS错误，可填入代理地址。留空则直接调用。</div>
+</div>
+<div class="ai-form-group">
 <label>🛡️ 安全说明</label>
 <div class="rag-api-safety">
 <div>• API Key 仅存储于浏览器 localStorage</div>
 <div>• 所有 API 请求均从你的浏览器直接发出</div>
 <div>• 本页面不收集、不转发任何密钥信息</div>
 <div>• 无 Key 时仍可使用本地语义Embedding检索模式</div>
+<div>• 若API调用报CORS错误，需在上方填写代理地址</div>
 </div>
 </div>
 </div>
@@ -2012,7 +2018,7 @@ return s;
 }
 
 // --- LLM API ---
-var _ragApiConfig={provider:'deepseek',key:''};
+var _ragApiConfig={provider:'deepseek',key:'',proxy:''};
 
 function _ragLoadApiConfig(){
 try{
@@ -2020,6 +2026,8 @@ var saved=localStorage.getItem('pay-llm-key');
 var provider=localStorage.getItem('pay-llm-provider');
 if(saved)_ragApiConfig.key=saved;
 if(provider)_ragApiConfig.provider=provider;
+var proxy=localStorage.getItem('pay-llm-proxy');
+if(proxy)_ragApiConfig.proxy=proxy;
 }catch(e){}
 }
 
@@ -2027,12 +2035,16 @@ function _ragSaveApiConfig(){
 try{
 localStorage.setItem('pay-llm-key',_ragApiConfig.key);
 localStorage.setItem('pay-llm-provider',_ragApiConfig.provider);
+localStorage.setItem('pay-llm-proxy',_ragApiConfig.proxy||'');
 }catch(e){}
 }
 
 function _ragGetApiUrl(){
-if(_ragApiConfig.provider==='qwen')return'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
-return'https://api.deepseek.com/v1/chat/completions';
+var api='';
+if(_ragApiConfig.provider==='qwen')api='https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+else api='https://api.deepseek.com/v1/chat/completions';
+if(_ragApiConfig.proxy)return _ragApiConfig.proxy+encodeURIComponent(api);
+return api;
 }
 
 function _ragGetModel(){
@@ -2130,7 +2142,14 @@ read();
 }).catch(function(e){
 clearTimeout(timeout);
 if(e.name==='AbortError')onError('请求超时，请重试');
-else onError('API调用失败: '+e.message);
+else {
+var msg=e.message||'';
+if(msg==='Failed to fetch'||msg.indexOf('NetworkError')>=0){
+onError('CORS跨域限制：浏览器安全策略阻止了直接调用LLM API。\n解决方法：①在API设置中配置代理地址 ②安装浏览器CORS扩展 ③使用本地检索模式');
+}else{
+onError('API调用失败: '+msg);
+}
+}
 });
 }
 
@@ -2138,6 +2157,8 @@ else onError('API调用失败: '+e.message);
 function _ragLocalAnswer(query,retrieved){
 if(retrieved.length===0)return'抱歉，没有检索到与您问题相关的优惠信息。请尝试换个描述方式提问。';
 var lines=['根据检索结果，为您整理以下信息：\n'];
+// Find the best offer
+var best=retrieved[0];
 retrieved.slice(0,6).forEach(function(r,i){
 var o=r.offer;
 lines.push(''+(i+1)+'. **'+o.bank+'** · '+o.platformName+' · '+o.typeName);
@@ -2146,7 +2167,16 @@ if(o.save>0)lines.push('   至高省'+o.save+'元'+(o.need>0?'（需满'+o.need+
 lines.push('');
 });
 if(retrieved.length>6)lines.push('...还有'+(retrieved.length-6)+'条相关优惠，可查看下方推荐列表。');
-lines.push('\n💡 *当前为本地语义Embedding检索模式，配置LLM API后可获得更智能的自然语言回答*');
+// Add smart summary based on query intent
+var summary='\n📊 **快速总结**：';
+if(query.indexOf('最')>=0&&best){
+summary+='推荐最优方案——'+best.offer.bank+' '+best.offer.platformName+' '+best.offer.typeName+'，'+best.offer.detail;
+if(best.offer.save>0)summary+='，至高省'+best.offer.save+'元';
+}else{
+summary+='共找到'+retrieved.length+'条相关优惠，上方已按相关度排序。';
+}
+lines.push(summary);
+lines.push('\n💡 *当前为本地语义检索模式。如需更智能的AI对话回答，请在API设置中配置LLM API Key及代理地址*');
 return lines.join('\n');
 }
 
@@ -2333,6 +2363,8 @@ var providerRadio=document.querySelector('input[name=apiProvider][value="'+_ragA
 if(providerRadio)providerRadio.checked=true;
 var keyInput=document.getElementById('apiKeyInput');
 keyInput.value=_ragApiConfig.key;
+var proxyInput=document.getElementById('apiProxyInput');
+if(proxyInput)proxyInput.value=_ragApiConfig.proxy||'';
 }
 function closeApiModal(){
 document.getElementById('apiModalOverlay').classList.remove('open');
@@ -2341,6 +2373,8 @@ function saveApiConfig(){
 var provider=document.querySelector('input[name=apiProvider]:checked');
 _ragApiConfig.provider=provider?provider.value:'deepseek';
 _ragApiConfig.key=document.getElementById('apiKeyInput').value.trim();
+var proxyInput=document.getElementById('apiProxyInput');
+_ragApiConfig.proxy=proxyInput?proxyInput.value.trim():'';
 _ragSaveApiConfig();
 closeApiModal();
 _updateRagStatus();
