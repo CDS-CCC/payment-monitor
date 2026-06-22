@@ -733,6 +733,7 @@ canvas{width:100%;max-height:260px}
 <span class="rag-chat-badge" id="ragStatusBadge">未连接</span>
 </div>
 <div class="rag-chat-body" id="ragChatBody">
+<div id="ragDebugInfo" style="display:none;padding:4px 12px;font-size:11px;color:#888;background:rgba(0,0,0,0.3);border-radius:4px;margin:4px 8px;font-family:monospace;"></div>
 <div class="rag-welcome">
 <div class="rag-welcome-icon">🤖</div>
 <div class="rag-welcome-text">我是支付优惠智能Agent，基于语义Embedding检索+Query-Rewrite+RAG增强生成，支持主动监控优惠变化</div>
@@ -2044,12 +2045,14 @@ var api='';
 if(_ragApiConfig.provider==='qwen')api='https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 else api='https://api.deepseek.com/v1/chat/completions';
 if(_ragApiConfig.proxy){
-var base=_ragApiConfig.proxy;
-// 确保 base 以 ?url= 结尾
-if(base.indexOf('?url=')<0){
-base=base.replace(/\/+$/,'')+'?url=';
-}
+var base=_ragApiConfig.proxy.trim();
+// 去掉末尾斜杠
+while(base.length>0&&base.charAt(base.length-1)==='/')base=base.substring(0,base.length-1);
+// 统一用 ?url= + encodeURIComponent 格式
+if(base.indexOf('?url=')>=0){
 return base+encodeURIComponent(api);
+}
+return base+'?url='+encodeURIComponent(api);
 }
 return api;
 }
@@ -2091,19 +2094,41 @@ temperature:0.3,
 stream:true
 });
 
+// 调试信息：在聊天区显示请求URL（隐藏key）
+var debugUrl=url.replace(/Bearer\s+\S+/,'').replace(_ragApiConfig.key,'sk-***');
+var debugEl=document.getElementById('ragDebugInfo');
+if(debugEl){
+debugEl.textContent='请求: '+debugUrl.substring(0,120)+(debugUrl.length>120?'...':'');
+debugEl.style.display='block';
+}
+
 var ctrl=new AbortController();
 var timeout=setTimeout(function(){ctrl.abort();},30000);
 
+var fetchHeaders={'Content-Type':'application/json','Authorization':'Bearer '+_ragApiConfig.key};
+
 fetch(url,{
 method:'POST',
-headers:{'Content-Type':'application/json','Authorization':'Bearer '+_ragApiConfig.key},
+headers:fetchHeaders,
 body:body,
 signal:ctrl.signal
 }).then(function(resp){
 clearTimeout(timeout);
 if(!resp.ok){
 return resp.text().then(function(t){
+// 4xx 错误说明请求到了API但认证/参数有问题
+if(resp.status===401)throw new Error('API认证失败(401)：请检查API Key是否正确');
+if(resp.status===402||resp.status===429)throw new Error('API额度不足('+resp.status+')：请检查账户余额');
 throw new Error('API错误 '+resp.status+': '+t.substring(0,200));
+});
+}
+// 检查是否真的是流式响应
+var contentType=resp.headers.get('content-type')||'';
+if(contentType.indexOf('text/event-stream')<0&&contentType.indexOf('application/json')<0&&contentType.indexOf('text/plain')<0){
+// 可能是代理返回了HTML错误页
+return resp.text().then(function(t){
+if(t.indexOf('<')===0)throw new Error('代理返回了网页而非API响应，请检查代理地址配置');
+throw new Error('意外的响应格式: '+contentType);
 });
 }
 var reader=resp.body.getReader();
@@ -2151,8 +2176,13 @@ clearTimeout(timeout);
 if(e.name==='AbortError')onError('请求超时，请重试');
 else {
 var msg=e.message||'';
-if(msg==='Failed to fetch'||msg.indexOf('NetworkError')>=0){
-onError('CORS跨域限制：浏览器安全策略阻止了直接调用LLM API。\n解决方法：①在API设置中配置代理地址 ②安装浏览器CORS扩展 ③使用本地检索模式');
+// 只有直接调用API（无代理）才提示CORS
+if(!_ragApiConfig.proxy&&(msg==='Failed to fetch'||msg.indexOf('NetworkError')>=0)){
+onError('浏览器CORS限制：直接调用LLM API被拦截。\n解决方法：①在API设置中填写代理地址（推荐Cloudflare Worker） ②安装浏览器CORS扩展（如CORS Unblock） ③清空API Key使用本地检索模式');
+}else if(_ragApiConfig.proxy&&(msg==='Failed to fetch'||msg.indexOf('NetworkError')>=0)){
+onError('代理连接失败：无法连接到代理地址。\n请检查：①代理地址是否正确 ②Cloudflare Worker是否部署成功 ③浏览器控制台(F12)查看具体错误');
+}else if(msg.indexOf('CORS')>=0||msg.indexOf('cors')>=0){
+onError('CORS错误：代理未正确返回跨域头。\n请确保Worker代码包含 Access-Control-Allow-Origin:* 头');
 }else{
 onError('API调用失败: '+msg);
 }
