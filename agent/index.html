@@ -873,7 +873,7 @@ canvas{width:100%;max-height:260px}
 <div class="ai-form-group">
 <label>🌐 API代理地址</label>
 <input type="text" id="apiProxyInput" class="rag-api-input" placeholder="https://your-proxy.example.com/proxy?url=">
-<div class="rag-api-hint">可选。若浏览器直接调用API报CORS错误，可填入代理地址。留空则直接调用。</div>
+<div class="rag-api-hint">可选。填入Cloudflare Worker地址即可，如 https://xxx.workers.dev （无需加?url=）</div>
 </div>
 <div class="ai-form-group">
 <label>🛡️ 安全说明</label>
@@ -2043,7 +2043,12 @@ function _ragGetApiUrl(){
 var api='';
 if(_ragApiConfig.provider==='qwen')api='https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 else api='https://api.deepseek.com/v1/chat/completions';
-if(_ragApiConfig.proxy)return _ragApiConfig.proxy+encodeURIComponent(api);
+if(_ragApiConfig.proxy){
+var base=_ragApiConfig.proxy;
+if(base.indexOf('?url=')>=0)return base+encodeURIComponent(api);
+if(base.endsWith('/'))return base+api;
+return base+'/'+api;
+}
 return api;
 }
 
