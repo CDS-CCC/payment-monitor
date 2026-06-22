@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>电商支付营销监控 · AI-RAG</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0e1a;--card:#111827;--card2:#1a2332;--border:#1e2d3d;
+--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+--accent:#3b82f6;--accent2:#8b5cf6;--accent3:#06b6d4;
+--red:#ef4444;--orange:#f59e0b;--green:#22c55e;--pink:#ec4899;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;line-height:1.6;overflow-x:hidden}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-left h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-left .badge{background:var(--red);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;animation:pulse 2s infinite}
+.header-left .version{background:linear-gradient(135deg,var(--orange),var(--pink));color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;font-weight:600;margin-left:8px}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* Chat Interface */
+.chat-container{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px}
+.chat-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)}
+.chat-header-title{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.chat-header-title .icon{font-size:18px}
+.chat-status{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px}
+.chat-status .dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite}
+.chat-header-actions{display:flex;gap:8px}
+.chat-btn{background:var(--card2);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s}
+.chat-btn:hover{border-color:var(--accent);color:var(--accent)}
+.chat-btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none}
+.chat-btn.primary:hover{opacity:.9}
+
+.chat-messages{height:420px;overflow-y:auto;padding:16px 20px;scroll-behavior:smooth}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.msg{display:flex;gap:10px;margin-bottom:16px;animation:msgIn .3s ease}
+@keyframes msgIn{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+.msg-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.msg-avatar.ai{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.msg-avatar.user{background:var(--orange)}
+.msg-content{flex:1;min-width:0}
+.msg-name{font-size:12px;color:var(--text3);margin-bottom:4px}
+.msg-text{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.msg-text.user-text{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)}
+.msg-text .highlight{color:var(--green);font-weight:600}
+.msg-text .highlight-red{color:var(--red);font-weight:600}
+.msg-text .highlight-blue{color:var(--accent3);font-weight:600}
+.msg-text .offer-tag{display:inline-block;background:rgba(59,130,246,.15);color:var(--accent);font-size:12px;padding:1px 8px;border-radius:4px;margin:1px 2px}
+.msg-text .section-title{font-weight:700;color:var(--accent3);margin:8px 0 4px}
+.msg-time{font-size:11px;color:var(--text3);margin-top:4px;text-align:right}
+.msg-actions{display:flex;gap:8px;margin-top:6px}
+.msg-actions button{background:transparent;border:1px solid var(--border);color:var(--text3);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .2s}
+.msg-actions button:hover{border-color:var(--accent);color:var(--accent)}
+.msg-actions button.copied{background:var(--green);color:#fff;border-color:var(--green)}
+.typing{display:flex;gap:10px;margin-bottom:16px;padding:8px 0}
+.typing .dots{display:flex;gap:4px;align-items:center}
+.typing .dots span{width:8px;height:8px;border-radius:50%;background:var(--text3);animation:dot 1.4s infinite}
+.typing .dots span:nth-child(2){animation-delay:.2s}
+.typing .dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,60%,100%{opacity:.3;transform:scale(.8)}30%{opacity:1;transform:scale(1.2)}}
+
+/* Input Area */
+.chat-input-wrap{border-top:1px solid var(--border);padding:14px 20px}
+.chat-input-row{display:flex;gap:10px;align-items:flex-end}
+.chat-input-row textarea{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;resize:none;min-height:48px;max-height:120px;outline:none;transition:border-color .2s}
+.chat-input-row textarea:focus{border-color:var(--accent)}
+.chat-input-row textarea::placeholder{color:var(--text3)}
+.chat-send-btn{width:48px;height:48px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:20px;cursor:pointer;transition:all .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.chat-send-btn:hover{transform:scale(1.08);box-shadow:0 4px 20px rgba(59,130,246,.3)}
+.chat-send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.chat-suggestions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chat-suggestions button{background:var(--card2);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.chat-suggestions button:hover{background:rgba(59,130,246,.15);border-color:var(--accent);color:var(--accent)}
+
+/* Source Panel */
+.source-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.source-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);cursor:pointer}
+.source-header-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.source-header .arrow{transition:transform .3s;font-size:12px}
+.source-header.collapsed .arrow{transform:rotate(-90deg)}
+.source-body{padding:12px 20px;max-height:300px;overflow-y:auto;transition:max-height .3s}
+.source-body.hidden{max-height:0;padding:0 20px;overflow:hidden}
+.source-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:13px;gap:8px}
+.source-item .src-bank{font-weight:600;color:var(--accent);white-space:nowrap}
+.source-item .src-detail{flex:1;color:var(--text2);font-size:12px}
+.source-item .src-save{color:var(--green);font-weight:600;white-space:nowrap}
+.source-item .src-score{font-size:11px;color:var(--text3);white-space:nowrap}
+
+/* Settings Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:16px;width:90%;max-width:480px;max-height:80vh;overflow-y:auto;padding:24px}
+.modal-title{font-size:18px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;color:var(--text2);margin-bottom:6px;font-weight:500}
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group select{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;outline:none}
+.form-group input:focus{border-color:var(--accent)}
+.form-group .hint{font-size:11px;color:var(--text3);margin-top:4px}
+.form-group .checkbox-grid{display:flex;flex-wrap:wrap;gap:8px}
+.form-group .checkbox-grid label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;padding:6px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px}
+.form-group .checkbox-grid label input{accent-color:var(--accent)}
+.form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
+.form-actions button{padding:10px 24px;border-radius:10px;font-size:14px;cursor:pointer;border:none;transition:all .2s}
+.form-actions .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.form-actions .btn-primary:hover{opacity:.9}
+.form-actions .btn-secondary{background:var(--card2);color:var(--text2);border:1px solid var(--border)}
+
+/* Stats Section */
+.stats-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat-card{text-align:center;padding:12px}
+.stat-value{font-size:24px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* Footer */
+.footer{text-align:center;padding:20px;color:var(--text3);font-size:12px}
+.footer a{color:var(--accent)}
+
+@media(max-width:640px){
+.chat-messages{height:320px}
+.chat-header-actions .chat-btn span{display:none}
+}
+
+/* Clear button for API key */
+.api-key-row{display:flex;gap:8px;align-items:center}
+.api-key-row input{flex:1}
+.api-key-row button{white-space:nowrap;padding:10px 12px;background:var(--card2);border:1px solid var(--border);color:var(--text3);border-radius:8px;cursor:pointer;font-size:12px;transition:all .2s}
+.api-key-row button:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>💳 电商支付营销监控</h1>
+      <span class="badge">AI-RAG</span>
+      <span class="version">v2.0</span>
+    </div>
+    <div class="header-right">
+      <button class="chat-btn" onclick="toggleSettings()">⚙️ 设置</button>
+      <button class="chat-btn" onclick="clearChat()">🗑️ 清空</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" id="statOffers">81</div><div class="stat-label">优惠活动数</div></div>
+      <div class="stat-card"><div class="stat-value" id="statBanks">18</div><div class="stat-label">银行/平台</div></div>
+      <div class="stat-card"><div class="stat-value" id="statPlatforms">14</div><div class="stat-label">覆盖平台</div></div>
+      <div class="stat-card"><div class="stat-value" id="statMode">规则</div><div class="stat-label">当前模式</div></div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="chat-header-title">
+        <span class="icon">🧠</span>
+        <span>AI 智能助手</span>
+      </div>
+      <div class="chat-header-actions">
+        <span class="chat-status"><span class="dot"></span><span id="statusText">就绪</span></span>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg">
+        <div class="msg-avatar ai">🧠</div>
+        <div class="msg-content">
+          <div class="msg-name">AI 助手</div>
+          <div class="msg-text">
+👋 你好！我是你的专属优惠智能顾问。
+
+输入你的需求，我会为你智能匹配最优方案。例如：
+
+• <span class="highlight-blue">「我想买 iPhone 怎么最划算」</span>
+• <span class="highlight-blue">「京东上买家电有什么优惠」</span>
+• <span class="highlight-blue">「工行最近有哪些立减活动」</span>
+• <span class="highlight-blue">「分期买电脑哪个银行最省钱」</span>
+• <span class="highlight-blue">「白条免息和银行分期哪个划算」</span>
+
+💡 <span class="highlight">提示：</span> 点击右上角 ⚙️ 设置可填写 DeepSeek API Key 开启 AI 智能回答模式
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-wrap">
+      <div class="chat-input-row">
+        <textarea id="chatInput" rows="1" placeholder="输入你的购物需求..." onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+        <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+      </div>
+      <div class="chat-suggestions" id="suggestions">
+        <button onclick="quickAsk('买手机怎么最划算')">📱 买手机</button>
+        <button onclick="quickAsk('京东分期优惠有哪些')">🏪 京东分期</button>
+        <button onclick="quickAsk('工行有什么活动')">🏦 工行</button>
+        <button onclick="quickAsk('淘宝天猫满减汇总')">🛒 淘宝满减</button>
+        <button onclick="quickAsk('白条有什么优惠')">🤍 白条</button>
+        <button onclick="quickAsk('随机立减哪个力度大')">🎲 随机立减</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Panel -->
+  <div class="source-panel">
+    <div class="source-header collapsed" id="sourceHeader" onclick="toggleSourcePanel()">
+      <div class="source-header-title">📋 匹配依据 <span id="sourceCount" style="font-size:12px;color:var(--text3);font-weight:400"></span></div>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="source-body hidden" id="sourceBody"></div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal-box">
+    <div class="modal-title">⚙️ 设置</div>
+
+    <div class="form-group">
+      <label>🔑 DeepSeek API Key <span style="color:var(--text3);font-weight:400">（可选）</span></label>
+      <div class="api-key-row">
+        <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxx" />
+        <button onclick="document.getElementById('apiKeyInput').value='';updateMode()">清除</button>
+      </div>
+      <div class="hint">填写后启用 AI 智能回答（RAG）。不填则使用规则引擎匹配。<br>← 获取：<a href="https://platform.deepseek.com/api_keys" target="_blank" style="color:var(--accent)">platform.deepseek.com</a></div>
+    </div>
+
+    <div class="form-group">
+      <label>🧑 消费画像（可选，用于个性化推荐）</label>
+      <div class="form-group">
+        <label style="font-size:12px">常用平台</label>
+        <div class="checkbox-grid" id="prefPlatforms"></div>
+      </div>
+      <div class="form-group">
+        <label style="font-size:12px">常用银行</label>
+        <div class="checkbox-grid" id="prefBanks"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-secondary" onclick="closeSettings()">取消</button>
+      <button class="btn-primary" onclick="saveSettings()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="./" target="_blank">返回经典版</a> · 数据更新于 2026-06 · 提供信息仅供参考
+</div>
+
+<script>
+// ============================================================
+// DATA: 优惠活动全集（源自 _aiOffers）
+// ============================================================
+const OFFERS = [
+{id:1,bank:'工行',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满10元立减1元 / 满100元随机立减至高8.8元',save:8.8,need:100},
+{id:2,bank:'工行',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'bind',typeName:'首绑',detail:'首绑信用卡满10.01元减10元',save:10,need:10.01},
+{id:3,bank:'工行',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'points',typeName:'积分',detail:'工银i豆当钱花，至高抵30元',save:30,need:0},
+{id:4,bank:'兴业',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满200减10/满1000减15/满2000减20/满5000减50',save:50,need:5000},
+{id:5,bank:'中行',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'random',typeName:'随机减',detail:'满200减2-20元(月限1次)/满500减10元(限1次)',save:20,need:500},
+{id:6,bank:'交行',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'618狂欢季',save:0,need:0},
+{id:7,bank:'光大',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'bind',typeName:'首绑',detail:'一键绑卡送消费大礼包',save:0,need:0},
+{id:8,bank:'浦发',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'新用户一键绑卡领168元券包/消费叠加满减',save:168,need:0},
+{id:9,bank:'招行',platform:'dy',platformName:'抖音',payMethod:'alipay',type:'cashback',typeName:'返现',detail:'储蓄卡快捷支付达标抽锦鲤，至高6180元返现券',save:6180,need:0},
+{id:10,bank:'工行',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满388减8/满2888减28',save:28,need:2888},
+{id:11,bank:'兴业',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满200减10/满2000减20/满5000减50',save:50,need:5000},
+{id:12,bank:'中信',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满200减10/满2000减30',save:30,need:2000},
+{id:13,bank:'华夏',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满200减10/满2000减30',save:30,need:2000},
+{id:14,bank:'光大',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满200减10/满2000减30(至6.30)',save:30,need:2000},
+{id:15,bank:'浦发',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满100减6(免密)/满200减10/满2000减20',save:20,need:2000},
+{id:16,bank:'农行',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'88VIP专享：满200减15',save:15,need:200},
+{id:17,bank:'多家',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'installment',typeName:'分期',detail:'中行/建行/光大/交行/招行/邮储 500-25/1500-75/5000-200',save:200,need:5000},
+{id:18,bank:'广发',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'installment',typeName:'分期',detail:'淘宝分期满额享400元立减',save:400,need:2000},
+{id:19,bank:'光大借记卡',platform:'tb',platformName:'淘宝',payMethod:'alipay',type:'random',typeName:'随机减',detail:'支付宝收银台选光大借记卡，0.1-100元随机立减',save:100,need:10},
+{id:20,bank:'兴业',platform:'tm',platformName:'天猫',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'满200减10/满2000减20/满5000减50',save:50,need:5000},
+{id:21,bank:'光大借记卡',platform:'tm',platformName:'天猫',payMethod:'alipay',type:'random',typeName:'随机减',detail:'支付宝收银台选光大借记卡，0.1-100元随机立减',save:100,need:10},
+{id:22,bank:'多家',platform:'tm',platformName:'天猫',payMethod:'alipay',type:'installment',typeName:'分期',detail:'平安/浦发/中信：500-25/1500-75/3000-120/5000-200',save:200,need:5000},
+{id:23,bank:'多家',platform:'tm',platformName:'天猫',payMethod:'alipay',type:'installment',typeName:'分期',detail:'3C类分期：3000-200/6000-400，农行/建行/平安/浦发/中信/交行/邮储',save:400,need:6000},
+{id:24,bank:'交行',platform:'tm',platformName:'天猫',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'618狂欢季',save:0,need:0},
+{id:25,bank:'浦发',platform:'tm',platformName:'天猫',payMethod:'alipay',type:'reduce',typeName:'立减',detail:'分期最低400元+随机满减',save:400,need:2000},
+{id:26,bank:'工行',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'reduce',typeName:'立减',detail:'满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)',save:28,need:2888},
+{id:27,bank:'工行',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'bind',typeName:'首绑',detail:'首绑信用卡满10.01元减10元',save:10,need:10.01},
+{id:28,bank:'工行',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'分期至高立减300元',save:300,need:1000},
+{id:29,bank:'工行',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'points',typeName:'积分',detail:'工银i豆当钱花，至高抵100元',save:100,need:0},
+{id:30,bank:'广发',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'分期支付达标至高500元立减',save:500,need:1000},
+{id:31,bank:'浦发',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'京东分期购最高减500元',save:500,need:1000},
+{id:32,bank:'交行',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'分期满4000元减80元',save:80,need:4000},
+{id:33,bank:'兴业',platform:'jd',platformName:'京东',payMethod:'wx',type:'random',typeName:'随机减',detail:'京东微信小程序：满100随机0.5-10/满300随机1-30',save:30,need:300},
+{id:34,bank:'浦发借记卡',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'random',typeName:'随机减',detail:'满200减0.2-10元(月限3次)/外卖满10减2/满20减3',save:10,need:200},
+{id:35,bank:'光大借记卡',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'random',typeName:'随机减',detail:'满10元随机0.3-6.18元',save:6.18,need:10},
+{id:36,bank:'民生',platform:'jd',platformName:'京东',payMethod:'jdpay',type:'reduce',typeName:'立减',detail:'分期满减',save:0,need:0},
+{id:37,bank:'工行',platform:'pdd',platformName:'拼多多',payMethod:'wx',type:'random',typeName:'随机减',detail:'满200元随机至高立减18元/满1888元立减18元',save:18,need:200},
+{id:38,bank:'工行',platform:'pdd',platformName:'拼多多',payMethod:'wx',type:'bind',typeName:'首绑',detail:'首绑信用卡满8.01元立减8元',save:8,need:8.01},
+{id:39,bank:'浦发',platform:'pdd',platformName:'拼多多',payMethod:'wx',type:'reduce',typeName:'立减',detail:'满500减3/满1500减12/满4000减25',save:25,need:4000},
+{id:40,bank:'交行',platform:'pdd',platformName:'拼多多',payMethod:'wx',type:'reduce',typeName:'立减',detail:'618狂欢季',save:0,need:0},
+{id:41,bank:'浦发',platform:'pdd',platformName:'拼多多',payMethod:'wx',type:'bind',typeName:'首绑',detail:'首绑立减+日常满减/分期至高166元',save:166,need:0},
+{id:42,bank:'招行',platform:'pdd',platformName:'拼多多',payMethod:'wx',type:'cashback',typeName:'返现',detail:'储蓄卡快捷支付达标抽锦鲤',save:6180,need:0},
+{id:43,bank:'邮储',platform:'xhs',platformName:'小红书',payMethod:'union',type:'reduce',typeName:'立减',detail:'云闪付支付：满100减10元，每日180名额',save:10,need:100},
+{id:44,bank:'邮储',platform:'xhs',platformName:'小红书',payMethod:'union',type:'random',typeName:'随机减',detail:'满10元随机减1-66元，每日720名额',save:66,need:10},
+{id:45,bank:'光大',platform:'xhs',platformName:'小红书',payMethod:'union',type:'bind',typeName:'首绑',detail:'一键绑卡送大礼包',save:0,need:0},
+{id:46,bank:'工行',platform:'alipay',platformName:'支付宝',payMethod:'alipay',type:'random',typeName:'随机减',detail:'碰一下满25随机减至高6元/天天减满20随机至高6.18元',save:6.18,need:25},
+{id:47,bank:'工行',platform:'alipay',platformName:'支付宝',payMethod:'alipay',type:'bind',typeName:'首绑',detail:'首绑信用卡满15.01元立减15元',save:15,need:15.01},
+{id:48,bank:'工行',platform:'alipay',platformName:'支付宝',payMethod:'alipay',type:'installment',typeName:'分期',detail:'分期至高减200元',save:200,need:1000},
+{id:49,bank:'工行借记卡',platform:'alipay',platformName:'支付宝',payMethod:'alipay',type:'random',typeName:'随机减',detail:'连续10天消费立减',save:0,need:20},
+{id:50,bank:'多家',platform:'alipay',platformName:'支付宝',payMethod:'alipay',type:'subsidy',typeName:'贴息',detail:'广发/农行/中行/邮储 账单分期年化1%财政贴息，至高3000元',save:3000,need:0},
+{id:51,bank:'招行',platform:'alipay',platformName:'支付宝',payMethod:'alipay',type:'cashback',typeName:'返现',detail:'砸金蛋至高500元立减金/抽锦鲤至高6180元返现券',save:6180,need:0},
+{id:52,bank:'工行',platform:'wx',platformName:'微信',payMethod:'wx',type:'bind',typeName:'首绑',detail:'首绑信用卡满15.01元减15元',save:15,need:15.01},
+{id:53,bank:'光大',platform:'wx',platformName:'微信',payMethod:'wx',type:'bind',typeName:'首绑',detail:'首绑微信领立减券',save:0,need:0},
+{id:54,bank:'农行',platform:'wx',platformName:'微信',payMethod:'wx',type:'points',typeName:'积分',detail:'微信支付积分惊喜·网购狂欢盛典',save:0,need:0},
+{id:55,bank:'招行',platform:'wx',platformName:'微信',payMethod:'wx',type:'cashback',typeName:'返现',detail:'储蓄卡快捷支付达标抽锦鲤',save:6180,need:0},
+{id:56,bank:'华夏',platform:'wx',platformName:'微信',payMethod:'wx',type:'reduce',typeName:'立减',detail:'绑卡最高减167元',save:167,need:0},
+{id:57,bank:'交行',platform:'wx',platformName:'微信',payMethod:'wx',type:'reduce',typeName:'立减',detail:'最红星期五·周周5折/微信支付宝刷卡金5折',save:0,need:0},
+{id:58,bank:'工行',platform:'union',platformName:'云闪付',payMethod:'union',type:'reduce',typeName:'立减',detail:'中免线下满2000减200/62开头信用卡满6.01减6',save:200,need:2000},
+{id:59,bank:'邮储',platform:'union',platformName:'云闪付',payMethod:'union',type:'reduce',typeName:'立减',detail:'小红书满100减10/随机减1-66',save:66,need:100},
+{id:60,bank:'建行',platform:'union',platformName:'云闪付',payMethod:'union',type:'reduce',typeName:'立减',detail:'华润万象满300减26-66/奥莱满1666减166',save:166,need:1666},
+{id:61,bank:'浦发借记卡',platform:'union',platformName:'云闪付',payMethod:'union',type:'reduce',typeName:'立减',detail:'携程满100减10/滴滴满30减5',save:10,need:100},
+{id:62,bank:'浦发',platform:'union',platformName:'云闪付',payMethod:'union',type:'reduce',typeName:'立减',detail:'国补焕新返现+随机立减',save:0,need:0},
+{id:63,bank:'江南农商',platform:'union',platformName:'云闪付',payMethod:'union',type:'reduce',typeName:'立减',detail:'中石油满100随机5-10元/每周四支付立减10元',save:10,need:100},
+{id:64,bank:'京东金融',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'cashback',typeName:'免单',detail:'搜"支付免单"每天抽',save:0,need:0},
+{id:65,bank:'光大借记卡',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'random',typeName:'随机减',detail:'满10元随机立减0.3-6.18元',save:6.18,need:10},
+{id:66,bank:'光大信用卡',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'分期满100随机减0.1-300/满1000减30/满4000减120(12期+)',save:300,need:100},
+{id:67,bank:'工行',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'京东支付分期至高立减300元',save:300,need:1000},
+{id:68,bank:'广发',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'京东支付分期至高立减500元',save:500,need:1000},
+{id:69,bank:'浦发',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'京东分期购最高减500元',save:500,need:1000},
+{id:70,bank:'交行',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'installment',typeName:'分期',detail:'分期满4000元减80元',save:80,need:4000},
+{id:71,bank:'工行',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'reduce',typeName:'立减',detail:'满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)',save:28,need:2888},
+{id:72,bank:'工行',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'bind',typeName:'首绑',detail:'首绑信用卡满10.01减10元',save:10,need:10.01},
+{id:73,bank:'浦发借记卡',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'random',typeName:'随机减',detail:'满200减0.2-10元(月限3次)',save:10,need:200},
+{id:74,bank:'兴业',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'random',typeName:'随机减',detail:'满100随机0.5-10/满300随机1-30',save:30,need:300},
+{id:75,bank:'工行',platform:'jdpay',platformName:'京东支付',payMethod:'jdpay',type:'points',typeName:'积分',detail:'工银i豆当钱花，至高抵100元',save:100,need:0},
+{id:76,bank:'白条',platform:'baitiao',platformName:'白条',payMethod:'baitiao',type:'installment',typeName:'免息',detail:'每人每天领1次6期免息券',save:0,need:0},
+{id:77,bank:'白条',platform:'baitiao',platformName:'白条',payMethod:'baitiao',type:'installment',typeName:'免息',detail:'激活白条至高享24期免息，国补可叠',save:0,need:0},
+{id:78,bank:'白条',platform:'baitiao',platformName:'白条',payMethod:'baitiao',type:'reduce',typeName:'立减',detail:'新开通白条用户：6期免息券+立减25元券',save:25,need:0},
+{id:79,bank:'白条',platform:'baitiao',platformName:'白条',payMethod:'baitiao',type:'cashback',typeName:'返现',detail:'"大牌帮你还白条"晒单抽8888元',save:8888,need:0},
+{id:80,bank:'白条',platform:'baitiao',platformName:'白条',payMethod:'baitiao',type:'installment',typeName:'免息',detail:'国补商品可叠加白条免息',save:0,need:0},
+{id:81,bank:'白条',platform:'baitiao',platformName:'白条',payMethod:'baitiao',type:'cashback',typeName:'提额',detail:'618期间提额，至高10万额度',save:0,need:0}
+];
+
+// Category scenarios for stacking
+const SCENARIOS = {
+  '3c':     { catName:'3C数码', guobuPct:0.15, guobuCap:500,  platSaves:{jd:50,tb:30,tm:40}, banks:['工行','广发','浦发'] },
+  'appliance': { catName:'家电', guobuPct:0.15, guobuCap:1500, platSaves:{jd:200,tb:100,tm:100}, banks:['工行','广发','浦发'] },
+  'beauty':   { catName:'美妆', guobuPct:0,    guobuCap:0,    platSaves:{jd:0,tb:0,tm:0}, banks:['兴业','中信','华夏','光大'] },
+  'gold':     { catName:'黄金珠宝', guobuPct:0, guobuCap:0,   platSaves:{jd:50,tb:0,tm:0}, banks:['工行'] },
+  'daily':    { catName:'日用百货', guobuPct:0, guobuCap:0,   platSaves:{}, banks:['工行','华夏','浦发借记卡'] },
+  'food':     { catName:'外卖餐饮', guobuPct:0, guobuCap:0,   platSaves:{}, banks:['浦发','交行'] },
+  'travel':   { catName:'出行旅游', guobuPct:0, guobuCap:0,   platSaves:{}, banks:['浦发借记卡','交行','浦发'] }
+};
+
+// Bank abbreviation mapping
+const BANK_ALIAS = {
+  'icbc':'工行','工行':'工行','工商银行':'工行',
+  '招商':'招行','招行':'招行','招商银行':'招行',
+  'cgb':'广发','广发':'广发','广发银行':'广发',
+  'spdb':'浦发','浦发':'浦发','浦发银行':'浦发',
+  'cib':'兴业','兴业':'兴业','兴业银行':'兴业',
+  'bcm':'交行','交行':'交行','交通银行':'交行',
+  'ceb':'光大','光大':'光大','光大银行':'光大',
+  'boc':'中行','中行':'中行','中国银行':'中行',
+  'ccb':'建行','建行':'建行','建设银行':'建行',
+  'psbc':'邮储','邮储':'邮储','邮储银行':'邮储',
+  'abc':'农行','农行':'农行','农业银行':'农行',
+  '中信':'中信','citic':'中信','华夏':'华夏',
+  '白条':'白条','baitiao':'白条','民生':'民生'
+};
+
+const PLATFORM_ALIAS = {
+  '京东':'jd','jd':'jd','京东商城':'jd',
+  '淘宝':'tb','tb':'tb','taobao':'tb',
+  '天猫':'tm','tm':'tm','tmall':'tm',
+  '抖音':'dy','dy':'dy','douyin':'dy',
+  '拼多多':'pdd','pdd':'pdd','拼多多商城':'pdd',
+  '小红书':'xhs','xhs':'xhs',
+  '支付宝':'alipay','alipay':'alipay',
+  '微信':'wx','wx':'wx','wechat':'wx',
+  '云闪付':'union','union':'union','银联':'union'
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let chatHistory = [];
+let userProfile = { platforms: [], banks: [] };
+let apiKey = '';
+let apiMode = false; // true = LLM RAG, false = rule engine
+let isRequesting = false;
+
+try {
+  const saved = JSON.parse(localStorage.getItem('pay-rag-profile') || '{}');
+  if (saved.apiKey) apiKey = saved.apiKey;
+  if (saved.platforms) userProfile.platforms = saved.platforms;
+  if (saved.banks) userProfile.banks = saved.banks;
+  apiMode = !!apiKey;
+} catch(e) {}
+
+// ============================================================
+// RAG ENGINE
+// ============================================================
+
+// Tokenize Chinese text
+function tokenize(text) {
+  const cleaned = text.toLowerCase().replace(/[^\u4e00-\u9fff\w]/g, ' ');
+  return cleaned.split(/\s+/).filter(t => t.length > 0);
+}
+
+// Simple BM25 scorer
+function bm25(query, doc) {
+  const qTerms = tokenize(query);
+  if (qTerms.length === 0) return 0;
+  const docText = [doc.bank, doc.platformName, doc.typeName, doc.detail].join(' ').toLowerCase();
+  const docTokens = tokenize(docText);
+  const docLen = docTokens.length;
+  const avgLen = 40; // approximate average doc length
+  const k1 = 1.2, b = 0.75;
+  // Term frequency in doc
+  const tfMap = {};
+  docTokens.forEach(t => { tfMap[t] = (tfMap[t] || 0) + 1; });
+  // IDF approximation
+  const N = OFFERS.length;
+  let score = 0;
+  qTerms.forEach(qt => {
+    const nqi = OFFERS.filter(d => {
+      const dt = [d.bank, d.platformName, d.typeName, d.detail].join(' ').toLowerCase();
+      return dt.includes(qt);
+    }).length;
+    const idf = Math.log((N - nqi + 0.5) / (nqi + 0.5) + 1);
+    const tf = tfMap[qt] || 0;
+    const tfNorm = (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (docLen / avgLen)));
+    score += idf * tfNorm;
+  });
+  return score;
+}
+
+// Extract intents from query
+function parseIntent(q) {
+  const intent = { platforms:[], banks:[], types:[], cat:'', amount:0 };
+  const lower = q.toLowerCase();
+  // Extract amount
+  const amt = lower.match(/(\d+)\s*元/);
+  if (amt) intent.amount = parseInt(amt[1]);
+  // platforms
+  Object.entries(PLATFORM_ALIAS).forEach(([k,v]) => {
+    if (lower.includes(k)) { if (!intent.platforms.includes(v)) intent.platforms.push(v); }
+  });
+  // banks
+  Object.entries(BANK_ALIAS).forEach(([k,v]) => {
+    if (lower.includes(k)) { if (!intent.banks.includes(v)) intent.banks.push(v); }
+  });
+  // types
+  const typePat = /立减|满减|分期|免息|首绑|随机减|返现|积分|贴息|免单|提额|优惠/;
+  const tm = lower.match(typePat);
+  if (tm) intent.types.push(tm[0]);
+  // category
+  const catMap = {
+    '手机':'3c','iphone':'3c','ipad':'3c','电脑':'3c','笔记本':'3c','数码':'3c','耳机':'3c','3c':'3c',
+    '家电':'appliance','冰箱':'appliance','洗衣机':'appliance','电视':'appliance','空调':'appliance',
+    '美妆':'beauty','化妆品':'beauty','护肤':'beauty','口红':'beauty','香水':'beauty',
+    '黄金':'gold','金':'gold','珠宝':'gold','首饰':'gold',
+    '日用':'daily','日用品':'daily','食品':'food','外卖':'food','餐饮':'food','吃':'food',
+    '出行':'travel','机票':'travel','酒店':'travel','火车':'travel','打车':'travel'
+  };
+  for (const [k,v] of Object.entries(catMap)) {
+    if (lower.includes(k)) { intent.cat = v; break; }
+  }
+  return intent;
+}
+
+// Rule-based answer engine
+function ruleAnswer(intent, query) {
+  let matched = OFFERS.slice();
+  // Filter by intent
+  if (intent.platforms.length > 0) {
+    matched = matched.filter(o => intent.platforms.includes(o.platform));
+  }
+  if (intent.banks.length > 0) {
+    matched = matched.filter(o => intent.banks.some(b => o.bank.includes(b)));
+  }
+  if (intent.types.length > 0) {
+    matched = matched.filter(o => o.typeName.includes(intent.types[0]));
+  }
+  if (intent.amount > 0) {
+    matched = matched.filter(o => o.need <= intent.amount || o.need === 0);
+  }
+  // If no filter hit, do BM25 search
+  if (matched.length === OFFERS.length) {
+    const scored = OFFERS.map(o => ({ ...o, _score: bm25(query, o) })).filter(o => o._score > 0);
+    scored.sort((a,b) => b._score - a._score);
+    matched = scored.slice(0, 10);
+  } else {
+    // Score within matched
+    const scored = matched.map(o => ({ ...o, _score: bm25(query, o) }));
+    scored.sort((a,b) => b._score - a._score || b.save - a.save);
+    matched = scored.slice(0, 10);
+  }
+
+  // Build scenario stacking if category matched
+  let stacking = null;
+  if (intent.cat && SCENARIOS[intent.cat]) {
+    const sc = SCENARIOS[intent.cat];
+    const price = intent.amount || { '3c':6999, 'appliance':4999, 'beauty':399, 'gold':5000, 'daily':200, 'food':50, 'travel':500 }[intent.cat] || 1000;
+    const bestPlatform = Object.keys(sc.platSaves).length > 0 ? 'jd' : null;
+    const platSave = (bestPlatform && sc.platSaves[bestPlatform]) ? sc.platSaves[bestPlatform] : 0;
+    const afterPlat = Math.max(0, price - platSave);
+    const guobu = Math.min(afterPlat * sc.guobuPct, sc.guobuCap);
+    const afterGuobu = Math.max(0, afterPlat - guobu);
+    const bestBank = matched.find(o => o.save >= 30 && sc.banks.some(b => o.bank.includes(b)));
+    const bankSave = bestBank ? bestBank.save : (matched.length > 0 ? matched[0].save : 0);
+    const finalP = Math.max(0, afterGuobu - bankSave);
+    const totalSaved = price - finalP;
+    stacking = { price, catName: sc.catName, platSave, guobu, bankSave, finalP, totalSaved, bestBank, bestPlatform };
+  }
+
+  return { matched, stacking, intent };
+}
+
+// Generate natural language response (rule mode)
+function generateRuleResponse(result) {
+  const { matched, stacking, intent } = result;
+  if (matched.length === 0) {
+    return '😔 暂未找到匹配的优惠，你可以试试换个关键词或缩小范围搜索。';
+  }
+
+  let text = '';
+
+  // Stacking plan
+  if (stacking && stacking.totalSaved > 0) {
+    text += `**💡 最优叠加方案 — 买${stacking.catName}**\n\n`;
+    text += `商品原价：${stacking.price}元\n`;
+    if (stacking.platSave > 0) {
+      text += `① 平台优惠：-${stacking.platSave}元\n`;
+    }
+    if (stacking.guobu > 0) {
+      text += `② 国补 ${Math.round(stacking.guobu/stacking.price*100)}%：-${Math.round(stacking.guobu)}元\n`;
+    }
+    if (stacking.bestBank) {
+      text += `③ ${stacking.bestBank.bank} ${stacking.bestBank.typeName}：-${stacking.bestBank.save}元\n`;
+    }
+    text += `━━━━━━━━━━━━━━━━━━\n`;
+    text += `**到手价：${Math.round(stacking.finalP)}元 | 共省 ${Math.round(stacking.totalSaved)}元**\n\n`;
+  }
+
+  // Top matches
+  text += `**📊 匹配到 ${matched.length} 项优惠，按推荐度排序：**\n\n`;
+  matched.forEach((o, i) => {
+    const badge = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
+    const saveTag = o.save > 0 ? ` <span class="highlight">-${o.save}元</span>` : '';
+    text += `${badge} 【${o.bank}】${o.platformName} · ${o.typeName}${saveTag}\n`;
+    text += `   ${o.detail}\n`;
+    text += `   ${o.need > 0 ? `门槛：满${o.need}元` : '无门槛'}\n\n`;
+  });
+
+  // Summary
+  const maxSaveOffer = matched.reduce((a,b) => a.save > b.save ? a : b);
+  if (maxSaveOffer && maxSaveOffer.save > 0) {
+    text += `💎 **最优单笔：** ${maxSaveOffer.bank} ${maxSaveOffer.platformName} 最高省 ${maxSaveOffer.save}元\n`;
+  }
+
+  return text;
+}
+
+// ============================================================
+// LLM RAG (DeepSeek API)
+// ============================================================
+function buildRAGContext(matched) {
+  const top = matched.slice(0, 8);
+  let ctx = '以下是当前可用的银行优惠活动数据（JSON格式）：\n\n';
+  ctx += JSON.stringify(top.map(o => ({
+    bank: o.bank, platform: o.platformName, type: o.typeName,
+    detail: o.detail, maxSave: o.save + '元', minAmount: o.need > 0 ? '满' + o.need + '元' : '无门槛'
+  })), null, 2);
+  ctx += '\n\n请基于以上优惠数据，以专业理财顾问的口吻回答用户问题。要求：\n';
+  ctx += '1. 用**自然语言**做推荐，不要只说数据\n';
+  ctx += '2. 如果有多个选择，做**对比分析**，指出最优方案\n';
+  ctx += '3. 如果优惠可以**叠加使用**，明确给出叠加方案\n';
+  ctx += '4. 用口语化的中文，带emoji，让用户容易理解\n';
+  ctx += '5. 最后给一个**行动建议**（下一步该怎么做）';
+  return ctx;
+}
+
+function buildLLMPrompt(query, context) {
+  return [
+    { role: 'system', content: '你是电商支付优惠领域的资深顾问，精通银行活动、平台优惠、支付立减、分期策略等。回答专业、精准、实用，用中文回复。' },
+    { role: 'user', content: context + '\n\n用户的问题是：' + query }
+  ];
+}
+
+async function callDeepSeek(messages) {
+  const resp = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey
+    },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: messages,
+      temperature: 0.7,
+      max_tokens: 1500
+    })
+  });
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`API错误: ${resp.status} ${err.slice(0,200)}`);
+  }
+  const data = await resp.json();
+  return data.choices[0].message.content;
+}
+
+// ============================================================
+// MAIN QUERY ENTRY
+// ============================================================
+async function ask(query) {
+  const intent = parseIntent(query);
+  const result = ruleAnswer(intent, query);
+  let answer, sources;
+
+  if (apiMode && apiKey) {
+    // LLM mode
+    try {
+      setStatus('🧠 AI 分析中...');
+      sources = result.matched;
+      const context = buildRAGContext(result.matched);
+      const messages = buildLLMPrompt(query, context);
+      answer = await callDeepSeek(messages);
+    } catch (e) {
+      // Fallback to rule
+      answer = generateRuleResponse(result);
+      answer += `\n\n⚠️ *AI模式出错（${e.message}），已自动切换规则引擎回答*`;
+      sources = result.matched;
+    }
+  } else {
+    // Rule mode
+    answer = generateRuleResponse(result);
+    sources = result.matched;
+  }
+
+  return { answer, sources, intent };
+}
+
+// ============================================================
+// UI
+// ============================================================
+function addMessage(role, text, sources) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `
+    <div class="msg-avatar ${role}">${role === 'ai' ? '🧠' : '👤'}</div>
+    <div class="msg-content">
+      <div class="msg-name">${role === 'ai' ? 'AI 助手' : '你'}</div>
+      <div class="msg-text ${role === 'user' ? 'user-text' : ''}">${text}</div>
+      <div class="msg-time">${new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'})}</div>
+      ${role === 'ai' ? `<div class="msg-actions"><button onclick="copyMsg(this)" title="复制">📋 复制</button></div>` : ''}
+    </div>
+  `;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  chatHistory.push({ role, text });
+
+  // Update source panel
+  if (role === 'ai' && sources) {
+    updateSources(sources);
+  }
+}
+
+function addTyping() {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'typing';
+  div.id = 'typingIndicator';
+  div.innerHTML = `
+    <div class="msg-avatar ai">🧠</div>
+    <div class="msg-content">
+      <div class="msg-name">AI 助手</div>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function setStatus(text) {
+  document.getElementById('statusText').textContent = text;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const query = input.value.trim();
+  if (!query || isRequesting) return;
+
+  input.value = '';
+  autoResize(input);
+  addMessage('user', query);
+  isRequesting = true;
+  document.getElementById('sendBtn').disabled = true;
+  addTyping();
+
+  try {
+    const result = await ask(query);
+    removeTyping();
+    addMessage('ai', result.answer, result.sources);
+    setStatus('就绪');
+  } catch (e) {
+    removeTyping();
+    addMessage('ai', `😅 处理出错：${e.message}，请重试`);
+  }
+  isRequesting = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function quickAsk(q) {
+  document.getElementById('chatInput').value = q;
+  sendMessage();
+}
+
+function copyMsg(btn) {
+  const text = btn.closest('.msg-content').querySelector('.msg-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 复制';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {});
+}
+
+function clearChat() {
+  if (!confirm('确定清空所有聊天记录？')) return;
+  document.getElementById('chatMessages').innerHTML = `
+    <div class="msg">
+      <div class="msg-avatar ai">🧠</div>
+      <div class="msg-content">
+        <div class="msg-name">AI 助手</div>
+        <div class="msg-text">👋 已清空，重新开始吧！输入你的购物需求让我帮你推荐~</div>
+      </div>
+    </div>
+  `;
+  chatHistory = [];
+  document.getElementById('sourceBody').innerHTML = '';
+  document.getElementById('sourceCount').textContent = '';
+}
+
+function updateSources(sources) {
+  const body = document.getElementById('sourceBody');
+  const count = document.getElementById('sourceCount');
+  if (!sources || sources.length === 0) {
+    body.innerHTML = '';
+    count.textContent = '';
+    return;
+  }
+  count.textContent = `（${sources.length} 项）`;
+  let html = '';
+  sources.forEach((o, i) => {
+    const saveTag = o.save > 0 ? `<span class="src-save">-${o.save}元</span>` : '';
+    html += `<div class="source-item">
+      <span class="src-bank">${o.bank}</span>
+      <span class="src-detail">${o.platformName} · ${o.typeName} · ${o.detail}</span>
+      ${saveTag}
+    </div>`;
+  });
+  body.innerHTML = html;
+}
+
+function toggleSourcePanel() {
+  const header = document.getElementById('sourceHeader');
+  const body = document.getElementById('sourceBody');
+  header.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+const ALL_PLATFORMS = ['京东','淘宝','天猫','抖音','拼多多','小红书','支付宝','微信','云闪付'];
+const ALL_BANKS = ['工行','招行','广发','浦发','兴业','交行','光大','中行','建行','邮储','农行','中信','华夏','白条','民生'];
+
+function toggleSettings() {
+  const modal = document.getElementById('settingsModal');
+  modal.classList.toggle('open');
+  if (modal.classList.contains('open')) {
+    // Populate checkboxes
+    const platHtml = ALL_PLATFORMS.map(p =>
+      `<label><input type="checkbox" value="${p}" ${userProfile.platforms.includes(p)?'checked':''}> ${p}</label>`
+    ).join('');
+    document.getElementById('prefPlatforms').innerHTML = platHtml;
+    const bankHtml = ALL_BANKS.map(b =>
+      `<label><input type="checkbox" value="${b}" ${userProfile.banks.includes(b)?'checked':''}> ${b}</label>`
+    ).join('');
+    document.getElementById('prefBanks').innerHTML = bankHtml;
+    document.getElementById('apiKeyInput').value = apiKey;
+  }
+}
+
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('open');
+}
+
+function saveSettings() {
+  apiKey = document.getElementById('apiKeyInput').value.trim();
+  const platforms = [];
+  document.querySelectorAll('#prefPlatforms input:checked').forEach(cb => platforms.push(cb.value));
+  const banks = [];
+  document.querySelectorAll('#prefBanks input:checked').forEach(cb => banks.push(cb.value));
+  userProfile = { platforms, banks };
+  localStorage.setItem('pay-rag-profile', JSON.stringify({ apiKey, platforms, banks }));
+  apiMode = !!apiKey;
+  updateMode();
+  closeSettings();
+  addMessage('ai', `⚙️ 设置已更新！${apiMode ? '✅ AI 模式已开启，回答将基于 DeepSeek 大模型生成' : '当前为规则引擎模式，填写 DeepSeek API Key 可开启 AI 回答'}`);
+}
+
+function updateMode() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  apiKey = key;
+  apiMode = !!key;
+  document.getElementById('statMode').textContent = apiMode ? 'AI(RAG)' : '规则引擎';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  // Unique banks & platforms count
+  const uniqueBanks = new Set(OFFERS.map(o => o.bank));
+  const uniquePlatforms = new Set(OFFERS.map(o => o.platformName));
+  document.getElementById('statOffers').textContent = OFFERS.length;
+  document.getElementById('statBanks').textContent = uniqueBanks.size;
+  document.getElementById('statPlatforms').textContent = uniquePlatforms.size;
+  document.getElementById('statMode').textContent = apiMode ? 'AI(RAG)' : '规则引擎';
+}
+init();
+</script>
+</body>
+</html>
