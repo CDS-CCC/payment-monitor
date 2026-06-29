@@ -3,800 +3,1767 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' data: blob:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src * https: http: wss:;">
 <meta name="format-detection" content="telephone=no">
 <meta name="x5-page-mode" content="app">
 <meta name="browsermode" content="application">
-<title>电商支付营销监控 V6</title>
+<title>电商支付营销监控 · V6数据驱动版</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0e1a;--card:#111827;--card2:#1a2332;--border:#1e2d3d;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--accent:#3b82f6;--accent2:#8b5cf6;--accent3:#06b6d4;--red:#ef4444;--orange:#f59e0b;--green:#22c55e;--pink:#ec4899;--dy:#fe2c55;--tb:#ff6a00;--tm:#ff0036;--jd:#e23a3a;--pdd:#e02e24;--xhs:#ff2442;--alipay:#1677ff;--wx:#07c160;--union:#e60012;--jdpay:#c62828;--baitiao:#1565c0}
+:root{
+--bg:#0a0e1a;--card:#111827;--card2:#1a2332;--border:#1e2d3d;
+--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+--accent:#3b82f6;--accent2:#8b5cf6;--accent3:#06b6d4;
+--red:#ef4444;--orange:#f59e0b;--green:#22c55e;--pink:#ec4899;
+--dy:#fe2c55;--tb:#ff6a00;--tm:#ff0036;--jd:#e23a3a;--pdd:#e02e24;
+--xhs:#ff2442;--alipay:#1677ff;--wx:#07c160;--union:#e60012;--jdpay:#c62828;--baitiao:#1565c0;
+}
 .light{--bg:#f1f5f9;--card:#ffffff;--card2:#f8fafc;--border:#e2e8f0;--text:#1e293b;--text2:#475569;--text3:#94a3b8}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;line-height:1.6;transition:background .3s,color .3s;overflow-x:hidden;word-break:break-word}
 a{color:var(--accent);text-decoration:none}
-.container{max-width:1440px;margin:0 auto;padding:12px 16px}
+.container{max-width:1440px;margin:0 auto;padding:16px;position:relative;z-index:1}
 .control-area{position:relative;z-index:100;pointer-events:auto;isolation:isolate}
-.header{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.header-left{display:flex;align-items:center;gap:10px}
-.header-left h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header-left .version{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;font-weight:600}
-.header-right{display:flex;align-items:center;gap:8px}
-.update-time{font-size:11px;color:var(--text3)}
-.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s;pointer-events:auto;position:relative;z-index:1}
+
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-left h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-left .badge{background:var(--red);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;animation:pulse 2s infinite}
+.header-left .version{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:10px;padding:2px 6px;border-radius:6px;font-weight:600;margin-left:8px}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.update-time{font-size:12px;color:var(--text3)}
+.fav-count{font-size:12px;color:var(--orange);cursor:pointer;pointer-events:auto;position:relative;z-index:1}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:13px;cursor:pointer;transition:all .2s;pointer-events:auto;position:relative;z-index:1}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn-icon{padding:6px 10px;font-size:14px}
-.search-box{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;width:100%;max-width:360px}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+.ticker{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;margin-bottom:20px;overflow:hidden;position:relative}
+.ticker-tag{position:absolute;left:0;top:0;bottom:0;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:0 10px;display:flex;align-items:center;border-radius:10px 0 0 10px;z-index:2}
+.ticker-content{margin-left:56px;white-space:nowrap;animation:scroll 30s linear infinite;font-size:13px;color:var(--text2)}
+@keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-200%)}}
+
+.year-timeline{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;overflow:visible}
+.yt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.yt-title{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px}
+.yt-year{font-size:12px;color:var(--text3);background:var(--card2);padding:2px 10px;border-radius:10px}
+.yt-track-wrap{position:relative;height:100px;margin:0 24px;overflow:visible;user-select:none}
+.yt-track{position:absolute;top:38px;left:0;right:0;height:4px;background:var(--border);border-radius:2px}
+.yt-progress{position:absolute;top:38px;left:0;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));overflow:hidden}
+.yt-progress::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);animation:ytShimmer 3s infinite}
+@keyframes ytShimmer{0%{left:-100%}100%{left:100%}}
+.yt-now{position:absolute;top:31px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid var(--card);box-shadow:0 0 14px rgba(59,130,246,0.6);transform:translateX(-50%);z-index:4;animation:ytNowPulse 2s infinite}
+@keyframes ytNowPulse{0%,100%{box-shadow:0 0 14px rgba(59,130,246,0.6)}50%{box-shadow:0 0 26px rgba(59,130,246,0.9)}}
+.yt-node{position:absolute;top:24px;transform:translateX(-50%);z-index:3;cursor:pointer;text-align:center;transition:transform .2s}
+.yt-node:hover{transform:translateX(-50%) scale(1.25);z-index:5}
+.yt-node-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:11px;margin:0 auto;transition:all .3s}
+.yt-node.yt-past .yt-node-dot{opacity:.45;border-color:var(--text3)}
+.yt-node.yt-current .yt-node-dot{border-color:var(--red);background:rgba(239,68,68,.12);box-shadow:0 0 10px rgba(239,68,68,.3);animation:ytNodePulse 2s infinite}
+.yt-node.yt-upcoming .yt-node-dot{border-color:var(--accent);background:rgba(59,130,246,.08)}
+@keyframes ytNodePulse{0%,100%{box-shadow:0 0 8px rgba(239,68,68,.25)}50%{box-shadow:0 0 18px rgba(239,68,68,.5)}}
+.yt-node-label{font-size:9px;color:var(--text3);margin-top:3px;white-space:nowrap;max-width:52px;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.yt-node.yt-current .yt-node-label{color:var(--red);font-weight:700;font-size:10px}
+.yt-node-info{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.yt-node:hover .yt-node-info{opacity:1}
+.yt-node-info .info-name{font-weight:600;color:var(--text);margin-bottom:2px}
+.yt-node-info .info-time{color:var(--text3);font-size:10px}
+.yt-node-stagger-even{top:24px}
+.yt-node-stagger-odd{top:8px}
+.yt-node-stagger-odd .yt-node-info{bottom:auto;top:calc(100% + 6px)}
+.yt-months{display:flex;justify-content:space-between;padding:0;margin-top:4px;font-size:9px;color:var(--text3)}
+.yt-cd-row{display:flex;align-items:center;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);flex-wrap:wrap}
+.yt-cd-item{display:flex;align-items:center;gap:5px;font-size:12px}
+.yt-cd-item .cd-val{font-weight:700;color:var(--accent)}
+.yt-cd-item .cd-val.urgent{color:var(--red)}
+
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;cursor:pointer;pointer-events:auto;transition:transform .2s}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 0 0 60px;opacity:.1}
+.stat-card:nth-child(1)::after{background:var(--accent)}.stat-card:nth-child(2)::after{background:var(--accent2)}.stat-card:nth-child(3)::after{background:var(--green)}.stat-card:nth-child(4)::after{background:var(--orange)}.stat-card:nth-child(5)::after{background:var(--pink)}
+.stat-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px}
+.stat-value{font-size:26px;font-weight:700}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.sc-blue .stat-value{color:var(--accent)}.sc-purple .stat-value{color:var(--accent2)}.sc-green .stat-value{color:var(--green)}.sc-orange .stat-value{color:var(--orange)}.sc-pink .stat-value{color:var(--pink)}
+
+.search-box{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;margin-bottom:16px;width:100%;max-width:400px}
 .search-box input{background:transparent;border:none;outline:none;color:var(--text);font-size:13px;flex:1}
 .search-box input::placeholder{color:var(--text3)}
-.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.quick-btn{padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:11px;cursor:pointer;transition:all .2s;pointer-events:auto}
-.quick-btn:hover{border-color:var(--accent);color:var(--accent)}
-.tabs{display:flex;gap:2px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:0;flex-wrap:wrap}
-.tab-btn{padding:8px 14px;border:none;background:transparent;color:var(--text3);font-size:13px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;pointer-events:auto;position:relative;z-index:1;white-space:nowrap}
-.tab-btn:hover{color:var(--text2)}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.filter-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px}
-.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.filter-row:last-child{margin-bottom:0}
-.filter-row .label{font-size:12px;color:var(--text3);margin-right:2px;white-space:nowrap;min-width:52px}
-.filter-btn{padding:4px 12px;border-radius:16px;border:1px solid var(--border);background:var(--card2);color:var(--text2);font-size:11px;cursor:pointer;transition:all .2s;pointer-events:auto;position:relative;z-index:1}
+
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-bar .label{font-size:13px;color:var(--text3);margin-right:4px;white-space:nowrap}
+.filter-btn{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s;pointer-events:auto;position:relative;z-index:1}
 .filter-btn:hover{border-color:var(--accent);color:var(--accent)}
 .filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;pointer-events:auto;transition:transform .2s}
-.stat-card:hover{transform:translateY(-2px)}
-.stat-label{font-size:11px;color:var(--text3);margin-bottom:2px}
-.stat-value{font-size:22px;font-weight:700}
-.stat-sub{font-size:10px;color:var(--text3);margin-top:2px}
-.sc-blue .stat-value{color:var(--accent)}.sc-green .stat-value{color:var(--green)}.sc-orange .stat-value{color:var(--orange)}.sc-red .stat-value{color:var(--red)}
-.calendar-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;overflow-x:auto}
-.calendar-title{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.calendar-track{position:relative;height:80px;min-width:900px;margin:0 12px}
-.calendar-line{position:absolute;top:30px;left:0;right:0;height:3px;background:var(--border);border-radius:2px}
-.calendar-progress{position:absolute;top:30px;left:0;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.calendar-now{position:absolute;top:26px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--card);transform:translateX(-50%);z-index:2}
-.calendar-node{position:absolute;top:18px;transform:translateX(-50%);cursor:pointer;z-index:3;text-align:center;transition:transform .2s}
-.calendar-node:hover{transform:translateX(-50%) scale(1.2)}
-.calendar-node-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:10px;margin:0 auto;transition:all .2s}
-.calendar-node.current .calendar-node-dot{border-color:var(--red);background:rgba(239,68,68,.12);box-shadow:0 0 8px rgba(239,68,68,.3)}
-.calendar-node.past .calendar-node-dot{opacity:.5}
-.calendar-node.upcoming .calendar-node-dot{border-color:var(--accent)}
-.calendar-node-label{font-size:9px;color:var(--text3);margin-top:2px;white-space:nowrap;max-width:50px;overflow:hidden;text-overflow:ellipsis}
-.calendar-node.current .calendar-node-label{color:var(--red);font-weight:600}
-.calendar-node.upcoming .calendar-node-label{color:var(--accent)}
-.calendar-node-info{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
-.calendar-node:hover .calendar-node-info{opacity:1}
-.calendar-months{display:flex;justify-content:space-between;padding:4px 0 0;min-width:900px;font-size:9px;color:var(--text3)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
-.card-header{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
-.card-name{font-size:14px;font-weight:600}
-.card-sub{font-size:10px;color:var(--text3)}
-.card-body{padding:10px 14px}
-.offer-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);position:relative}
-.offer-item:last-child{border-bottom:none}
-.offer-bank{font-size:11px;font-weight:600;color:var(--accent2);min-width:60px;flex-shrink:0}
-.offer-type{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:600;flex-shrink:0;white-space:nowrap}
+
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0;flex-wrap:wrap}
+.tab-btn{padding:8px 16px;border:none;background:transparent;color:var(--text3);font-size:13px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;pointer-events:auto;position:relative;z-index:1;white-space:nowrap}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.platform-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.platform-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.2)}
+.pc-header{padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.pc-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.pc-name{font-size:15px;font-weight:600}
+.pc-sub{font-size:11px;color:var(--text3)}
+.pc-body{padding:12px 16px}
+.offer-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);position:relative;padding-right:24px}
+.offer-row:last-child{border-bottom:none}
+.offer-bank{font-size:12px;font-weight:600;color:var(--accent2);min-width:70px;flex-shrink:0}
+.offer-type{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600;flex-shrink:0}
 .type-reduce{background:rgba(34,197,94,.15);color:var(--green)}
-.type-installment,.type-free{background:rgba(59,130,246,.15);color:var(--accent)}
+.type-installment{background:rgba(59,130,246,.15);color:var(--accent)}
 .type-bind{background:rgba(245,158,11,.15);color:var(--orange)}
 .type-random{background:rgba(139,92,246,.15);color:var(--accent2)}
 .type-points{background:rgba(6,182,212,.15);color:var(--accent3)}
-.type-cashback,.type-freered{background:rgba(236,72,153,.15);color:var(--pink)}
-.type-subsidy,.type-credit{background:rgba(239,68,68,.15);color:var(--red)}
-.offer-detail{font-size:12px;color:var(--text2);line-height:1.4;flex:1}
+.type-cashback{background:rgba(236,72,153,.15);color:var(--pink)}
+.type-subsidy{background:rgba(239,68,68,.15);color:var(--red)}
+.type-exempt{background:rgba(34,197,94,.15);color:var(--green)}
+.offer-detail{font-size:12px;color:var(--text2);line-height:1.5;flex:1}
 .offer-amount{font-size:13px;font-weight:700;color:var(--green);white-space:nowrap;flex-shrink:0}
-.offer-fav{position:absolute;right:0;top:8px;cursor:pointer;font-size:13px;opacity:.4;transition:opacity .2s;pointer-events:auto}
-.offer-fav:hover{opacity:1}
-.offer-fav.active{opacity:1;color:var(--orange)}
-.status-badge{font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px}
+.offer-fav{position:absolute;right:4px;top:8px;cursor:pointer;font-size:14px;opacity:.4;transition:opacity .2s;pointer-events:auto}
+.offer-fav:hover{opacity:1}.offer-fav.active{opacity:1}
+.offer-status{font-size:9px;padding:1px 4px;border-radius:3px;font-weight:600;margin-left:4px}
 .status-active{background:rgba(34,197,94,.15);color:var(--green)}
 .status-expiring{background:rgba(245,158,11,.15);color:var(--orange)}
-.status-expired{background:rgba(239,68,68,.15);color:var(--red)}
-.compare-table{width:100%;border-collapse:collapse;font-size:12px;overflow-x:auto;display:block}
-.compare-table th,.compare-table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-.compare-table th{background:var(--card2);font-weight:600;color:var(--text2);position:sticky;top:0}
+.status-expired{background:rgba(100,116,139,.15);color:var(--text3)}
+.status-upcoming{background:rgba(59,130,246,.15);color:var(--accent)}
+
+.bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.bank-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.bank-header{padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.bank-name{font-size:15px;font-weight:600}
+.bank-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(59,130,246,.15);color:var(--accent)}
+.bank-body{padding:12px 16px}
+.bank-platform-group{padding:8px 0;border-bottom:1px solid var(--border)}
+.bank-platform-group:last-child{border-bottom:none}
+.bank-plat-name{font-size:12px;font-weight:600;margin-bottom:4px}
+.bank-offer{font-size:12px;color:var(--text2);padding-left:14px;margin:2px 0}
+
+.category-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.cat-header{padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.cat-icon{font-size:22px}
+.cat-name{font-size:15px;font-weight:600}
+.cat-count{font-size:11px;color:var(--text3);margin-left:auto}
+.cat-body{padding:12px 16px}
+.cat-platform{padding:8px 0;border-bottom:1px solid var(--border)}
+.cat-platform:last-child{border-bottom:none}
+.cat-platform-name{font-size:12px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cat-platform-name .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cat-offer{font-size:12px;color:var(--text2);padding-left:14px;margin:2px 0}
+
+.compare-section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:16px}
+.compare-table{width:100%;border-collapse:collapse;font-size:12px;min-width:800px}
+.compare-table th{background:var(--card2);padding:10px 12px;text-align:left;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0}
+.compare-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
 .compare-table tr:hover td{background:rgba(59,130,246,.05)}
 .compare-table .highlight{color:var(--green);font-weight:600}
-.compare-table .best{background:rgba(34,197,94,.1)}
-.calc-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
-.calc-section h3{font-size:15px;font-weight:600;margin-bottom:14px}
-.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px}
+.compare-table .platform-col{font-weight:600;color:var(--text);white-space:nowrap}
+.dot-dy{color:var(--dy)}.dot-tb{color:var(--tb)}.dot-tm{color:var(--tm)}.dot-jd{color:var(--jd)}.dot-pdd{color:var(--pdd)}.dot-xhs{color:var(--xhs)}
+
+.calc-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.calc-section h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
 .calc-field{display:flex;flex-direction:column;gap:4px}
 .calc-field label{font-size:12px;color:var(--text3)}
-.calc-field input,.calc-field select{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:14px;outline:none;width:100%}
+.calc-field input,.calc-field select{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:14px;outline:none}
 .calc-field input:focus,.calc-field select:focus{border-color:var(--accent)}
-.calc-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;pointer-events:auto;transition:transform .2s}
+.calc-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;pointer-events:auto;transition:transform .2s}
 .calc-btn:hover{transform:scale(1.02)}
-.calc-result{margin-top:14px}
-.calc-best{background:rgba(34,197,94,.1);border:1px solid var(--green);border-radius:10px;padding:14px;margin-bottom:12px}
-.calc-best h4{color:var(--green);font-size:13px;margin-bottom:6px}
-.calc-best .combo{font-size:18px;font-weight:700;color:var(--green)}
-.calc-others{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.calc-result{margin-top:16px;display:none}
+.calc-result.show{display:block}
+.calc-best{background:rgba(34,197,94,.1);border:1px solid var(--green);border-radius:10px;padding:16px;margin-bottom:12px}
+.calc-best h4{color:var(--green);font-size:14px;margin-bottom:8px}
+.calc-best .combo{font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px}
+.calc-best .detail{font-size:12px;color:var(--text2)}
+.calc-others{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
 .calc-other{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px}
-.calc-other .rank{font-size:11px;color:var(--accent)}
+.calc-other .rank{font-size:11px;color:var(--accent);font-weight:600}
 .calc-other .combo-text{font-size:13px;font-weight:600;margin:4px 0}
 .calc-other .save{font-size:16px;font-weight:700;color:var(--green)}
-.stack-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;justify-content:center}
-.stack-step{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;min-width:100px}
-.stack-step .icon{font-size:20px;margin-bottom:2px}
-.stack-step .name{font-size:11px;font-weight:600}
+.calc-other .detail{font-size:11px;color:var(--text3)}
+
+.stack-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.stack-section h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.stack-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;justify-content:center}
+.stack-step{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;min-width:120px}
+.stack-step .icon{font-size:24px;margin-bottom:4px}
+.stack-step .name{font-size:12px;font-weight:600}
 .stack-step .amount{font-size:14px;font-weight:700;color:var(--green)}
-.stack-arrow{font-size:16px;color:var(--text3)}
-.stack-result{background:rgba(34,197,94,.08);border:2px solid var(--green);border-radius:12px;padding:14px;text-align:center}
+.stack-arrow{font-size:20px;color:var(--text3)}
+.stack-result{background:rgba(34,197,94,.08);border:2px solid var(--green);border-radius:12px;padding:16px;text-align:center}
 .stack-result .label{font-size:12px;color:var(--text3)}
-.stack-result .price{font-size:24px;font-weight:700;color:var(--green)}
-.stack-result .saved{font-size:13px;color:var(--accent2)}
-.data-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
-.data-panel h3{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.data-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
-.data-stat{background:var(--card2);border-radius:8px;padding:10px 12px;text-align:center}
-.data-stat .value{font-size:20px;font-weight:700}
-.data-stat .label{font-size:11px;color:var(--text3)}
-.data-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.data-actions .btn{flex:1;min-width:100px;text-align:center}
-.data-warning{background:rgba(245,158,11,.1);border:1px solid var(--orange);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--orange);margin-bottom:14px}
-.log-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;max-height:400px;overflow-y:auto}
-.log-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
-.log-item:last-child{border-bottom:none}
-.log-icon{font-size:14px;flex-shrink:0;width:24px;text-align:center}
-.log-content{flex:1}
-.log-title{font-size:13px;font-weight:600}
-.log-desc{font-size:11px;color:var(--text2)}
-.log-time{font-size:10px;color:var(--text3);margin-top:2px}
-.log-empty{text-align:center;color:var(--text3);padding:30px 0;font-size:13px}
-.empty-state{text-align:center;color:var(--text3);padding:40px 20px;font-size:13px}
-.cat-tag{font-size:9px;padding:1px 4px;border-radius:3px;background:var(--card2);color:var(--text3);margin-right:4px}
-.search-highlight{background:rgba(245,158,11,.3);padding:0 2px;border-radius:2px}
-.fav-panel{position:fixed;top:0;right:0;width:360px;height:100%;background:var(--card);border-left:1px solid var(--border);z-index:1001;padding:16px;overflow-y:auto;display:none}
+.stack-result .price{font-size:28px;font-weight:700;color:var(--green)}
+.stack-result .saved{font-size:14px;color:var(--accent2)}
+
+.rank-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.rank-section h3{font-size:14px;font-weight:600;margin-bottom:12px}
+.rank-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.rank-item:last-child{border-bottom:none}
+.rank-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rank-num.r1{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff}
+.rank-num.r2{background:linear-gradient(135deg,#94a3b8,#64748b);color:#fff}
+.rank-num.r3{background:linear-gradient(135deg,#b45309,#92400e);color:#fff}
+.rank-num.r4{background:var(--card2);color:var(--text3)}
+.rank-info{flex:1;min-width:0}
+.rank-info .title{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-info .desc{font-size:11px;color:var(--text3)}
+.rank-save{font-size:16px;font-weight:700;color:var(--green);flex-shrink:0}
+.rank-fav{cursor:pointer;font-size:18px;flex-shrink:0;pointer-events:auto;opacity:.6;transition:opacity .2s}
+.rank-fav:hover{opacity:1}.rank-fav.active{opacity:1}
+
+.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-bottom:16px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.chart-card h3{font-size:14px;font-weight:600;margin-bottom:12px}
+canvas{width:100%;max-height:260px}
+
+.heatmap-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.heatmap-title{font-size:14px;font-weight:600;margin-bottom:12px}
+
+.trend-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.trend-title{font-size:14px;font-weight:600;margin-bottom:12px}
+
+.tips{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.tips h3{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--orange)}
+.tips ul{padding-left:18px;font-size:13px;color:var(--text2)}
+.tips li{margin-bottom:4px}
+
+.fav-panel{position:fixed;top:0;right:0;width:380px;height:100%;background:var(--card);border-left:1px solid var(--border);z-index:1000;padding:20px;overflow-y:auto;display:none}
 .fav-panel.open{display:block}
-.fav-panel h3{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.fav-panel .close{cursor:pointer;font-size:18px;pointer-events:auto}
+.fav-panel h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.fav-panel .close{cursor:pointer;font-size:20px;pointer-events:auto}
 .fav-item{padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;font-size:12px}
-.fav-item .fav-title{font-weight:600;margin-bottom:2px}
-.fav-item .fav-desc{color:var(--text3);font-size:11px}
+.fav-item .fav-title{font-weight:600;margin-bottom:4px}
+.fav-item .fav-desc{color:var(--text3)}
 .fav-item .fav-remove{color:var(--red);cursor:pointer;font-size:11px;pointer-events:auto;margin-top:4px;display:inline-block}
-.fav-empty{text-align:center;color:var(--text3);padding:30px 0}
-.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;display:none}
+.fav-export{display:flex;gap:8px;margin-top:16px}
+.fav-export button{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text2);font-size:12px;cursor:pointer;pointer-events:auto;transition:all .2s}
+.fav-export button:hover{border-color:var(--accent);color:var(--accent)}
+.fav-empty{text-align:center;color:var(--text3);padding:40px 0;font-size:13px}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;display:none}
 .overlay.show{display:block}
-.scroll-top{position:fixed;bottom:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:16px;z-index:998;box-shadow:0 4px 12px rgba(59,130,246,.3)}
+
+.scroll-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:18px;z-index:998;box-shadow:0 4px 12px rgba(59,130,246,.3)}
 .scroll-top.show{display:flex}
-.hidden{display:none!important}
-@media(max-width:768px){.grid{grid-template-columns:1fr}.header{flex-direction:column;align-items:flex-start}.header-right{width:100%;justify-content:space-between}.tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}.tab-btn{padding:8px 10px;font-size:12px}.stats-row{grid-template-columns:repeat(2,1fr)}.calc-grid{grid-template-columns:1fr}.fav-panel{width:100%}}
+
+/* AI Chat Styles */
+.ai-chat-section{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;max-height:500px;display:flex;flex-direction:column}
+.ai-chat-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border)}
+.ai-chat-title{font-size:15px;font-weight:600}
+.ai-chat-badge{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+.ai-chat-badge.offline{background:rgba(239,68,68,.12);color:var(--red)}
+.ai-chat-badge.online{background:rgba(34,197,94,.12);color:var(--green)}
+.ai-chat-badge.local{background:rgba(245,158,11,.12);color:var(--orange)}
+.ai-chat-body{flex:1;overflow-y:auto;padding:16px 20px;min-height:200px;max-height:320px}
+.ai-welcome{text-align:center;padding:16px 0}
+.ai-welcome-icon{font-size:40px;margin-bottom:8px}
+.ai-welcome-text{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6}
+.ai-msg{margin-bottom:14px;animation:ragFadeIn .3s ease}
+@keyframes ragFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ai-msg-user{display:flex;justify-content:flex-end}
+.ai-msg-user .ai-bubble{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:14px 14px 4px 14px;max-width:80%;padding:10px 14px;font-size:13px;line-height:1.6}
+.ai-msg-ai{display:flex;justify-content:flex-start;gap:8px}
+.ai-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ai-body{max-width:85%}
+.ai-bubble{background:var(--card2);border:1px solid var(--border);border-radius:4px 14px 14px 14px;padding:12px 14px;font-size:13px;line-height:1.7;color:var(--text)}
+.ai-bubble p{margin:0 0 8px 0}.ai-bubble p:last-child{margin-bottom:0}
+.ai-bubble strong{color:var(--accent)}
+.ai-bubble em{color:var(--accent3);font-style:normal;font-weight:600}
+.ai-thinking{display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:12px;color:var(--text3)}
+.ai-thinking-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent3);animation:ragDot 1.4s infinite;margin:0 2px}
+.ai-thinking-dots span:nth-child(2){animation-delay:.2s}
+.ai-thinking-dots span:nth-child(3){animation-delay:.4s}
+@keyframes ragDot{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
+.ai-quick-actions{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.ai-qa-btn{font-size:11px;padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card2);color:var(--text2);cursor:pointer;pointer-events:auto;position:relative;z-index:2;transition:all .2s;white-space:nowrap}
+.ai-qa-btn:hover{border-color:var(--accent3);color:var(--accent3)}
+.ai-input-row{display:flex;align-items:center;gap:8px;position:relative;z-index:2}
+.ai-input-row input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:14px;outline:none;min-width:0}
+.ai-input-row input::placeholder{color:var(--text3)}
+.ai-input-row input:focus{border-color:var(--accent3)}
+.ai-send-btn{background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#fff;border:none;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;pointer-events:auto;position:relative;z-index:2;white-space:nowrap;transition:opacity .2s}
+.ai-send-btn:hover{opacity:.9}
+.ai-send-btn:disabled{opacity:.5;cursor:not-allowed}
+.ai-retrieval-info{font-size:10px;color:var(--text3);margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ai-retrieval-info span{background:var(--card);padding:1px 6px;border-radius:4px}
+.ai-source-card{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.15);color:var(--accent);margin:2px 2px}
+.ai-source-card .src-bank{font-weight:600}
+.ai-source-card .src-save{color:var(--green);font-weight:600}
+.ai-sources{margin-top:8px;border-top:1px dashed var(--border);padding-top:8px}
+.ai-sources-title{font-size:11px;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+
+/* AI Tab Content */
+.ai-top-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px}
+.ai-top-header{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ai-top-sub{font-size:11px;color:var(--text3);font-weight:400;margin-left:8px}
+.ai-top-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.ai-top-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;position:relative;transition:transform .2s,border-color .2s}
+.ai-top-card:hover{transform:translateY(-2px);border-color:var(--accent3)}
+.ai-top-card .ai-match{font-size:11px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent3),var(--accent2));padding:2px 8px;border-radius:8px;position:absolute;top:8px;right:8px}
+.ai-top-card .ai-reason{font-size:10px;color:var(--accent3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+.ai-top-card .ai-offer-bank{font-size:13px;font-weight:600;color:var(--accent2)}
+.ai-top-card .ai-offer-type{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600;margin-left:6px}
+.ai-top-card .ai-offer-detail{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.4}
+.ai-top-card .ai-offer-amount{font-size:15px;font-weight:700;color:var(--green);margin-top:4px}
+.ai-fb-btn{font-size:14px;cursor:pointer;opacity:.4;transition:opacity .2s;pointer-events:auto;position:relative;z-index:2;background:none;border:none;padding:2px}
+.ai-fb-btn:hover{opacity:1}.ai-fb-btn.active{opacity:1}
+.ai-stack-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px}
+.ai-stack-header{font-size:15px;font-weight:600;margin-bottom:12px}
+.ai-stack-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.ai-stack-name{font-size:13px;font-weight:600;margin-bottom:6px}
+.ai-stack-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ai-stack-step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;text-align:center}
+.ai-stack-step .s-label{color:var(--text3);font-size:10px}
+.ai-stack-step .s-value{font-weight:600;color:var(--green)}
+.ai-stack-arrow{color:var(--text3);font-size:14px}
+.ai-stack-result{font-size:18px;font-weight:700;color:var(--green);margin-top:8px;text-align:center}
+.ai-stack-result .save-detail{font-size:12px;color:var(--text3);font-weight:400}
+.ai-insight-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px}
+.ai-insight-header{font-size:15px;font-weight:600;margin-bottom:12px}
+.ai-insight-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text2);line-height:1.5}
+.ai-insight-item:last-child{border-bottom:none}
+.ai-insight-item .ii-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.ai-insight-item .ii-text strong{color:var(--text);font-weight:600}
+
+/* Data Management Tab */
+.data-mgmt-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.data-mgmt-section h3{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.data-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.data-stat-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.data-stat-label{font-size:12px;color:var(--text3);margin-bottom:4px}
+.data-stat-value{font-size:22px;font-weight:700}
+.data-stat-value.active-color{color:var(--green)}
+.data-stat-value.expiring-color{color:var(--orange)}
+.data-stat-value.expired-color{color:var(--text3)}
+.data-freshness{font-size:12px;padding:8px 12px;border-radius:8px;margin-bottom:16px}
+.data-freshness.fresh{background:rgba(34,197,94,.1);border:1px solid var(--green);color:var(--green)}
+.data-freshness.stale{background:rgba(245,158,11,.1);border:1px solid var(--orange);color:var(--orange)}
+.data-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.data-table-container{overflow-x:auto}
+.data-table{width:100%;border-collapse:collapse;font-size:12px;min-width:600px}
+.data-table th{background:var(--card2);padding:8px 10px;text-align:left;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap}
+.data-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+.data-table tr:hover td{background:rgba(59,130,246,.05)}
+.status-badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.status-badge.active{background:rgba(34,197,94,.15);color:var(--green)}
+.status-badge.expiring{background:rgba(245,158,11,.15);color:var(--orange)}
+.status-badge.expired{background:rgba(100,116,139,.15);color:var(--text3)}
+.status-badge.upcoming{background:rgba(59,130,246,.15);color:var(--accent)}
+.manual-status-select{background:var(--card2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--text);font-size:11px;cursor:pointer}
+
+/* Monitor Log Tab */
+.monitor-log-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.monitor-log-section h3{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.log-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.log-item{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;font-size:12px}
+.log-item:last-child{border-bottom:none}
+.log-time{font-size:11px;color:var(--text3);white-space:nowrap;min-width:60px}
+.log-icon{font-size:14px;flex-shrink:0}
+.log-content{flex:1}
+.log-title{font-weight:600;color:var(--text)}
+.log-desc{font-size:11px;color:var(--text3);margin-top:2px}
+.log-type-expired{color:var(--red)}
+.log-type-new{color:var(--green)}
+.log-type-expiring{color:var(--orange)}
+.log-type-info{color:var(--accent)}
+.log-empty{text-align:center;color:var(--text3);padding:40px 0;font-size:13px}
+
+@media print{.header-right,.filter-bar,.tabs,.scroll-top,.fav-panel,.overlay,.year-timeline,.calc-section,.stack-section{display:none!important}.platform-grid,.category-grid,.bank-grid{grid-template-columns:repeat(2,1fr)}body{background:#fff;color:#000}}
+@media(max-width:1280px){.container{padding:14px;max-width:100%}.platform-grid,.category-grid,.bank-grid{grid-template-columns:1fr}.chart-row{grid-template-columns:1fr}.fav-panel.open{width:100%}.stats-row{grid-template-columns:repeat(3,1fr)}.compare-table{font-size:12px}.stack-flow{flex-wrap:wrap}}
+@media(max-width:768px){.container{padding:10px}.header{padding:10px 0;gap:8px;flex-wrap:wrap}.header-left h1{font-size:17px}.header-right{width:100%;justify-content:flex-start}.stats-row{grid-template-columns:repeat(2,1fr);gap:8px}.platform-grid,.category-grid,.bank-grid{grid-template-columns:1fr}.filter-btn{padding:5px 10px;font-size:11px}.chart-row{grid-template-columns:1fr}.year-timeline{padding:12px 10px}.fav-panel.open{width:100%}.stack-flow{flex-direction:column}.stack-arrow{transform:rotate(90deg)}.compare-section{margin-left:-10px;margin-right:-10px;border-radius:0}.ticker{padding:8px 12px}.ticker-content{margin-left:50px;font-size:12px}.tabs{overflow-x:auto;flex-wrap:nowrap}.tab-btn{flex-shrink:0;font-size:12px;padding:6px 12px}.calc-grid{grid-template-columns:1fr}.ai-chat-body{max-height:260px}.ai-top-grid{grid-template-columns:1fr}}
+@media(max-width:400px){.stats-row{grid-template-columns:1fr 1fr}.header-left h1{font-size:15px}.filter-btn{padding:4px 8px;font-size:10px}.tab-btn{font-size:11px;padding:5px 10px}}
 </style>
 </head>
 <body>
 <div class="container">
-<div class="control-area">
 <div class="header">
-<div class="header-left">
-<h1>支付营销监控</h1>
-<span class="version">V6</span>
+<div class="header-left"><h1>💳 电商支付营销监控</h1><span class="badge" id="eventBadge">常态监控</span><span class="version" id="versionTag">V6数据驱动</span></div>
+<div class="header-right"><span class="update-time" id="updateTime">加载中...</span><span class="fav-count" onclick="toggleFavPanel()">⭐ 收藏(<span id="favCountNum">0</span>)</span><button class="btn" onclick="toggleTheme()" id="themeBtn">🌙 暗色</button><button class="btn" onclick="window.print()">🖨️ 打印</button></div>
 </div>
-<div class="header-right">
-<span class="update-time" id="updateTime"></span>
-<span class="btn btn-icon" onclick="toggleFav()" title="我的收藏">⭐ <span id="favCount">0</span></span>
-<span class="btn btn-icon" onclick="toggleTheme()" title="切换主题" id="themeBtn">🌙</span>
+
+<div class="ticker"><span class="ticker-tag" id="tickerTag">📡 动态</span><div class="ticker-content" id="tickerContent">加载中...</div></div>
+
+<div class="year-timeline" id="yearTimeline"></div>
+
+<div class="stats-row" id="statsRow"></div>
+
+<div class="search-box"><span>🔍</span><input type="text" placeholder="搜索银行、平台、优惠类型...（支持同义词：招行=招商银行=CMB）" id="searchInput" oninput="handleSearch()"></div>
+
+<div class="filter-bar">
+<div class="filter-row" id="filterPlatform">
+<span class="label">平台：</span>
 </div>
+<div class="filter-row" id="filterPayMethod">
+<span class="label">支付：</span>
 </div>
-</div>
-<div class="control-area">
-<div class="search-box">
-<span>🔍</span>
-<input type="text" id="searchInput" placeholder="搜索银行/平台/优惠... (如:招行/京东)" oninput="handleSearch()">
-</div>
-<div class="quick-btns">
-<button class="quick-btn" onclick="quickSearch('京东最划算的方案')">京东最划算</button>
-<button class="quick-btn" onclick="quickSearch('哪个银行满减最多')">满减最多</button>
-<button class="quick-btn" onclick="quickSearch('即将到期的优惠')">即将到期</button>
-<button class="quick-btn" onclick="quickSearch('3C数码最佳组合')">3C最佳组合</button>
-</div>
-</div>
-<div class="calendar-section">
-<div class="calendar-title">📅 2026年营销日历 <span style="font-size:12px;color:var(--text3)">当前: <span id="currentDate"></span></span></div>
-<div class="calendar-track">
-<div class="calendar-line"></div>
-<div class="calendar-progress" id="calendarProgress"></div>
-<div class="calendar-now" id="calendarNow"></div>
-<div id="calendarNodes"></div>
-</div>
-<div class="calendar-months" id="calendarMonths"></div>
-</div>
-<div class="tabs control-area">
-<button class="tab-btn active" data-tab="platform" onclick="switchTab('platform')">按平台</button>
-<button class="tab-btn" data-tab="bank" onclick="switchTab('bank')">按银行</button>
-<button class="tab-btn" data-tab="category" onclick="switchTab('category')">按品类</button>
-<button class="tab-btn" data-tab="compare" onclick="switchTab('compare')">横向对比</button>
-<button class="tab-btn" data-tab="calc" onclick="switchTab('calc')">省钱计算</button>
-<button class="tab-btn" data-tab="stack" onclick="switchTab('stack')">叠加模拟</button>
-<button class="tab-btn" data-tab="data" onclick="switchTab('data')">📊数据管理</button>
-<button class="tab-btn" data-tab="log" onclick="switchTab('log')">📡监控日志</button>
-</div>
-<div class="filter-section control-area">
-<div class="filter-row">
-<span class="label">平台:</span>
-<div id="filterPlatform"></div>
-</div>
-<div class="filter-row">
-<span class="label">支付:</span>
-<div id="filterPayMethod"></div>
-</div>
-<div class="filter-row">
-<span class="label">类型:</span>
-<div id="filterType"></div>
-</div>
-<div class="filter-row">
-<span class="label">状态:</span>
-<div id="filterStatus"></div>
+<div class="filter-row" id="filterType">
+<span class="label">类型：</span>
 </div>
 </div>
-<div id="statsRow" class="stats-row"></div>
-<div id="tabContent"></div>
+
+<div class="tabs">
+<button class="tab-btn active" onclick="switchTab('platform',this)" type="button">📊 按平台</button>
+<button class="tab-btn" onclick="switchTab('bank',this)" type="button">🏦 按银行</button>
+<button class="tab-btn" onclick="switchTab('category',this)" type="button">🏷️ 按品类</button>
+<button class="tab-btn" onclick="switchTab('compare',this)" type="button">⚖️ 横向对比</button>
+<button class="tab-btn" onclick="switchTab('calc',this)" type="button">🧮 省钱计算</button>
+<button class="tab-btn" onclick="switchTab('stack',this)" type="button">🔄 叠加模拟</button>
+<button class="tab-btn" onclick="switchTab('rank',this)" type="button">🏆 优惠排行</button>
+<button class="tab-btn" onclick="switchTab('ai',this)" type="button">🤖 AI助手</button>
+<button class="tab-btn" onclick="switchTab('data',this)" type="button">📊 数据管理</button>
+<button class="tab-btn" onclick="switchTab('log',this)" type="button">📡 监控日志</button>
 </div>
-<div class="overlay" id="overlay" onclick="closeFav()"></div>
-<div class="fav-panel" id="favPanel">
-<h3>⭐ 我的收藏 <span class="close" onclick="closeFav()">×</span></h3>
-<div id="favList"></div>
+
+<!-- Tab: Platform -->
+<div class="tab-content active" id="tab-platform">
+<div class="platform-grid" id="platformGrid"></div>
 </div>
-<button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+
+<!-- Tab: Bank -->
+<div class="tab-content" id="tab-bank">
+<div class="bank-grid" id="bankGrid"></div>
+</div>
+
+<!-- Tab: Category -->
+<div class="tab-content" id="tab-category">
+<div class="category-grid" id="categoryGrid"></div>
+</div>
+
+<!-- Tab: Compare -->
+<div class="tab-content" id="tab-compare">
+<div class="compare-section" id="compareTable"></div>
+</div>
+
+<!-- Tab: Calculator -->
+<div class="tab-content" id="tab-calc">
+<div class="calc-section">
+<h3>🧮 省钱计算器 — 输入金额，推荐最优组合</h3>
+<div class="calc-grid">
+<div class="calc-field"><label>购买金额（元）</label><input type="number" id="calcAmount" placeholder="例如 5999" value="5999"></div>
+<div class="calc-field"><label>购买品类</label><select id="calcCategory"><option value="3c">📱 3C数码</option><option value="appliance">🏠 大家电</option><option value="beauty">💄 美妆个护</option><option value="gold">💍 黄金珠宝</option><option value="daily">🛒 日用快消</option><option value="food">🍜 餐饮外卖</option><option value="travel">✈️ 出行旅游</option></select></div>
+<div class="calc-field"><label>是否使用分期</label><select id="calcInstallment"><option value="no">不分期</option><option value="3">3期</option><option value="6">6期</option><option value="12">12期</option><option value="24">24期</option></select></div>
+<div class="calc-field"><label>支付方式偏好</label><select id="calcPayMethod"><option value="all">不限</option><option value="alipay">支付宝</option><option value="wx">微信支付</option><option value="union">云闪付</option><option value="jdpay">京东支付</option><option value="baitiao">白条支付</option></select></div>
+</div>
+<button class="calc-btn" onclick="calcBest()">💡 计算最优方案</button>
+<div class="calc-result" id="calcResult"><div class="calc-best" id="calcBest"></div><div class="calc-others" id="calcOthers"></div></div>
+</div>
+</div>
+
+<!-- Tab: Stack -->
+<div class="tab-content" id="tab-stack">
+<div class="stack-section">
+<h3>🔄 优惠叠加模拟器 — 原价→平台券→国补→银行优惠</h3>
+<div class="calc-grid">
+<div class="calc-field"><label>商品原价（元）</label><input type="number" id="stackPrice" placeholder="例如 6999" value="6999"></div>
+<div class="calc-field"><label>品类</label><select id="stackCategory"><option value="3c">📱 3C数码（国补至高500）</option><option value="appliance">🏠 大家电（国补至高1500）</option><option value="other">📦 其他品类（无国补）</option></select></div>
+<div class="calc-field"><label>银行优惠</label><select id="stackBank"><option value="icbc_jd_300">工行京东分期减300</option><option value="cgb_jd_500">广发京东分期减500</option><option value="spdb_jd_500">浦发京东分期减500</option><option value="ceg_jd_300">光大京东分期随机减至高300</option><option value="icbc_tb_28">工行淘宝满2888减28</option><option value="cmb_6180">招行抽锦鲤至高6180</option><option value="baitiao_6">白条6期免息(省息费)</option><option value="baitiao_24">白条24期免息(省息费)</option><option value="none">不使用银行优惠</option></select></div>
+<div class="calc-field"><label>平台优惠</label><select id="stackPlatform"><option value="jd_plus_50">京东PLUS会员券50</option><option value="jd_200">京东满减券200</option><option value="tm_300">天猫满减300</option><option value="tb_200">淘宝满减200</option><option value="none">无平台优惠</option></select></div>
+</div>
+<button class="calc-btn" onclick="calcStack()">💰 计算叠加后到手价</button>
+<div id="stackResult" style="margin-top:20px"></div>
+</div>
+</div>
+
+<!-- Tab: Rank -->
+<div class="tab-content" id="tab-rank">
+<div class="rank-section"><h3>🏆 优惠力度排行榜 — 按实际省钱金额排序</h3>
+<div id="rankList"></div></div>
+</div>
+
+<!-- Tab: AI -->
+<div class="tab-content" id="tab-ai">
+<div class="ai-chat-section">
+<div class="ai-chat-header">
+<span class="ai-chat-title">💬 AI 智能问答</span>
+<span class="ai-chat-badge local" id="aiStatusBadge">本地检索</span>
+</div>
+<div class="ai-chat-body" id="aiChatBody">
+<div class="ai-welcome">
+<div class="ai-welcome-icon">🤖</div>
+<div class="ai-welcome-text">我是支付优惠智能助手，基于语义检索为您推荐最优方案</div>
+</div>
+</div>
+<div class="ai-chat-input-area" style="border-top:1px solid var(--border);padding:12px 20px">
+<div class="ai-quick-actions">
+<button class="ai-qa-btn" onclick="aiQuick('京东最划算的方案')" type="button">📱 京东最划算</button>
+<button class="ai-qa-btn" onclick="aiQuick('哪个银行满减最多')" type="button">🏆 满减最多</button>
+<button class="ai-qa-btn" onclick="aiQuick('即将到期的优惠有哪些')" type="button">⏰ 即将到期</button>
+<button class="ai-qa-btn" onclick="aiQuick('3C数码最佳组合')" type="button">💻 3C最佳组合</button>
+</div>
+<div class="ai-input-row">
+<input type="text" id="aiInput" placeholder="用自然语言提问：招行在京东买手机能省多少？..." onkeydown="if(event.key==='Enter')aiSend()">
+<button class="ai-send-btn" onclick="aiSend()" type="button">发送</button>
+</div>
+</div>
+</div>
+<div class="ai-top-section">
+<div class="ai-top-header"><span>🔥 为你推荐</span><span class="ai-top-sub">基于智能匹配</span></div>
+<div class="ai-top-grid" id="aiTopGrid"></div>
+</div>
+<div class="ai-stack-section">
+<div class="ai-stack-header">💡 最优叠加方案</div>
+<div id="aiStackContent"></div>
+</div>
+<div class="ai-insight-section">
+<div class="ai-insight-header">🧠 AI洞察</div>
+<div id="aiInsightList"></div>
+</div>
+</div>
+
+<!-- Tab: Data Management -->
+<div class="tab-content" id="tab-data">
+<div class="data-mgmt-section">
+<h3>📊 数据管理面板</h3>
+<div class="data-stats-grid" id="dataStatsGrid"></div>
+<div id="dataFreshness"></div>
+<div class="data-actions">
+<button class="btn" onclick="exportData()">📥 导出JSON</button>
+<button class="btn" onclick="document.getElementById('importFile').click()">📤 导入JSON</button>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+<button class="btn" onclick="refreshMonitorLog()">🔄 刷新状态</button>
+</div>
+<div class="data-table-container">
+<table class="data-table">
+<thead><tr><th>ID</th><th>银行</th><th>平台</th><th>类型</th><th>面值/节省</th><th>有效期</th><th>状态</th><th>手动标记</th></tr></thead>
+<tbody id="dataTableBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- Tab: Monitor Log -->
+<div class="tab-content" id="tab-log">
+<div class="monitor-log-section">
+<h3>📡 实时监控日志 — 基于数据状态计算</h3>
+<div class="log-filter" id="logFilter">
+<button class="filter-btn active" onclick="filterLogType('all',this)" type="button">全部</button>
+<button class="filter-btn" onclick="filterLogType('expired',this)" type="button">已到期</button>
+<button class="filter-btn" onclick="filterLogType('expiring',this)" type="button">即将到期</button>
+<button class="filter-btn" onclick="filterLogType('active',this)" type="button">进行中</button>
+</div>
+<div id="monitorLogList"></div>
+</div>
+</div>
+
+<div class="overlay" id="favOverlay" onclick="toggleFavPanel()"></div>
+<div class="fav-panel" id="favPanel"><h3>⭐ 我的收藏 <span class="close" onclick="toggleFavPanel()">✕</span></h3><div id="favList"></div><div class="fav-export"><button onclick="exportFavText()">📋 复制文本</button><button onclick="exportFavImage()">📸 截图保存</button></div></div>
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+</div>
+
 <script>
-var _data={version:'',lastUpdated:'',offers:[],calendar:[],platforms:[],banks:[]};
-var _filteredOffers=[];
-var _filters={platform:'',payMethod:'',type:'',status:'active'};
-var _favs=[];
-var _theme='dark';
-var _searchQuery='';
-var _synonyms={'招行':['招商银行','CMD'],'工行':['工商银行','ICBC'],'建行':['建设银行'],'农行':['农业银行'],'中行':['中国银行'],'交行':['交通银行'],'浦发':['浦发银行'],'光大':['光大银行'],'兴业':['兴业银行'],'民生':['民生银行'],'华夏':['华夏银行'],'邮储':['邮储银行'],'中信':['中信银行'],'广发':['广发银行'],'江南农商':['江南农商行','江南农商银行']};
-var _categoryMap={'3C数码':['3C数码','3C','数码','手机','电脑'],'家电':['家电','电器','空调','冰箱','洗衣机'],'黄金珠宝':['黄金','珠宝','金饰'],'美妆个护':['美妆','个护','护肤','彩妆'],'外卖食品':['外卖','食品','餐饮'],'出行旅游':['出行','旅游','机票','酒店']};
-var _categoryTags=['3C数码','家电','黄金珠宝','美妆个护','外卖食品','出行旅游'];
-var _platformKeys={};
-var _typeLabels={reduce:'立减',installment:'分期',bind:'首绑',random:'随机减',points:'积分',cashback:'返现',subsidy:'贴息',freered:'免单',free:'免息',credit:'提额'};
-var _today=new Date();
-var _currentTab='platform';
-function init(){
-loadTheme();
-loadFavs();
-loadData();
+// ============ V6 Global State ============
+var _v6Data = null;
+var _v6Offers = [];
+var _v6Platforms = [];
+var _v6Banks = [];
+var _v6Calendar = [];
+var _v6Favs = [];
+var _v6LogFilter = 'all';
+
+// ============ Synonym Dictionary ============
+var _bankSynonyms = {
+'工行':['工商银行','工商','ICBC'],'招行':['招商银行','招商','CMB','招商银行信用卡'],
+'广发':['广发银行'],'浦发':['浦发银行'],'兴业':['兴业银行'],
+'交行':['交通银行','交通'],'光大':['光大银行'],'中行':['中国银行'],
+'建行':['建设银行','建设'],'邮储':['邮储银行'],'农行':['农业银行','农业'],
+'中信':['中信银行'],'华夏':['华夏银行'],'民生':['民生银行'],
+'江南农商':['江南农商行'],'白条':['京东白条']
+};
+
+var _platformSynonyms = {
+'京东':['jd','JD'],'淘宝':['tb','TB'],'天猫':['tm','TM'],
+'抖音':['dy','DY'],'拼多多':['pdd','PDD'],'小红书':['xhs','XHS'],
+'支付宝':['alipay','Alipay'],'微信':['wx','WX','微信支付'],
+'云闪付':['union','UnionPay'],'京东支付':['jdpay','JDpay'],
+'白条支付':['baitiao','Baitiao','白条']
+};
+
+function normalizeBank(text) {
+for(var k in _bankSynonyms) {
+if(text.indexOf(k) >= 0) return k;
+for(var i = 0; i < _bankSynonyms[k].length; i++) {
+if(text.indexOf(_bankSynonyms[k][i]) >= 0) return k;
 }
-function loadTheme(){
-_theme=localStorage.getItem('pay-theme')||'dark';
-if(_theme==='light')document.body.classList.add('light');
-document.getElementById('themeBtn').textContent=_theme==='dark'?'🌙':'☀️';
 }
-function toggleTheme(){
-_theme=_theme==='dark'?'light':'dark';
-localStorage.setItem('pay-theme',_theme);
-document.body.classList.toggle('light');
-document.getElementById('themeBtn').textContent=_theme==='dark'?'🌙':'☀️';
+return null;
 }
-function loadFavs(){
-try{_favs=JSON.parse(localStorage.getItem('pay-favs'))||[]}catch(e){_favs=[];}
-document.getElementById('favCount').textContent=_favs.length;
+
+function normalizePlatform(text) {
+for(var k in _platformSynonyms) {
+if(text.indexOf(k) >= 0) return k;
+for(var i = 0; i < _platformSynonyms[k].length; i++) {
+if(text.indexOf(_platformSynonyms[k][i]) >= 0) return k;
 }
-function saveFavs(){
-localStorage.setItem('pay-favs',JSON.stringify(_favs));
-document.getElementById('favCount').textContent=_favs.length;
 }
-function toggleFav(id){
-if(id){
-var idx=_favs.indexOf(id);
-if(idx>=0){_favs.splice(idx,1);return false;}
-else{_favs.push(id);return true;}
+return null;
 }
-document.getElementById('favPanel').classList.toggle('open');
-document.getElementById('overlay').classList.toggle('show');
-renderFavList();
+
+// ============ Calculate Offer Status ============
+function calcOfferStatus(offer) {
+var now = new Date();
+var end = new Date(offer.endDate);
+var start = new Date(offer.startDate);
+if(now < start) return 'upcoming';
+var diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+if(diffDays < 0) return 'expired';
+if(diffDays <= 3) return 'expiring';
+return 'active';
 }
-function closeFav(){
-document.getElementById('favPanel').classList.remove('open');
-document.getElementById('overlay').classList.remove('show');
+
+function formatDate(dateStr) {
+var d = new Date(dateStr);
+return (d.getMonth() + 1) + '-' + d.getDate();
 }
-function renderFavList(){
-var el=document.getElementById('favList');
-if(_favs.length===0){el.innerHTML='<div class="fav-empty">暂无收藏</div>';return;}
-var html='';
-_favs.forEach(function(id){
-var o=_data.offers.find(function(x){return x.id===id;});
-if(o){
-html+='<div class="fav-item"><div class="fav-title">'+o.bank+'·'+o.platform+'·'+o.typeLabel+'</div><div class="fav-desc">'+o.detail+' | '+o.amount+'</div><span class="fav-remove" onclick="removeFav(\''+id+'\')">删除</span></div>';
+
+// ============ Data Loading ============
+function getFallbackData() {
+return {
+"version": "6.0",
+"lastUpdated": new Date().toISOString(),
+"offers": [
+{"id":"offer-001","platform":"抖音","platformKey":"dy","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满10元立减1元 / 满100元随机立减至高8.8元","amount":"至高8.8元","title":"工行抖音立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-002","platform":"抖音","platformKey":"dy","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"alipay","detail":"首绑信用卡满10.01元减10元","amount":"10元","title":"工行抖音首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},
+{"id":"offer-003","platform":"抖音","platformKey":"dy","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"alipay","detail":"储蓄卡快捷支付达标抽锦鲤，至高6180元返现券","amount":"至高6180元","title":"招行抖音返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-004","platform":"淘宝","platformKey":"tb","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满388减8 / 满2888减28","amount":"至高28元","title":"工行淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-005","platform":"淘宝","platformKey":"tb","bank":"兴业","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"支付宝支付：满200减10 / 满2000减20 / 满5000减50","amount":"至高50元","title":"兴业淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-006","platform":"天猫","platformKey":"tm","bank":"光大借记卡","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"支付宝收银台选光大借记卡，0.1-100元随机立减","amount":"至高100元","title":"光大借记卡天猫随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-007","platform":"京东","platformKey":"jd","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"jdpay","detail":"满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)","amount":"至高28元","title":"工行京东立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["黄金珠宝","3C数码","PLUS会员"]},
+{"id":"offer-008","platform":"京东","platformKey":"jd","bank":"工行","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期至高立减300元","amount":"300元","title":"工行京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-009","platform":"京东","platformKey":"jd","bank":"广发","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期支付达标至高500元立减","amount":"500元","title":"广发京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-010","platform":"京东","platformKey":"jd","bank":"浦发","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"京东分期购最高减500元","amount":"至高500元","title":"浦发京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-011","platform":"拼多多","platformKey":"pdd","bank":"工行","type":"random","typeLabel":"随机减","payMethod":"wx","detail":"满200元随机至高立减18元 / 满1888元立减18元","amount":"至高18元","title":"工行拼多多随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-012","platform":"拼多多","platformKey":"pdd","bank":"浦发","type":"reduce","typeLabel":"立减","payMethod":"wx","detail":"满500减3/满1500减12/满4000减25","amount":"至高25元","title":"浦发拼多多立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-013","platform":"拼多多","platformKey":"pdd","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"wx","detail":"储蓄卡快捷支付达标抽锦鲤","amount":"至高6180元","title":"招行拼多多返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-014","platform":"支付宝","platformKey":"alipay","bank":"工行","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"碰一下满25随机减至高6元 / 天天减满20随机至高6.18元","amount":"至高6.18元","title":"工行支付宝随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-015","platform":"支付宝","platformKey":"alipay","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"alipay","detail":"首绑信用卡满15.01元立减15元","amount":"15元","title":"工行支付宝首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},
+{"id":"offer-016","platform":"微信","platformKey":"wx","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"wx","detail":"首绑信用卡满15.01元减15元","amount":"15元","title":"工行微信首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},
+{"id":"offer-017","platform":"微信","platformKey":"wx","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"wx","detail":"储蓄卡快捷支付达标抽锦鲤","amount":"至高6180元","title":"招行微信返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-018","platform":"京东支付","platformKey":"jdpay","bank":"工行","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"京东支付分期至高立减300元","amount":"300元","title":"工行京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-019","platform":"京东支付","platformKey":"jdpay","bank":"光大信用卡","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期支付满100随机减0.1-300元 / 满1000减30(6期+)","amount":"至高300元","title":"光大京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-020","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"installment","typeLabel":"免息","payMethod":"baitiao","detail":"每人每天领1次6期免息券，覆盖3C/家电/美妆等海量商品","amount":"6期免息","title":"白条全民6期免息","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-021","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"installment","typeLabel":"免息","payMethod":"baitiao","detail":"激活白条用户至高享24期免息，部分国补商品可叠加","amount":"24期免息","title":"白条至高24期免息","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息","国补"]},
+{"id":"offer-022","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"reduce","typeLabel":"立减","payMethod":"baitiao","detail":"新开通白条用户：1张6期免息券+1张立减25元券","amount":"25元","title":"白条新户立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},
+{"id":"offer-023","platform":"天猫","platformKey":"tm","bank":"多家","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"平安/浦发/中信：500-25/1500-75/3000-120/5000-200","amount":"至高200元","title":"多家天猫分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-024","platform":"淘宝","platformKey":"tb","bank":"多家","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"中行/建行/光大/交行/招行/邮储 500-25/1500-75/5000-200","amount":"至高200元","title":"多家淘宝分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},
+{"id":"offer-025","platform":"支付宝","platformKey":"alipay","bank":"多家","type":"subsidy","typeLabel":"贴息","payMethod":"alipay","detail":"广发/农行/中行/邮储 账单分期年化1%财政贴息，至高3000元","amount":"至高3000元","title":"财政贴息","status":"expiring","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]}
+],
+"calendar": [
+{"name":"年货节","icon":"🧧","start":"2026-01-05","end":"2026-01-28","desc":"春节前最后一波大促","platforms":["京东","淘宝","天猫","拼多多"]},
+{"name":"38女神节","icon":"🌸","start":"2026-03-01","end":"2026-03-08","desc":"美妆个护、女装专属优惠","platforms":["淘宝","天猫","抖音","小红书"]},
+{"name":"五一出游季","icon":"✈️","start":"2026-04-25","end":"2026-05-05","desc":"出行旅游、酒店机票满减","platforms":["京东","淘宝","飞猪"]},
+{"name":"618开门红","icon":"🚀","start":"2026-05-31","end":"2026-06-03","desc":"京东/天猫第一波爆发","platforms":["京东","天猫","淘宝"]},
+{"name":"618巅峰期","icon":"🔥","start":"2026-06-15","end":"2026-06-18","desc":"全平台最高优惠叠加期","platforms":["京东","天猫","淘宝","抖音","拼多多","小红书"]},
+{"name":"618返场","icon":"🔄","start":"2026-06-19","end":"2026-06-20","desc":"部分延续，适合捡漏","platforms":["京东","天猫"]},
+{"name":"暑期清凉季","icon":"🍉","start":"2026-07-01","end":"2026-07-15","desc":"冰品家电、防晒消暑专场","platforms":["京东","天猫","拼多多"]},
+{"name":"7月会员日","icon":"👑","start":"2026-07-18","end":"2026-07-20","desc":"京东PLUS/淘宝88VIP专属满减","platforms":["京东","淘宝"]},
+{"name":"818大促","icon":"🛒","start":"2026-08-08","end":"2026-08-18","desc":"苏宁/京东818年中主场","platforms":["京东","苏宁"]},
+{"name":"开学季","icon":"📚","start":"2026-08-25","end":"2026-09-05","desc":"数码3C、文具书包满减","platforms":["京东","淘宝","拼多多"]},
+{"name":"双11预售","icon":"预售","start":"2026-10-24","end":"2026-10-31","desc":"定金膨胀、早鸟优惠","platforms":["京东","天猫","淘宝"]},
+{"name":"双11狂欢","icon":"💥","start":"2026-11-01","end":"2026-11-11","desc":"全年最大促销","platforms":["京东","天猫","淘宝","抖音","拼多多","小红书"]},
+{"name":"双12","icon":"🎁","start":"2026-12-06","end":"2026-12-12","desc":"年终清仓满减","platforms":["淘宝","天猫","拼多多"]},
+{"name":"圣诞元旦","icon":"🎄","start":"2026-12-23","end":"2026-12-31","desc":"跨年优惠叠加","platforms":["京东","淘宝","天猫","拼多多"]}
+],
+"platforms": [
+{"key":"jd","name":"京东","icon":"京","color":"#e23a3a","desc":"自营+3C家电强势"},
+{"key":"tb","name":"淘宝","icon":"淘","color":"#ff6a00","desc":"万能集市·中小商家"},
+{"key":"tm","name":"天猫","icon":"猫","color":"#ff0036","desc":"品牌旗舰·品质保障"},
+{"key":"dy","name":"抖音","icon":"抖","color":"#fe2c55","desc":"直播电商·内容种草"},
+{"key":"pdd","name":"拼多多","icon":"拼","color":"#e02e24","desc":"百亿补贴·极致性价比"},
+{"key":"xhs","name":"小红书","icon":"红","color":"#ff2442","desc":"种草社区·美妆个护"},
+{"key":"alipay","name":"支付宝","icon":"付","color":"#1677ff","desc":"碰一下·生活缴费"},
+{"key":"wx","name":"微信","icon":"微","color":"#07c160","desc":"小程序·社交电商"},
+{"key":"union","name":"云闪付","icon":"银","color":"#e60012","desc":"62折·交通出行"},
+{"key":"jdpay","name":"京东支付","icon":"付","color":"#c62828","desc":"京东官方支付"},
+{"key":"baitiao","name":"白条支付","icon":"白","color":"#1565c0","desc":"京东信用消费"}
+],
+"banks": [
+{"name":"工商银行","alias":["工行","工商"],"tier":1},
+{"name":"招商银行","alias":["招行","招商"],"tier":1},
+{"name":"广发银行","alias":["广发"],"tier":1},
+{"name":"浦发银行","alias":["浦发"],"tier":1},
+{"name":"交通银行","alias":["交行"],"tier":1},
+{"name":"兴业银行","alias":["兴业"],"tier":1},
+{"name":"光大银行","alias":["光大","光大信用卡","光大借记卡"],"tier":2},
+{"name":"中信银行","alias":["中信"],"tier":2},
+{"name":"中国银行","alias":["中行"],"tier":2},
+{"name":"建设银行","alias":["建行"],"tier":2},
+{"name":"农业银行","alias":["农行"],"tier":2},
+{"name":"邮储银行","alias":["邮储"],"tier":2},
+{"name":"华夏银行","alias":["华夏"],"tier":2},
+{"name":"民生银行","alias":["民生"],"tier":2},
+{"name":"江南农商行","alias":["江南农商"],"tier":3}
+]
+};
+}
+
+async function loadData() {
+try {
+var resp = await fetch('./data-v6.json');
+if(resp.ok) {
+_v6Data = await resp.json();
+console.log('数据加载成功，版本:', _v6Data.version);
+} else {
+console.warn('数据文件加载失败，使用内嵌数据');
+_v6Data = getFallbackData();
+}
+} catch(e) {
+console.warn('数据加载出错，使用内嵌数据:', e.message);
+_v6Data = getFallbackData();
+}
+
+// Apply user overrides if exists
+try {
+var overrides = localStorage.getItem('pay-v6-data-override');
+if(overrides) {
+var overrideData = JSON.parse(overrides);
+if(overrideData.offers) {
+overrideData.offers.forEach(function(over) {
+var idx = _v6Data.offers.findIndex(function(o){return o.id === over.id;});
+if(idx >= 0) {
+_v6Data.offers[idx] = Object.assign({}, _v6Data.offers[idx], over);
 }
 });
-el.innerHTML=html;
 }
-function removeFav(id){
-_favs=_favs.filter(function(f){return f!==id;});
-saveFavs();
-renderFavList();
-renderCurrentTab();
 }
-async function loadData(){
-try{
-var res=await fetch('./data-v6.json');
-_data=await res.json();
-}catch(e){
-console.warn('fetch失败，使用内嵌数据');
-_data=getEmbeddedData();
+} catch(e) {}
+
+_v6Offers = _v6Data.offers.map(function(o) {
+return Object.assign({}, o, {calcStatus: calcOfferStatus(o)});
+});
+_v6Platforms = _v6Data.platforms || [];
+_v6Banks = _v6Data.banks || [];
+_v6Calendar = _v6Data.calendar || [];
+
+// Save fetch time
+try {
+localStorage.setItem('pay-v6-last-fetch', new Date().toISOString());
+} catch(e) {}
+
+// Load favs
+try {
+var favs = localStorage.getItem('pay-favs');
+if(favs) _v6Favs = JSON.parse(favs);
+} catch(e) {}
+
+// Init UI
+initFilters();
+renderAll();
 }
-localStorage.setItem('pay-v6-last-fetch',new Date().toISOString());
-_data.platforms.forEach(function(p){_platformKeys[p.key]=p;});
-_data.platforms.forEach(function(p){_platformKeys[p.name]=p;});
-updateStats();
-renderFilters();
-renderCalendar();
-renderCurrentTab();
-document.getElementById('updateTime').textContent='数据更新: '+_data.lastUpdated;
-}
-function getEmbeddedData(){
-return {"version":"6.0","lastUpdated":"2026-06-29T10:00:00+08:00","offers":[{"id":"offer-001","platform":"抖音","platformKey":"dy","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满10元立减1元 / 满100元随机立减至高8.8元","amount":"至高8.8元","title":"工行抖音立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-002","platform":"抖音","platformKey":"dy","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"alipay","detail":"首绑信用卡满10.01元减10元","amount":"10元","title":"工行抖音首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-003","platform":"抖音","platformKey":"dy","bank":"工行","type":"points","typeLabel":"积分","payMethod":"alipay","detail":"工银i豆当钱花，至高抵30元","amount":"至高30元","title":"工行抖音i豆","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-004","platform":"抖音","platformKey":"dy","bank":"兴业","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满200减10 / 满1000减15 / 满2000减20 / 满5000减50","amount":"至高50元","title":"兴业抖音立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-005","platform":"抖音","platformKey":"dy","bank":"中行","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"满200减2-20元(月限1次) / 满500减10元(限1次)","amount":"至高20元","title":"中行抖音随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-006","platform":"抖音","platformKey":"dy","bank":"交行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"618狂欢季满减超惠享","amount":"多档立减","title":"交行抖音立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-007","platform":"抖音","platformKey":"dy","bank":"光大","type":"bind","typeLabel":"首绑","payMethod":"alipay","detail":"一键绑卡送消费大礼包","amount":"礼包","title":"光大抖音首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-008","platform":"抖音","platformKey":"dy","bank":"浦发","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"新用户一键绑卡领168元券包 / 消费叠加满减","amount":"168元券","title":"浦发抖音立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-009","platform":"抖音","platformKey":"dy","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"alipay","detail":"储蓄卡快捷支付达标抽锦鲤，至高6180元返现券","amount":"至高6180元","title":"招行抖音返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-010","platform":"淘宝","platformKey":"tb","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满388减8 / 满2888减28","amount":"至高28元","title":"工行淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-011","platform":"淘宝","platformKey":"tb","bank":"兴业","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"支付宝支付：满200减10 / 满2000减20 / 满5000减50","amount":"至高50元","title":"兴业淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-012","platform":"淘宝","platformKey":"tb","bank":"中信","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满200减10 / 满2000减30","amount":"至高30元","title":"中信淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-013","platform":"淘宝","platformKey":"tb","bank":"华夏","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满200减10 / 满2000减30","amount":"至高30元","title":"华夏淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-014","platform":"淘宝","platformKey":"tb","bank":"光大","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满200减10 / 满2000减30(至6.30)","amount":"至高30元","title":"光大淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-015","platform":"淘宝","platformKey":"tb","bank":"浦发","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"满100减6(免密) / 满200减10 / 满2000减20","amount":"至高20元","title":"浦发淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-016","platform":"淘宝","platformKey":"tb","bank":"农行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"88VIP专享：满200减15","amount":"15元","title":"农行淘宝立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-017","platform":"淘宝","platformKey":"tb","bank":"多家","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"中行/建行/光大/交行/招行/邮储 500-25/1500-75/5000-200","amount":"至高200元","title":"多家淘宝分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-018","platform":"淘宝","platformKey":"tb","bank":"广发","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"淘宝分期满额享400元立减","amount":"400元","title":"广发淘宝分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-019","platform":"淘宝","platformKey":"tb","bank":"光大借记卡","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"支付宝收银台选光大借记卡，0.1-100元随机立减","amount":"至高100元","title":"光大借记卡淘宝随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-020","platform":"天猫","platformKey":"tm","bank":"兴业","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"支付宝支付：满200减10 / 满2000减20 / 满5000减50","amount":"至高50元","title":"兴业天猫立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-021","platform":"天猫","platformKey":"tm","bank":"光大借记卡","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"支付宝收银台选光大借记卡，0.1-100元随机立减","amount":"至高100元","title":"光大借记卡天猫随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-022","platform":"天猫","platformKey":"tm","bank":"多家","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"平安/浦发/中信：500-25/1500-75/3000-120/5000-200","amount":"至高200元","title":"多家天猫分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-023","platform":"天猫","platformKey":"tm","bank":"多家","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"3C类分期：3000-200/6000-400，农行/建行/平安/浦发/中信/交行/邮储","amount":"至高400元","title":"天猫3C分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["3C数码","分期免息"]},{"id":"offer-024","platform":"天猫","platformKey":"tm","bank":"交行","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"618狂欢季支付即减","amount":"多档立减","title":"交行天猫立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-025","platform":"天猫","platformKey":"tm","bank":"浦发","type":"reduce","typeLabel":"立减","payMethod":"alipay","detail":"分期最高400元立减+随机满减","amount":"至高400元","title":"浦发天猫立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-026","platform":"京东","platformKey":"jd","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"jdpay","detail":"满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)","amount":"至高28元","title":"工行京东立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["黄金珠宝","3C数码","PLUS会员"]},{"id":"offer-027","platform":"京东","platformKey":"jd","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"jdpay","detail":"首绑信用卡满10.01元减10元","amount":"10元","title":"工行京东首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-028","platform":"京东","platformKey":"jd","bank":"工行","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期至高立减300元","amount":"300元","title":"工行京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-029","platform":"京东","platformKey":"jd","bank":"工行","type":"points","typeLabel":"积分","payMethod":"jdpay","detail":"工银i豆当钱花，至高抵100元","amount":"至高100元","title":"工行京东i豆","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-030","platform":"京东","platformKey":"jd","bank":"广发","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期支付达标至高500元立减","amount":"500元","title":"广发京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-031","platform":"京东","platformKey":"jd","bank":"浦发","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"京东分期购最高减500元 / 首绑立减+随机抹零+外卖神券","amount":"至高500元","title":"浦发京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["外卖","分期免息"]},{"id":"offer-032","platform":"京东","platformKey":"jd","bank":"交行","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期满4000元减80元","amount":"80元","title":"交行京东分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-033","platform":"京东","platformKey":"jd","bank":"兴业","type":"random","typeLabel":"随机减","payMethod":"wx","detail":"京东微信小程序：满100随机0.5-10 / 满300随机1-30","amount":"至高30元","title":"兴业京东随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-034","platform":"京东","platformKey":"jd","bank":"浦发借记卡","type":"random","typeLabel":"随机减","payMethod":"jdpay","detail":"满200减0.2-10元(月限3次) / 外卖满10减2/满20减3","amount":"至高10元","title":"浦发借记卡京东随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["外卖"]},{"id":"offer-035","platform":"京东","platformKey":"jd","bank":"光大借记卡","type":"random","typeLabel":"随机减","payMethod":"jdpay","detail":"满10元随机0.3-6.18元","amount":"至高6.18元","title":"光大借记卡京东随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-036","platform":"京东","platformKey":"jd","bank":"民生","type":"reduce","typeLabel":"立减","payMethod":"jdpay","detail":"京东分期满减活动","amount":"详见活动","title":"民生京东立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-037","platform":"拼多多","platformKey":"pdd","bank":"工行","type":"random","typeLabel":"随机减","payMethod":"wx","detail":"满200元随机至高立减18元 / 满1888元立减18元","amount":"至高18元","title":"工行拼多多随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-038","platform":"拼多多","platformKey":"pdd","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"wx","detail":"首绑信用卡满8.01元立减8元","amount":"8元","title":"工行拼多多首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-039","platform":"拼多多","platformKey":"pdd","bank":"浦发","type":"reduce","typeLabel":"立减","payMethod":"wx","detail":"满500减3/满1500减12/满4000减25","amount":"至高25元","title":"浦发拼多多立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-040","platform":"拼多多","platformKey":"pdd","bank":"交行","type":"reduce","typeLabel":"立减","payMethod":"wx","detail":"618狂欢季支付满减","amount":"多档立减","title":"交行拼多多立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-041","platform":"拼多多","platformKey":"pdd","bank":"浦发","type":"bind","typeLabel":"首绑","payMethod":"wx","detail":"首绑立减+日常满减 / 分期至高166元","amount":"至高166元","title":"浦发拼多多首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-042","platform":"拼多多","platformKey":"pdd","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"wx","detail":"储蓄卡快捷支付达标抽锦鲤","amount":"至高6180元","title":"招行拼多多返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-043","platform":"小红书","platformKey":"xhs","bank":"邮储","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"云闪付支付：满100减10元，每日180名额","amount":"10元","title":"邮储小红书立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-044","platform":"小红书","platformKey":"xhs","bank":"邮储","type":"random","typeLabel":"随机减","payMethod":"union","detail":"满10元随机减1-66元，每日720名额","amount":"至高66元","title":"邮储小红书随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-045","platform":"小红书","platformKey":"xhs","bank":"光大","type":"bind","typeLabel":"首绑","payMethod":"union","detail":"一键绑卡至抖音支付，送消费大礼包","amount":"礼包","title":"光大小红书首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-046","platform":"支付宝","platformKey":"支付宝","bank":"工行","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"碰一下满25随机减至高6元 / 天天减满20随机至高6.18元","amount":"至高6.18元","title":"工行支付宝随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-047","platform":"支付宝","platformKey":"支付宝","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"alipay","detail":"首绑信用卡满15.01元立减15元","amount":"15元","title":"工行支付宝首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-048","platform":"支付宝","platformKey":"支付宝","bank":"工行","type":"installment","typeLabel":"分期","payMethod":"alipay","detail":"分期至高减200元","amount":"200元","title":"工行支付宝分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-049","platform":"支付宝","platformKey":"支付宝","bank":"工行借记卡","type":"random","typeLabel":"随机减","payMethod":"alipay","detail":"连续10天消费立减，满20即参与","amount":"随机立减","title":"工行借记卡支付宝随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-050","platform":"支付宝","platformKey":"支付宝","bank":"多家","type":"subsidy","typeLabel":"贴息","payMethod":"alipay","detail":"广发/农行/中行/邮储 账单分期年化1%财政贴息，至高3000元","amount":"至高3000元","title":"财政贴息","status":"expiring","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-051","platform":"支付宝","platformKey":"支付宝","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"alipay","detail":"砸金蛋：至高500元立减金 / 抽锦鲤：至高6180元返现券","amount":"至高6180元","title":"招行支付宝返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-052","platform":"微信","platformKey":"wx","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"wx","detail":"首绑信用卡满15.01元减15元","amount":"15元","title":"工行微信首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-053","platform":"微信","platformKey":"wx","bank":"光大","type":"bind","typeLabel":"首绑","payMethod":"wx","detail":"首绑微信领立减券","amount":"立减券","title":"光大微信首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-054","platform":"微信","platformKey":"wx","bank":"农行","type":"points","typeLabel":"积分","payMethod":"wx","detail":"微信支付积分惊喜·网购狂欢盛典","amount":"积分加速","title":"农行微信积分","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-055","platform":"微信","platformKey":"wx","bank":"招行","type":"cashback","typeLabel":"返现","payMethod":"wx","detail":"储蓄卡快捷支付达标抽锦鲤","amount":"至高6180元","title":"招行微信返现","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-056","platform":"微信","platformKey":"wx","bank":"华夏","type":"reduce","typeLabel":"立减","payMethod":"wx","detail":"绑卡最高减167元","amount":"至高167元","title":"华夏微信立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-057","platform":"微信","platformKey":"wx","bank":"交行","type":"reduce","typeLabel":"立减","payMethod":"wx","detail":"最红星期五·周周5折 / 微信支付宝刷卡金","amount":"5折","title":"交行微信立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-058","platform":"云闪付","platformKey":"union","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"中免线下满2000减200 / 62开头信用卡满6.01减6","amount":"至高200元","title":"工行云闪付立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-059","platform":"云闪付","platformKey":"union","bank":"邮储","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"小红书满100减10 / 随机减1-66","amount":"至高66元","title":"邮储云闪付立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-060","platform":"云闪付","platformKey":"union","bank":"建行","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"华润万象满300减26-66 / 奥特莱斯满1666减166","amount":"至高166元","title":"建行云闪付立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-061","platform":"云闪付","platformKey":"union","bank":"浦发借记卡","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"携程满100减10 / 滴滴满30减5","amount":"至高10元","title":"浦发借记卡云闪付立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-062","platform":"云闪付","platformKey":"union","bank":"浦发","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"国补焕新返现+随机立减","amount":"返现","title":"浦发云闪付立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["国补"]},{"id":"offer-063","platform":"云闪付","platformKey":"union","bank":"江南农商","type":"reduce","typeLabel":"立减","payMethod":"union","detail":"中石油满100随机5-10元 / 每周四支付立减10元","amount":"至高10元","title":"江南农商云闪付","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-064","platform":"京东支付","platformKey":"jdpay","bank":"京东金融","type":"cashback","typeLabel":"免单","payMethod":"jdpay","detail":"搜"支付免单"，5.30-6.18每天抽，海量名额，银行卡支付均有机会","amount":"免单","title":"京东支付免单","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-065","platform":"京东支付","platformKey":"jdpay","bank":"光大借记卡","type":"random","typeLabel":"随机减","payMethod":"jdpay","detail":"京东支付选光大借记卡，满10元随机立减0.3-6.18元","amount":"至高6.18元","title":"光大京东支付随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-066","platform":"京东支付","platformKey":"jdpay","bank":"光大信用卡","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期支付满100随机减0.1-300元 / 满1000减30(6期+) / 满4000减120(12期+)","amount":"至高300元","title":"光大京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-067","platform":"京东支付","platformKey":"jdpay","bank":"工行","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"京东支付分期至高立减300元","amount":"300元","title":"工行京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-068","platform":"京东支付","platformKey":"jdpay","bank":"广发","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"京东支付分期至高立减500元","amount":"500元","title":"广发京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-069","platform":"京东支付","platformKey":"jdpay","bank":"浦发","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"京东分期购最高减500元","amount":"500元","title":"浦发京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-070","platform":"京东支付","platformKey":"jdpay","bank":"交行","type":"installment","typeLabel":"分期","payMethod":"jdpay","detail":"分期满4000元减80元","amount":"80元","title":"交行京东支付分期","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息"]},{"id":"offer-071","platform":"京东支付","platformKey":"jdpay","bank":"工行","type":"reduce","typeLabel":"立减","payMethod":"jdpay","detail":"满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)","amount":"至高28元","title":"工行京东支付立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["黄金珠宝","3C数码","PLUS会员"]},{"id":"offer-072","platform":"京东支付","platformKey":"jdpay","bank":"工行","type":"bind","typeLabel":"首绑","payMethod":"jdpay","detail":"首绑信用卡满10.01减10元","amount":"10元","title":"工行京东支付首绑","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["新用户"]},{"id":"offer-073","platform":"京东支付","platformKey":"jdpay","bank":"浦发借记卡","type":"random","typeLabel":"随机减","payMethod":"jdpay","detail":"满200减0.2-10元(月限3次)","amount":"至高10元","title":"浦发借记卡京东支付随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-074","platform":"京东支付","platformKey":"jdpay","bank":"兴业","type":"random","typeLabel":"随机减","payMethod":"jdpay","detail":"满100随机0.5-10 / 满300随机1-30","amount":"至高30元","title":"兴业京东支付随机减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-075","platform":"京东支付","platformKey":"jdpay","bank":"工行","type":"points","typeLabel":"积分","payMethod":"jdpay","detail":"工银i豆当钱花，至高抵100元","amount":"至高100元","title":"工行京东支付i豆","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-076","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"installment","typeLabel":"免息","payMethod":"baitiao","detail":"每人每天领1次6期免息券，覆盖3C/家电/美妆/食品等海量商品，618期间可领多张","amount":"6期免息","title":"白条全民6期免息","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["美妆个护","3C数码","分期免息","家电"]},{"id":"offer-077","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"installment","typeLabel":"免息","payMethod":"baitiao","detail":"激活白条用户至高享24期免息，部分国补商品可叠加","amount":"24期免息","title":"白条至高24期免息","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息","国补"]},{"id":"offer-078","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"reduce","typeLabel":"立减","payMethod":"baitiao","detail":"新开通白条用户：1张6期免息券+1张立减25元券(可叠免息)","amount":"25元","title":"白条新户立减","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-079","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"cashback","typeLabel":"返现","payMethod":"baitiao","detail":""大牌帮你还白条"活动，晒单抽8888元还款红包+12期免息神券","amount":"至高8888元","title":"大牌帮你还白条","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-080","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"credit","typeLabel":"提额","payMethod":"baitiao","detail":"618期间白条提额，瓜分万亿额度，至高提额到10万","amount":"至高10万额度","title":"白条提额","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":[]},{"id":"offer-081","platform":"白条支付","platformKey":"baitiao","bank":"白条","type":"installment","typeLabel":"免息","payMethod":"baitiao","detail":"国补商品叠加白条免息，已接入白条免息的国补商户超60%，转化提升32%","amount":"国补+免息","title":"白条国补叠加免息","status":"active","startDate":"2026-06-01","endDate":"2026-06-30","source":"618大促","tags":["分期免息","国补"]}],"calendar":[{"name":"年货节","icon":"🧧","start":"2026-01-05","end":"2026-01-28","desc":"春节前最后一波大促","platforms":["京东","淘宝","天猫","拼多多"]},{"name":"38女神节","icon":"🌸","start":"2026-03-01","end":"2026-03-08","desc":"美妆个护、女装专属优惠","platforms":["淘宝","天猫","抖音","小红书"]},{"name":"五一出游季","icon":"✈️","start":"2026-04-25","end":"2026-05-05","desc":"出行旅游、酒店机票满减","platforms":["京东","淘宝","飞猪"]},{"name":"618开门红","icon":"🚀","start":"2026-05-31","end":"2026-06-03","desc":"京东/天猫第一波爆发","platforms":["京东","天猫","淘宝"]},{"name":"618巅峰期","icon":"🔥","start":"2026-06-15","end":"2026-06-18","desc":"全平台最高优惠叠加期","platforms":["京东","天猫","淘宝","抖音","拼多多","小红书"]},{"name":"618返场","icon":"🔄","start":"2026-06-19","end":"2026-06-20","desc":"部分延续，适合捡漏","platforms":["京东","天猫"]},{"name":"暑期清凉季","icon":"🍉","start":"2026-07-01","end":"2026-07-15","desc":"冰品家电、防晒消暑专场","platforms":["京东","天猫","拼多多"]},{"name":"7月会员日","icon":"👑","start":"2026-07-18","end":"2026-07-20","desc":"京东PLUS/淘宝88VIP专属满减","platforms":["京东","淘宝"]},{"name":"818大促","icon":"🛒","start":"2026-08-08","end":"2026-08-18","desc":"苏宁/京东818年中主场","platforms":["京东","苏宁"]},{"name":"开学季","icon":"📚","start":"2026-08-25","end":"2026-09-05","desc":"数码3C、文具书包满减","platforms":["京东","淘宝","拼多多"]},{"name":"9月丰收节","icon":"🌾","start":"2026-09-10","end":"2026-09-17","desc":"助农专场、生鲜食品满减","platforms":["拼多多","淘宝","京东"]},{"name":"国庆出游季","icon":"🇨🇳","start":"2026-09-28","end":"2026-10-07","desc":"出行旅游、酒店机票满减","platforms":["京东","淘宝","飞猪","携程"]},{"name":"双11预售","icon":"预售","start":"2026-10-24","end":"2026-10-31","desc":"定金膨胀、早鸟优惠","platforms":["京东","天猫","淘宝"]},{"name":"双11狂欢","icon":"💥","start":"2026-11-01","end":"2026-11-11","desc":"全年最大促销","platforms":["京东","天猫","淘宝","抖音","拼多多","小红书"]},{"name":"双12","icon":"🎁","start":"2026-12-06","end":"2026-12-12","desc":"年终清仓满减","platforms":["淘宝","天猫","拼多多"]},{"name":"圣诞元旦","icon":"🎄","start":"2026-12-23","end":"2026-12-31","desc":"跨年优惠叠加","platforms":["京东","淘宝","天猫","拼多多"]}],"platforms":[{"key":"jd","name":"京东","icon":"京","color":"#e23a3a","desc":"自营+3C家电强势"},{"key":"tb","name":"淘宝","icon":"淘","color":"#ff6a00","desc":"万能集市·中小商家"},{"key":"tm","name":"天猫","icon":"猫","color":"#ff0036","desc":"品牌旗舰·品质保障"},{"key":"dy","name":"抖音","icon":"抖","color":"#fe2c55","desc":"直播电商·内容种草"},{"key":"pdd","name":"拼多多","icon":"拼","color":"#e02e24","desc":"百亿补贴·极致性价比"},{"key":"xhs","name":"小红书","icon":"红","color":"#ff2442","desc":"种草社区·美妆个护"},{"key":"alipay","name":"支付宝","icon":"付","color":"#1677ff","desc":"碰一下·生活缴费"},{"key":"wx","name":"微信","icon":"微","color":"#07c160","desc":"小程序·社交电商"},{"key":"union","name":"云闪付","icon":"银","color":"#e60012","desc":"62折·交通出行"},{"key":"jdpay","name":"京东支付","icon":"付","color":"#c62828","desc":"京东官方支付"},{"key":"baitiao","name":"白条支付","icon":"白","color":"#1565c0","desc":"京东信用消费"}],"banks":[{"name":"工商银行","alias":["工行","工商"],"tier":1},{"name":"招商银行","alias":["招行","招商"],"tier":1},{"name":"广发银行","alias":["广发"],"tier":1},{"name":"浦发银行","alias":["浦发"],"tier":1},{"name":"交通银行","alias":["交行"],"tier":1},{"name":"兴业银行","alias":["兴业"],"tier":1},{"name":"光大银行","alias":["光大","光大信用卡","光大借记卡"],"tier":2},{"name":"中信银行","alias":["中信"],"tier":2},{"name":"中国银行","alias":["中行"],"tier":2},{"name":"建设银行","alias":["建行"],"tier":2},{"name":"农业银行","alias":["农行"],"tier":2},{"name":"邮储银行","alias":["邮储"],"tier":2},{"name":"华夏银行","alias":["华夏"],"tier":2},{"name":"民生银行","alias":["民生"],"tier":2},{"name":"江南农商行","alias":["江南农商"],"tier":3}]};
-}
-function getOfferStatus(offer){
-var start=new Date(offer.startDate);
-var end=new Date(offer.endDate);
-var now=_today;
-if(now<start)return'expiring';
-if(now>end)return'expired';
-var diffDays=Math.ceil((end-now)/(1000*60*60*24));
-if(diffDays<=3)return'expiring';
-return'attive';
-}
-function calcOffersStatus(){
-_data.offers.forEach(function(o){
-var start=new Date(o.startDate);
-var end=new Date(o.endDate);
-var now=_today;
-if(now<start){o._status='upcoming';}
-else if(now>end){o._status='expired';}
-else{
-var diffDays=Math.ceil((end-now)/(1000*60*60*24));
-if(diffDays<=3){o._status='expiring';}
-else{o._status='active';}
-}
+
+// ============ Filter State ============
+var _currentFilters = {
+platform: 'all',
+payMethod: 'all',
+type: 'all',
+search: ''
+};
+
+function initFilters() {
+var platformBtns = [
+{key:'all', label:'全部'},
+{key:'jd', label:'京东'},
+{key:'tb', label:'淘宝'},
+{key:'tm', label:'天猫'},
+{key:'dy', label:'抖音'},
+{key:'pdd', label:'拼多多'},
+{key:'xhs', label:'小红书'},
+{key:'alipay', label:'支付宝'},
+{key:'wx', label:'微信'},
+{key:'union', label:'云闪付'},
+{key:'jdpay', label:'京东支付'},
+{key:'baitiao', label:'白条支付'}
+];
+var pContainer = document.getElementById('filterPlatform');
+platformBtns.forEach(function(p, i) {
+var btn = document.createElement('button');
+btn.className = 'filter-btn' + (i === 0 ? ' active' : '');
+btn.textContent = p.label;
+btn.onclick = (function(key, b){ return function(){filterPlatform(key, b);}; })(p.key, btn);
+pContainer.appendChild(btn);
+});
+
+var payBtns = [
+{key:'all', label:'全部'},
+{key:'jdpay', label:'京东支付'},
+{key:'baitiao', label:'白条支付'},
+{key:'wx', label:'微信'},
+{key:'alipay', label:'支付宝'},
+{key:'union', label:'云闪付'}
+];
+var payContainer = document.getElementById('filterPayMethod');
+payBtns.forEach(function(p, i) {
+var btn = document.createElement('button');
+btn.className = 'filter-btn' + (i === 0 ? ' active' : '');
+btn.textContent = p.label;
+btn.onclick = (function(key, b){ return function(){filterPayMethod(key, b);}; })(p.key, btn);
+payContainer.appendChild(btn);
+});
+
+var typeBtns = [
+{key:'all', label:'全部'},
+{key:'reduce', label:'立减'},
+{key:'installment', label:'分期'},
+{key:'bind', label:'首绑'},
+{key:'random', label:'随机减'},
+{key:'points', label:'积分'},
+{key:'cashback', label:'返现'},
+{key:'subsidy', label:'贴息'}
+];
+var typeContainer = document.getElementById('filterType');
+typeBtns.forEach(function(p, i) {
+var btn = document.createElement('button');
+btn.className = 'filter-btn' + (i === 0 ? ' active' : '');
+btn.textContent = p.label;
+btn.onclick = (function(key, b){ return function(){filterType(key, b);}; })(p.key, btn);
+typeContainer.appendChild(btn);
 });
 }
-function updateStats(){
-calcOffersStatus();
-var active=0,expiring=0,expired=0,upcoming=0;
-_data.offers.forEach(function(o){
-if(o._status==='active')active++;
-else if(o._status==='expiring')expiring++;
-else if(o._status==='expired')expired++;
-else if(o._status==='upcoming')upcoming++;
-});
-document.getElementById('statsRow').innerHTML='<div class="stat-card sc-blue" onclick="setStatusFilter(\'\')"><div class="stat-label">总优惠</div><div class="stat-value">'+_data.offers.length+'</div></div><div class="stat-card sc-green" onclick="setStatusFilter(\'active\')"><div class="stat-label">进行中</div><div class="stat-value">'+active+'</div></div><div class="stat-card sc-orange" onclick="setStatusFilter(\'expiring\')"><div class="stat-label">即将到期</div><div class="stat-value">'+expiring+'</div></div><div class="stat-card sc-red" onclick="setStatusFilter(\'expired\')"><div class="stat-label">已过期</div><div class="stat-value">'+expired+'</div></div>';
-}
-function setStatusFilter(status){
-_filters.status=status;
-document.querySelectorAll('#filterStatus .filter-btn').forEach(function(b){b.classList.toggle('active',b.dataset.value===status);});
-applyFilters();
-}
-function renderFilters(){
-var platforms=['全部'].concat(_data.platforms.map(function(p){return p.name;}));
-var payMethods=['全部','京东支付','白条支付','微信','支付宝','云闪付'];
-var types=['全部','立减','首绑','分期','随机减','积分','返现','贴息','免单','免息','提额'];
-var statuses=[{v:'',l:'全部'},{v:'active',l:'进行中'},{v:'expiring',l:'即将到期'},{v:'expired',l:'已过期'}];
-document.getElementById('filterPlatform').innerHTML=platforms.map(function(p){return'<button class="filter-btn'+(p==='全部'?' active':'')+'" data-value="'+(p==='全部'?'':p)+'" onclick="setFilter(this,\'platform\')">'+p+'</button>';}).join('');
-document.getElementById('filterPayMethod').innerHTML=payMethods.map(function(p){return'<button class="filter-btn'+(p==='全部'?' active':'')+'" data-value="'+(p==='全部'?'':p)+'" onclick="setFilter(this,\'payMethod\')">'+p+'</button>';}).join('');
-document.getElementById('filterType').innerHTML=types.map(function(t){return'<button class="filter-btn'+(t==='全部'?' active':'')+'" data-value="'+(t==='全部'?'':t)+'" onclick="setFilter(this,\'type\')">'+t+'</button>';}).join('');
-document.getElementById('filterStatus').innerHTML=statuses.map(function(s){return'<button class="filter-btn'+(s.v===''?' active':'')+'" data-value="'+s.v+'" onclick="setStatusFilter(\''+s.v+'\')">'+s.l+'</button>';}).join('');
-}
-function setFilter(btn,key){
-_filters[key]=btn.dataset.value;
-btn.parentElement.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+
+function filterPlatform(key, btn) {
+_currentFilters.platform = key;
+document.querySelectorAll('#filterPlatform .filter-btn').forEach(function(b){b.classList.remove('active');});
 btn.classList.add('active');
-applyFilters();
+renderAll();
 }
-function applyFilters(){
-_filteredOffers=_data.offers.filter(function(o){
-if(_filters.platform&&o.platform!==_filters.platform)return false;
-if(_filters.payMethod&&o.payMethod!==_filters.payMethod&&o.platform!==_filters.payMethod)return false;
-if(_filters.type&&o.typeLabel!==_filters.type)return false;
-if(_filters.status&&o._status!==_filters.status)return false;
-if(_searchQuery){
-if(!matchSearch(o))return false;
+
+function filterPayMethod(key, btn) {
+_currentFilters.payMethod = key;
+document.querySelectorAll('#filterPayMethod .filter-btn').forEach(function(b){b.classList.remove('active');});
+btn.classList.add('active');
+renderAll();
 }
-return true;
-});
-renderCurrentTab();
+
+function filterType(key, btn) {
+_currentFilters.type = key;
+document.querySelectorAll('#filterType .filter-btn').forEach(function(b){b.classList.remove('active');});
+btn.classList.add('active');
+renderAll();
 }
-function expandSynonyms(query){
-var q=query.toLowerCase();
-var result=[query];
-for(var key in _synonyms){
-if(key.toLowerCase().indexOf(q)>=0||q.indexOf(key.toLowerCase())>=0){
-result=result.concat(_synonyms[key]);
-}
-_synonyms[key].forEach(function(syn){
-if(syn.toLowerCase().indexOf(q)>=0||q.indexOf(syn.toLowerCase())>=0){
-result.push(key);
-result=result.concat(_synonyms[key]);
-}
-});
-}
-return result;
-}
-function matchSearch(o){
-if(!_searchQuery)return true;
-var terms=expandSynonyms(_searchQuery);
-var text=(o.bank+o.platform+o.typeLabel+o.detail+o.title+o.amount).toLowerCase();
-return terms.some(function(t){return text.indexOf(t.toLowerCase())>=0;});
-}
-function handleSearch(){
-_searchQuery=document.getElementById('searchInput').value.trim();
-applyFilters();
-}
-function quickSearch(q){
-document.getElementById('searchInput').value=q;
-handleSearch();
-}
-function switchTab(tab){
-_currentTab=tab;
-document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.toggle('active',b.dataset.tab===tab);});
-document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
-var content=document.getElementById('tabContent');
-var existing=document.getElementById('tab-'+tab);
-if(existing){existing.classList.add('active');return;}
-renderCurrentTab();
-}
-function renderCurrentTab(){
-var content=document.getElementById('tabContent');
-content.innerHTML='<div id="tab-'+_currentTab+'" class="tab-content active"></div>';
-var el=document.getElementById('tab-'+_currentTab);
-switch(_currentTab){
-case'platform':renderPlatformTab(el);break;
-case'bank':renderBankTab(el);break;
-case'category':renderCategoryTab(el);break;
-case'compare':renderCompareTab(el);break;
-case'calc':renderCalcTab(el);break;
-case'stack':renderStackTab(el);break;
-case'data':renderDataTab(el);break;
-case'log':renderLogTab(el);break;
-}
-}
-function getPlatformColor(key){
-var p=_platformKeys[key]||_platformKeys[key.replace('支付宝','alipay').replace('微信','wx').replace('云闪付','union').replace('京东支付','jdpay').replace('白条支付','baitiao')];
-return p?p.color:'#666';
-}
-function getPlatformName(key){
-var p=_platformKeys[key]||_platformKeys[key.replace('支付宝','alipay').replace('微信','wx').replace('云闪付','union').replace('京东支付','jdpay').replace('白条支付','baitiao')];
-return p?p.name:key;
-}
-function getPlatformIcon(key){
-var p=_platformKeys[key]||_platformKeys[key.replace('支付宝','alipay').replace('微信','wx').replace('云闪付','union').replace('京东支付','jdpay').replace('白条支付','baitiao')];
-return p?p.icon:key.charAt(0);
-}
-function getTypeClass(type){
-var map={'reduce':'type-reduce','installment':'type-installment','bind':'type-bind','random':'type-random','points':'type-points','cashback':'type-cashback','subsidy':'type-subsidy','freered':'type-freered','free':'type-free','credit':'type-credit'};
-return map[type]||'type-reduce';
-}
-function highlightText(text,query){
-if(!query)return text;
-var terms=expandSynonyms(query);
-var result=text;
-terms.forEach(function(t){
-var re=new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
-result=result.replace(re,'<span class="search-highlight">$&</span>');
-});
-return result;
-}
-function renderPlatformTab(el){
-var groups={};
-_filteredOffers.forEach(function(o){
-if(!groups[o.platform])groups[o.platform]=[];
-groups[o.platform].push(o);
-});
-if(Object.keys(groups).length===0){el.innerHTML='<div class="empty-state">暂无符合条件的优惠</div>';return;}
-var html='<div class="grid">';
-Object.keys(groups).forEach(function(platform){
-var offers=groups[platform];
-var p=offers[0];
-html+='<div class="card"><div class="card-header"><div class="card-icon" style="background:'+getPlatformColor(platform)+'">'+getPlatformIcon(platform)+'</div><div><div class="card-name">'+highlightText(platform,_searchQuery)+'</div><div class="card-sub">'+offers.length+'个优惠</div></div></div><div class="card-body">';
-offers.forEach(function(o){
-var isFav=_favs.indexOf(o.id)>=0;
-var statusBadge=o._status==='expiring'?'<span class="status-badge status-expiring">即将到期</span>':o._status==='expired'?'<span class="status-badge status-expired">已过期</span>':'';
-html+='<div class="offer-item">'+'<div class="offer-bank">'+highlightText(o.bank,_searchQuery)+'</div>'+'<span class="offer-type '+getTypeClass(o.type)+'">'+o.typeLabel+'</span>'+'<div class="offer-detail">'+highlightText(o.detail,_searchQuery)+statusBadge+'</div>'+'<div class="offer-amount">'+highlightText(o.amount,_searchQuery)+'</div>'+'<span class="offer-fav'+(isFav?' active':'')+'" onclick="toggleFav(\''+o.id+'\');renderCurrentTab();">★</span></div>';
-});
-html+='</div></div>';
-});
-html+='</div>';
-el.innerHTML=html;
-}
-function renderBankTab(el){
-var groups={};
-_filteredOffers.forEach(function(o){
-if(!groups[o.bank])groups[o.bank]=[];
-groups[o.bank].push(o);
-});
-if(Object.keys(groups).length===0){el.innerHTML='<div class="empty-state">暂无符合条件的优惠</div>';return;}
-var html='<div class="grid">';
-Object.keys(groups).sort().forEach(function(bank){
-var offers=groups[bank];
-html+='<div class="card"><div class="card-header"><div><div class="card-name">'+highlightText(bank,_searchQuery)+'</div><div class="card-sub">'+offers.length+'个优惠 · '+getUniquePlatforms(offers)+'</div></div></div><div class="card-body">';
-offers.forEach(function(o){
-var isFav=_favs.indexOf(o.id)>=0;
-html+='<div class="offer-item">'+'<span class="offer-type '+getTypeClass(o.type)+'">'+o.typeLabel+'</span>'+'<div class="offer-detail">'+highlightText(o.platform,_searchQuery)+' · '+highlightText(o.detail,_searchQuery)+'</div>'+'<div class="offer-amount">'+highlightText(o.amount,_searchQuery)+'</div>'+'<span class="offer-fav'+(isFav?' active':'')+'" onclick="toggleFav(\''+o.id+'\');renderCurrentTab();">★</span></div>';
-});
-html+='</div></div>';
-});
-html+='</div>';
-el.innerHTML=html;
-}
-function getUniquePlatforms(offers){
-var platforms={};
-offers.forEach(function(o){platforms[o.platform]=true;});
-return Object.keys(platforms).join('/');
-}
-function renderCategoryTab(el){
-var groups={};
-_categoryTags.forEach(function(cat){groups[cat]=[];});
-_filteredOffers.forEach(function(o){
-var matched=false;
-if(o.tags&&o.tags.length>0){
-o.tags.forEach(function(tag){
-_categoryTags.forEach(function(cat){
-if(tag.indexOf(cat)>=0||cat.indexOf(tag)>=0){
-groups[cat].push(o);matched=true;}
-});
-});
-}
-if(!matched&&o.detail){
-_categoryTags.forEach(function(cat){
-var keywords=_categoryMap[cat]||[];
-if(keywords.some(function(k){return o.detail.indexOf(k)>=0;})){
-groups[cat].push(o);matched=true;}
-});
-}
-});
-var hasContent=false;
-Object.values(groups).forEach(function(arr){if(arr.length>0)hasContent=true;});
-if(!hasContent){
-el.innerHTML='<div class="empty-state">暂无符合条件的品类优惠</div>';return;}
-var html='<div class="grid">';
-_categoryTags.forEach(function(cat){
-var offers=groups[cat];
-if(offers.length===0)return;
-html+='<div class="card"><div class="card-header"><span class="cat-tag">📦</span><div class="card-name">'+cat+'</div><span class="card-sub">'+offers.length+'个优惠</span></div><div class="card-body">';
-offers.slice(0,5).forEach(function(o){
-var isFav=_favs.indexOf(o.id)>=0;
-html+='<div class="offer-item">'+'<span class="offer-type '+getTypeClass(o.type)+'">'+o.typeLabel+'</span>'+'<div class="offer-detail">'+highlightText(o.bank,_searchQuery)+'·'+highlightText(o.platform,_searchQuery)+' · '+highlightText(o.detail,_searchQuery)+'</div>'+'<div class="offer-amount">'+highlightText(o.amount,_searchQuery)+'</div>'+'<span class="offer-fav'+(isFav?' active':'')+'" onclick="toggleFav(\''+o.id+'\');renderCurrentTab();">★</span></div>';
-});
-html+='</div></div>';
-});
-html+='</div>';
-el.innerHTML=html;
-}
-function renderCompareTab(el){
-var platforms=['京东','淘宝','天猫','抖音','拼多多','小红书','支付宝','微信','云闪付','京东支付','白条支付'];
-var types=['立减','分期','随机减','首绑'];
-var html='<div class="compare-table-wrapper" style="overflow-x:auto"><table class="compare-table"><thead><tr><th>类型</th>';
-platforms.forEach(function(p){html+='<th>'+p+'</th>';});
-html+='</tr></thead><tbody>';
-types.forEach(function(type){
-html+='<tr><td><strong>'+type+'</strong></td>';
-platforms.forEach(function(platform){
-var best=_filteredOffers.filter(function(o){return o.platform===platform&&o.typeLabel===type;}).sort(function(a,b){return parseAmount(b.amount)-parseAmount(a.amount);})[0];
-if(best){
-html+='<td class="highlight">'+highlightText(best.bank,_searchQuery)+'<br>'+highlightText(best.amount,_searchQuery)+'</td>';
-}else{
-html+='<td style="color:var(--text3)">-</td>';
-}
-});
-html+='</tr>';
-});
-html+='</tbody></table></div>';
-el.innerHTML=html;
-}
-function parseAmount(amount){
-var m=amount.match(/(\d+)/);
-return m?parseInt(m[1]):0;
-}
-function renderCalcTab(el){
-el.innerHTML='<div class="calc-section"><h3>🧮 省钱计算器</h3><div class="calc-grid"><div class="calc-field"><label>商品价格(元)</label><input type="number" id="calcPrice" placeholder="输入金额" value="1000"></div><div class="calc-field"><label>商品品类</label><select id="calcCategory"><option value="">请选择</option><option value="3C数码">3C数码</option><option value="家电">家电</option><option value="黄金珠宝">黄金珠宝</option><option value="美妆个护">美妆个护</option><option value="外卖食品">外卖食品</option><option value="出行旅游">出行旅游</option></select></div><div class="calc-field"><label>支付方式</label><select id="calcPayMethod"><option value="">不限</option><option value="京东支付">京东支付</option><option value="支付宝">支付宝</option><option value="微信">微信</option><option value="云闪付">云闪付</option></select></div></div><button class="calc-btn" onclick="runCalc()">计算最优方案</button><div id="calcResult" class="calc-result"></div></div>';
-}
-function runCalc(){
-var price=parseFloat(document.getElementById('calcPrice').value)||0;
-var category=document.getElementById('calcCategory').value;
-var payMethod=document.getElementById('calcPayMethod').value;
-var candidates=_data.offers.filter(function(o){
-if(o._status==='expired'||o._status==='upcoming')return false;
-if(payMethod&&o.payMethod!==payMethod&&o.platform!==payMethod)return false;
-if(category){
-var match=false;
-if(o.tags&&o.tags.some(function(t){return t.indexOf(category)>=0||category.indexOf(t)>=0;}))match=true;
-if(o.detail&&_categoryMap[category]&&_categoryMap[category].some(function(k){return o.detail.indexOf(k)>=0;}))match=true;
-if(!match)return false;
+
+function getFilteredOffers() {
+return _v6Offers.filter(function(o) {
+if(_currentFilters.platform !== 'all' && o.platformKey !== _currentFilters.platform) return false;
+if(_currentFilters.payMethod !== 'all' && o.payMethod !== _currentFilters.payMethod) return false;
+if(_currentFilters.type !== 'all' && o.type !== _currentFilters.type) return false;
+if(_currentFilters.search) {
+var q = _currentFilters.search.toLowerCase();
+var normBank = normalizeBank(_currentFilters.search);
+if(normBank && o.bank.indexOf(normBank) >= 0) return true;
+if(o.bank.toLowerCase().indexOf(q) >= 0) return true;
+if(o.platform.toLowerCase().indexOf(q) >= 0) return true;
+if(o.platformKey && o.platformKey.toLowerCase().indexOf(q) >= 0) return true;
+if(o.detail && o.detail.toLowerCase().indexOf(q) >= 0) return true;
+if(o.typeLabel && o.typeLabel.toLowerCase().indexOf(q) >= 0) return true;
+if(o.tags && o.tags.some(function(t){return t.toLowerCase().indexOf(q) >= 0;})) return true;
+return false;
 }
 return true;
-}).map(function(o){
-var save=0;
-if(o.type==='reduce'||o.type==='installment'){
-var m=o.amount.match(/(\d+)/);
-save=m?parseInt(m[1]):0;
-}else if(o.type==='cashback'){
-var m=o.amount.match(/(\d+)/);
-save=m?Math.min(parseInt(m[1])*0.1,50):10;
-}else if(o.type==='random'){
-save=parseInt(o.amount.replace(/[^0-9]/g,''))||5;
-}else if(o.type==='subsidy'){
-var m=o.amount.match(/(\d+)/);
-save=m?Math.min(parseInt(m[1])*0.05,200):50;
-}
-return{offer:o,save:save};
-}).filter(function(c){return c.save>0;}).sort(function(a,b){return b.save-a.save;});
-var result=document.getElementById('calcResult');
-if(candidates.length===0){
-result.classList.remove('show');
-result.innerHTML='';
-return;
-}
-var best=candidates[0];
-var totalSave=Math.min(best.save,price*0.3);
-result.classList.add('show');
-result.innerHTML='<div class="calc-best"><h4>🏆 最优方案</h4><div class="combo">'+best.offer.bank+' · '+best.offer.platform+' · '+best.offer.typeLabel+'</div><div class="detail">'+best.offer.detail+'</div><div style="margin-top:8px;font-size:18px">预计节省: <strong style="color:var(--green)">'+totalSave.toFixed(0)+'元</strong></div></div>';
-if(candidates.length>1){
-var others='<div class="calc-others">';
-candidates.slice(1,4).forEach(function(c,i){
-others+='<div class="calc-other"><div class="rank">第'+(i+2)+'名</div><div class="combo-text">'+c.offer.bank+'·'+c.offer.platform+'·'+c.offer.typeLabel+'</div><div class="save">-'+c.save+'元</div><div class="detail">'+c.offer.detail+'</div></div>';
 });
-others+='</div>';
-result.innerHTML+=others;
 }
+
+// ============ Search ============
+function handleSearch() {
+_currentFilters.search = document.getElementById('searchInput').value;
+renderAll();
 }
-function renderStackTab(el){
-el.innerHTML='<div class="calc-section"><h3>🔗 叠加模拟器</h3><div class="calc-grid"><div class="calc-field"><label>商品原价(元)</label><input type="number" id="stackPrice" placeholder="输入金额" value="5000"></div><div class="calc-field"><label>叠加优惠数量</label><select id="stackCount"><option value="1">1个</option><option value="2" selected>2个</option><option value="3">3个</option></select></div></div><button class="calc-btn" onclick="runStack()">模拟叠加</button><div id="stackResult"></div></div>';
+
+// ============ Render Functions ============
+function renderAll() {
+renderTimeline();
+renderStats();
+renderTicker();
+renderPlatformTab();
+renderBankTab();
+renderCategoryTab();
+renderCompareTab();
+renderRankTab();
+renderAIDefault();
+renderDataMgmt();
+renderMonitorLog();
+updateFavCount();
 }
-function runStack(){
-var price=parseFloat(document.getElementById('stackPrice').value)||0;
-var count=parseInt(document.getElementById('stackCount').value)||1;
-var stackable=_data.offers.filter(function(o){
-if(o._status==='expired'||o._status==='upcoming')return false;
-return['reduce','installment','subsidy'].indexOf(o.type)>=0||o.type==='cashback';
-}).sort(function(a,b){
-var sa=parseAmount(a.amount);var sb=parseAmount(b.amount);
-return sb-sa;
-}).slice(0,count);
-if(stackable.length===0){
-document.getElementById('stackResult').innerHTML='<div class="empty-state">暂无可叠加的优惠</div>';
-return;
-}
-var flow='<div class="stack-flow">';
-flow+='<div class="stack-step"><div class="icon">💰</div><div class="name">原价</div><div class="amount">'+price+'元</div></div>';
-var totalSave=0;
-stackable.forEach(function(o,i){
-var save=Math.min(parseAmount(o.amount),price*0.2);
-totalSave+=save;
-flow+='<div class="stack-arrow">+</div><div class="stack-step"><div class="icon">💳</div><div class="name">'+o.bank+'·'+o.typeLabel+'</div><div class="amount">-'+save.toFixed(0)+'元</div></div>';
+
+function renderTimeline() {
+var el = document.getElementById('yearTimeline');
+var now = new Date();
+var year = now.getFullYear();
+var startOfYear = new Date(year, 0, 1);
+var endOfYear = new Date(year, 11, 31);
+var yearProgress = (now - startOfYear) / (endOfYear - startOfYear) * 100;
+
+var nodes = _v6Calendar.filter(function(c) {
+var cStart = new Date(c.start);
+return cStart.getFullYear() === year;
 });
-flow+='<div class="stack-arrow">=</div><div class="stack-step"><div class="icon">✅</div><div class="name">最终价</div><div class="amount" style="color:var(--green)">'+(price-totalSave).toFixed(0)+'元</div></div>';
-flow+='</div>';
-flow+='<div class="stack-result"><div class="label">叠加 '+count+' 个优惠后</div><div class="price">'+(price-totalSave).toFixed(0)+'元</div><div class="saved">共节省 '+totalSave.toFixed(0)+'元 (省'+(totalSave/price*100).toFixed(1)+'%)</div></div>';
-document.getElementById('stackResult').innerHTML=flow;
-}
-function renderDataTab(el){
-var active=0,expiring=0,expired=0;
-_data.offers.forEach(function(o){
-if(o._status==='active')active++;
-else if(o._status==='expiring')expiring++;
-else if(o._status==='expired')expired++;
+
+var html = '<div class="yt-header"><div class="yt-title">📅 ' + year + '年营销日历</div><span class="yt-year">今年</span></div>';
+html += '<div class="yt-track-wrap">';
+html += '<div class="yt-track"></div>';
+html += '<div class="yt-progress" style="width:' + yearProgress + '%"></div>';
+html += '<div class="yt-now" style="left:' + yearProgress + '%"></div>';
+
+nodes.forEach(function(c, i) {
+var cStart = new Date(c.start);
+var cEnd = new Date(c.end);
+var pos = (cStart - startOfYear) / (endOfYear - startOfYear) * 100;
+var endPos = (cEnd - startOfYear) / (endOfYear - startOfYear) * 100;
+var width = endPos - pos;
+var status = now < cStart ? 'yt-upcoming' : (now > cEnd ? 'yt-past' : 'yt-current');
+var stagger = i % 2 === 0 ? 'yt-node-stagger-even' : 'yt-node-stagger-odd';
+
+html += '<div class="yt-node ' + status + ' ' + stagger + '" style="left:' + pos + '%">';
+html += '<div class="yt-node-dot">' + c.icon + '</div>';
+html += '<div class="yt-node-label">' + c.name + '</div>';
+html += '<div class="yt-node-info"><div class="info-name">' + c.icon + ' ' + c.name + '</div><div class="info-time">' + c.start + ' ~ ' + c.end + '</div><div class="info-desc">' + c.desc + '</div></div>';
+html += '</div>';
 });
-var lastFetch=localStorage.getItem('pay-v6-last-fetch')||'未知';
-var daysOld=lastFetch!=='未知'?Math.floor((_today-new Date(lastFetch))/(1000*60*60*24)):0;
-var warning=daysOld>7?'<div class="data-warning">⚠️ 数据已超过'+daysOld+'天未更新，建议刷新获取最新数据</div>':'';
-el.innerHTML='<div class="data-panel"><h3>📊 数据统计</h3><div class="data-stats"><div class="data-stat"><div class="value" style="color:var(--accent)">'+_data.offers.length+'</div><div class="label">总优惠</div></div><div class="data-stat"><div class="value" style="color:var(--green)">'+active+'</div><div class="label">进行中</div></div><div class="data-stat"><div class="value" style="color:var(--orange)">'+expiring+'</div><div class="label">即将到期</div></div><div class="data-stat"><div class="value" style="color:var(--red)">'+expired+'</div><div class="label">已过期</div></div></div>'+warning+'<h3>📥 导出/导入</h3><div class="data-actions"><button class="btn" onclick="exportData()">📤 导出JSON</button><button class="btn" onclick="document.getElementById(\'importFile\').click()">📥 导入JSON</button><input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)"></div><h3>🏷️ 手动标记</h3><div class="data-actions"><button class="btn" onclick="markAllActive()">全部标为进行中</button><button class="btn" onclick="markAllExpired()">全部标为已过期</button></div><div style="margin-top:12px;font-size:12px;color:var(--text3)">最后更新: '+lastFetch+'</div></div>';
+
+html += '</div>';
+html += '<div class="yt-months">';
+for(var m = 0; m < 12; m++) {
+html += '<span>' + (m + 1) + '月</span>';
 }
-function exportData(){
-var blob=new Blob([JSON.stringify(_data,null,2)],{type:'application/json'});
-var url=URL.createObjectURL(blob);
-var a=document.createElement('a');
-a.href=url;a.download='payment-offers-'+new Date().toISOString().slice(0,10)+'.json';
-a.click();URL.revokeObjectURL(url);
+html += '</div>';
+
+// Countdown to next event
+var upcoming = nodes.filter(function(c){ return new Date(c.start) > now; });
+var nextEvent = upcoming.length > 0 ? upcoming[0] : null;
+if(nextEvent) {
+var daysTo = Math.ceil((new Date(nextEvent.start) - now) / (1000*60*60*24));
+html += '<div class="yt-cd-row"><span class="yt-cd-item"><span class="cd-ico">⏰</span><span class="cd-lbl">距</span><span class="cd-val">' + nextEvent.icon + ' ' + nextEvent.name + '</span></span><span class="yt-cd-item"><span class="cd-ico">📅</span><span class="cd-lbl">还有</span><span class="cd-val' + (daysTo <= 7 ? ' urgent' : '') + '">' + daysTo + '天</span></span></div>';
 }
-function importData(input){
-var file=input.files[0];
-if(!file)return;
-var reader=new FileReader();
-reader.onload=function(e){
-try{
-var imported=JSON.parse(e.target.result);
-if(imported.offers){
-_data=imported;
-localStorage.setItem('pay-v6-data-override',JSON.stringify(imported));
-localStorage.setItem('pay-v6-last-fetch',new Date().toISOString());
-calcOffersStatus();
-updateStats();
-renderFilters();
-renderCurrentTab();
-alert('导入成功，共'+imported.offers.length+'条优惠');
-}else{
-alert('无效的数据格式');
+
+el.innerHTML = html;
 }
-}catch(err){
-alert('导入失败: '+err.message);
+
+function renderStats() {
+var el = document.getElementById('statsRow');
+var active = _v6Offers.filter(function(o){return o.calcStatus === 'active';}).length;
+var expiring = _v6Offers.filter(function(o){return o.calcStatus === 'expiring';}).length;
+var expired = _v6Offers.filter(function(o){return o.calcStatus === 'expired';}).length;
+var upcoming = _v6Offers.filter(function(o){return o.calcStatus === 'upcoming';}).length;
+
+var html = '';
+html += '<div class="stat-card sc-blue" onclick="filterByStatus(\'active\')"><div class="stat-label">进行中</div><div class="stat-value">' + active + '</div><div class="stat-sub">项优惠</div></div>';
+html += '<div class="stat-card sc-orange" onclick="filterByStatus(\'expiring\')"><div class="stat-label">即将到期</div><div class="stat-value">' + expiring + '</div><div class="stat-sub">3天内结束</div></div>';
+html += '<div class="stat-card sc-green" onclick="filterByStatus(\'upcoming\')"><div class="stat-label">即将开始</div><div class="stat-value">' + upcoming + '</div><div class="stat-sub">待生效</div></div>';
+html += '<div class="stat-card sc-purple"><div class="stat-label">总优惠数</div><div class="stat-value">' + _v6Offers.length + '</div><div class="stat-sub">覆盖' + _v6Platforms.length + '平台</div></div>';
+html += '<div class="stat-card sc-pink"><div class="stat-label">已过期</div><div class="stat-value">' + expired + '</div><div class="stat-sub">历史活动</div></div>';
+
+el.innerHTML = html;
+}
+
+function filterByStatus(status) {
+_currentFilters.type = 'all';
+document.querySelectorAll('#filterType .filter-btn').forEach(function(b){b.classList.remove('active');});
+document.querySelector('#filterType .filter-btn').classList.add('active');
+_currentFilters.type = 'all';
+switchTab('platform', document.querySelector('.tab-btn'));
+}
+
+function renderTicker() {
+var active = _v6Offers.filter(function(o){return o.calcStatus === 'active';});
+var expiring = _v6Offers.filter(function(o){return o.calcStatus === 'expiring';});
+var msgs = [];
+active.slice(0,3).forEach(function(o){
+msgs.push(o.bank + '·' + o.platform + ' ' + o.typeLabel + ' ' + o.amount);
+});
+if(expiring.length > 0) {
+msgs.push('⚠️ ' + expiring.length + '项优惠即将在3天内到期');
+}
+msgs.push('🔥 618巅峰期：' + active.length + '项优惠进行中');
+document.getElementById('tickerContent').textContent = msgs.join(' | ');
+document.getElementById('updateTime').textContent = '数据更新: ' + new Date(_v6Data.lastUpdated).toLocaleString('zh-CN');
+}
+
+function renderPlatformTab() {
+var el = document.getElementById('platformGrid');
+var filtered = getFilteredOffers();
+var grouped = {};
+filtered.forEach(function(o) {
+if(!grouped[o.platformKey]) grouped[o.platformKey] = [];
+grouped[o.platformKey].push(o);
+});
+
+var html = '';
+Object.keys(grouped).sort().forEach(function(key) {
+var offers = grouped[key];
+var platform = _v6Platforms.find(function(p){return p.key === key;}) || {name:key,icon:key.charAt(0).toUpperCase(),color:'#666'};
+html += '<div class="platform-card" data-platform="' + key + '">';
+html += '<div class="pc-header"><div class="pc-icon" style="background:' + platform.color + '">' + platform.icon + '</div><div><div class="pc-name">' + platform.name + '</div><div class="pc-sub">' + platform.desc + '</div></div></div>';
+html += '<div class="pc-body">';
+offers.forEach(function(o) {
+html += renderOfferRow(o);
+});
+html += '</div></div>';
+});
+
+el.innerHTML = html || '<div class="fav-empty">暂无匹配的优惠</div>';
+}
+
+function renderOfferRow(o) {
+var isFav = _v6Favs.some(function(f){return f.id === o.id;});
+var statusLabel = o.calcStatus === 'active' ? '' : '<span class="offer-status status-' + o.calcStatus + '">' + 
+(o.calcStatus === 'expiring' ? '即将到期' : o.calcStatus === 'expired' ? '已过期' : '即将开始') + '</span>';
+return '<div class="offer-row" data-type="' + o.type + '" data-paymethod="' + o.payMethod + '">' +
+'<span class="offer-fav' + (isFav ? ' active' : '') + '" onclick="toggleFav(this,\'' + escapeHtml(o.title) + '\',\'' + escapeHtml(o.detail) + '\',\'' + o.id + '\')">' + (isFav ? '★' : '☆') + '</span>' +
+'<span class="offer-bank">' + o.bank + '</span>' +
+'<span class="offer-type type-' + o.type + '">' + o.typeLabel + '</span>' +
+'<span class="offer-detail">' + o.detail + statusLabel + '</span>' +
+'<span class="offer-amount">' + o.amount + '</span></div>';
+}
+
+function renderBankTab() {
+var el = document.getElementById('bankGrid');
+var filtered = getFilteredOffers();
+var grouped = {};
+filtered.forEach(function(o) {
+if(!grouped[o.bank]) grouped[o.bank] = {};
+if(!grouped[o.bank][o.platformKey]) grouped[o.bank][o.platformKey] = [];
+grouped[o.bank][o.platformKey].push(o);
+});
+
+var html = '';
+Object.keys(grouped).sort().forEach(function(bank) {
+var platGroups = grouped[bank];
+var count = Object.values(platGroups).reduce(function(s, g){return s + g.length;}, 0);
+html += '<div class="bank-card"><div class="bank-header"><span class="bank-name">🏦 ' + bank + '</span><span class="bank-tag">覆盖' + Object.keys(platGroups).length + '平台/' + count + '项优惠</span></div>';
+html += '<div class="bank-body">';
+Object.keys(platGroups).sort().forEach(function(pKey) {
+var platform = _v6Platforms.find(function(p){return p.key === pKey;}) || {name:pKey};
+html += '<div class="bank-platform-group"><div class="bank-plat-name">' + platform.name + '</div>';
+platGroups[pKey].forEach(function(o) {
+html += '<div class="bank-offer">' + o.typeLabel + '：' + o.detail + ' (' + o.amount + ')</div>';
+});
+html += '</div>';
+});
+html += '</div></div>';
+});
+
+el.innerHTML = html || '<div class="fav-empty">暂无匹配的优惠</div>';
+}
+
+function renderCategoryTab() {
+var el = document.getElementById('categoryGrid');
+var catMap = {
+'3c':{name:'3C数码',icon:'📱',tags:['3C数码','手机','数码']},
+'appliance':{name:'大家电',icon:'🏠',tags:['家电','电视','冰箱','洗衣机']},
+'gold':{name:'黄金珠宝',icon:'💍',tags:['黄金','珠宝','金饰']},
+'beauty':{name:'美妆个护',icon:'💄',tags:['美妆','个护','化妆品','护肤']},
+'food':{name:'餐饮外卖',icon:'🍜',tags:['外卖','餐饮','食品']},
+'travel':{name:'出行旅游',icon:'✈️',tags:['出行','旅游','机票','酒店']}
+};
+
+var filtered = getFilteredOffers();
+var html = '';
+Object.keys(catMap).forEach(function(catKey) {
+var cat = catMap[catKey];
+var catOffers = filtered.filter(function(o) {
+return o.tags && o.tags.some(function(t){return cat.tags.indexOf(t) >= 0;});
+});
+if(catOffers.length === 0) return;
+
+var grouped = {};
+catOffers.forEach(function(o) {
+if(!grouped[o.platformKey]) grouped[o.platformKey] = [];
+grouped[o.platformKey].push(o);
+});
+
+html += '<div class="cat-card"><div class="cat-header"><span class="cat-icon">' + cat.icon + '</span><span class="cat-name">' + cat.name + '</span><span class="cat-count">' + catOffers.length + '项优惠</span></div>';
+html += '<div class="cat-body">';
+Object.keys(grouped).forEach(function(pKey) {
+var platform = _v6Platforms.find(function(p){return p.key === pKey;}) || {name:pKey,color:'#666'};
+html += '<div class="cat-platform"><div class="cat-platform-name"><span class="dot" style="background:' + platform.color + '"></span>' + platform.name + '</div>';
+grouped[pKey].forEach(function(o) {
+html += '<div class="cat-offer">' + o.bank + '：' + o.detail + '</div>';
+});
+html += '</div>';
+});
+html += '</div></div>';
+});
+
+el.innerHTML = html || '<div class="fav-empty">暂无品类匹配的优惠</div>';
+}
+
+function renderCompareTab() {
+var el = document.getElementById('compareTable');
+var filtered = getFilteredOffers();
+
+// Get max discount per platform per type
+var platformKeys = ['dy','tb','tm','jd','pdd','xhs','alipay','wx'];
+var typeLabels = ['reduce','installment','bind','random'];
+
+var html = '<table class="compare-table"><thead><tr><th>优惠维度</th>';
+platformKeys.forEach(function(pk) {
+var p = _v6Platforms.find(function(pl){return pl.key === pk;});
+if(p) html += '<th class="dot-' + pk + '">' + p.name + '</th>';
+});
+html += '</tr></thead><tbody>';
+
+// Reduce
+html += '<tr><td class="platform-col">立减最高</td>';
+platformKeys.forEach(function(pk) {
+var offers = filtered.filter(function(o){return o.platformKey === pk && o.type === 'reduce';});
+var max = offers.length > 0 ? offers[0].amount : '—';
+html += '<td' + (offers.length > 0 ? ' class="highlight"' : '') + '>' + max + '</td>';
+});
+html += '</tr>';
+
+// Installment
+html += '<tr><td class="platform-col">分期最高减</td>';
+platformKeys.forEach(function(pk) {
+var offers = filtered.filter(function(o){return o.platformKey === pk && o.type === 'installment';});
+var max = offers.length > 0 ? Math.max(...offers.map(function(o){return parseAmount(o.amount);})) : 0;
+html += '<td' + (max > 0 ? ' class="highlight"' : '') + '>' + (max > 0 ? max + '元' : '—') + '</td>';
+});
+html += '</tr>';
+
+// Bind
+html += '<tr><td class="platform-col">首绑优惠</td>';
+platformKeys.forEach(function(pk) {
+var offers = filtered.filter(function(o){return o.platformKey === pk && o.type === 'bind';});
+var max = offers.length > 0 ? offers[0].amount : '—';
+html += '<td>' + max + '</td>';
+});
+html += '</tr>';
+
+// Random
+html += '<tr><td class="platform-col">随机立减</td>';
+platformKeys.forEach(function(pk) {
+var offers = filtered.filter(function(o){return o.platformKey === pk && o.type === 'random';});
+html += '<td' + (offers.length > 0 ? ' class="highlight"' : '') + '>' + (offers.length > 0 ? '✅' : '—') + '</td>';
+});
+html += '</tr>';
+
+// Bank count
+html += '<tr><td class="platform-col">覆盖银行数</td>';
+platformKeys.forEach(function(pk) {
+var banks = new Set(filtered.filter(function(o){return o.platformKey === pk;}).map(function(o){return o.bank;}));
+html += '<td>' + banks.size + '+</td>';
+});
+html += '</tr></tbody></table>';
+
+el.innerHTML = html;
+}
+
+function parseAmount(str) {
+var m = String(str).match(/(\d+)/);
+return m ? parseInt(m[1]) : 0;
+}
+
+function renderRankTab() {
+var el = document.getElementById('rankList');
+var filtered = getFilteredOffers();
+
+// Sort by amount value
+var sorted = filtered.map(function(o) {
+return Object.assign({}, o, {sortVal: parseAmount(o.amount)});
+}).sort(function(a, b){return b.sortVal - a.sortVal;}).slice(0, 20);
+
+var html = '';
+sorted.forEach(function(o, i) {
+var rankClass = i < 3 ? 'r' + (i+1) : 'r4';
+html += '<div class="rank-item">';
+html += '<span class="rank-num ' + rankClass + '">' + (i+1) + '</span>';
+html += '<div class="rank-info"><div class="title">' + o.bank + ' · ' + o.platform + '</div><div class="desc">' + o.typeLabel + '：' + o.detail + '</div></div>';
+html += '<span class="rank-save">' + o.amount + '</span>';
+html += '<span class="rank-fav' + (_v6Favs.some(function(f){return f.id === o.id;}) ? ' active' : '') + '" onclick="toggleFavRank(this,\'' + escapeHtml(o.title) + '\',\'' + escapeHtml(o.detail) + '\',\'' + o.id + '\')">' + (_v6Favs.some(function(f){return f.id === o.id;}) ? '★' : '☆') + '</span>';
+html += '</div>';
+});
+
+el.innerHTML = html || '<div class="fav-empty">暂无优惠数据</div>';
+}
+
+// ============ Calculator ============
+function calcBest() {
+var amount = parseInt(document.getElementById('calcAmount').value) || 0;
+var category = document.getElementById('calcCategory').value;
+var installment = document.getElementById('calcInstallment').value;
+var payMethod = document.getElementById('calcPayMethod').value;
+
+var filtered = getFilteredOffers().filter(function(o) {
+if(payMethod !== 'all' && o.payMethod !== payMethod) return false;
+return true;
+});
+
+// Group by platform
+var byPlatform = {};
+filtered.forEach(function(o) {
+if(!byPlatform[o.platform]) byPlatform[o.platform] = [];
+byPlatform[o.platform].push(o);
+});
+
+// Calculate best
+var results = [];
+Object.keys(byPlatform).forEach(function(plat) {
+var offers = byPlatform[plat];
+var bestSave = 0;
+var bestOffer = null;
+offers.forEach(function(o) {
+var save = parseAmount(o.amount);
+if(save > bestSave) {
+bestSave = save;
+bestOffer = o;
+}
+});
+if(bestOffer) {
+results.push({platform: plat, offer: bestOffer, save: bestSave, total: Math.max(0, amount - bestSave)});
+}
+});
+
+results.sort(function(a, b){return b.save - a.save;});
+var best = results[0];
+
+var html = '';
+if(best) {
+html += '<h4>💰 最优方案</h4>';
+html += '<div class="combo">' + best.platform + ' · ' + best.offer.bank + ' ' + best.offer.typeLabel + '</div>';
+html += '<div class="detail">优惠：' + best.offer.detail + '<br>节省：' + best.save + '元 → 实付：' + best.total + '元</div>';
+}
+
+var others = '';
+results.slice(1, 4).forEach(function(r, i) {
+others += '<div class="calc-other"><div class="rank">方案' + (i+2) + '</div><div class="combo-text">' + r.platform + ' · ' + r.offer.bank + '</div><div class="save">' + r.save + '元</div><div class="detail">实付 ' + r.total + '元</div></div>';
+});
+
+document.getElementById('calcBest').innerHTML = html;
+document.getElementById('calcOthers').innerHTML = others;
+document.getElementById('calcResult').classList.add('show');
+}
+
+// ============ Stack Calculator ============
+function calcStack() {
+var price = parseInt(document.getElementById('stackPrice').value) || 0;
+var category = document.getElementById('stackCategory').value;
+var bankSel = document.getElementById('stackBank').value;
+var platSel = document.getElementById('stackPlatform').value;
+
+var platSave = 0;
+if(platSel === 'jd_plus_50') platSave = 50;
+else if(platSel === 'jd_200') platSave = 200;
+else if(platSel === 'tm_300') platSave = 300;
+else if(platSel === 'tb_200') platSave = 200;
+
+var guobuPct = 0, guobuCap = 0;
+if(category === '3c') {guobuPct = 0.15; guobuCap = 500;}
+else if(category === 'appliance') {guobuPct = 0.15; guobuCap = 1500;}
+
+var bankSave = 0;
+if(bankSel === 'icbc_jd_300') bankSave = 300;
+else if(bankSel === 'cgb_jd_500' || bankSel === 'spdb_jd_500') bankSave = 500;
+else if(bankSel === 'ceg_jd_300') bankSave = 150;
+
+var afterPlat = Math.max(0, price - platSave);
+var guobu = guobuPct > 0 ? Math.min(afterPlat * guobuPct, guobuCap) : 0;
+var afterGuobu = Math.max(0, afterPlat - guobu);
+var finalPrice = Math.max(0, afterGuobu - bankSave);
+var totalSaved = price - finalPrice;
+
+var html = '<div class="stack-flow">';
+html += '<div class="stack-step"><div class="icon">💰</div><div class="name">原价</div><div class="amount">¥' + price + '</div></div>';
+if(platSave > 0) {
+html += '<span class="stack-arrow">→</span>';
+html += '<div class="stack-step"><div class="icon">🎫</div><div class="name">平台券</div><div class="amount">-¥' + platSave + '</div></div>';
+}
+if(guobu > 0) {
+html += '<span class="stack-arrow">→</span>';
+html += '<div class="stack-step"><div class="icon">🏛️</div><div class="name">国补15%</div><div class="amount">-¥' + Math.round(guobu) + '</div></div>';
+}
+if(bankSave > 0) {
+html += '<span class="stack-arrow">→</span>';
+html += '<div class="stack-step"><div class="icon">🏦</div><div class="name">银行优惠</div><div class="amount">-¥' + bankSave + '</div></div>';
+}
+html += '</div>';
+html += '<div class="stack-result"><div class="label">叠加后到手价</div><div class="price">¥' + Math.round(finalPrice) + '</div><div class="saved">共节省 ¥' + Math.round(totalSaved) + ' (' + (totalSaved/price*100).toFixed(1) + '%)</div></div>';
+
+document.getElementById('stackResult').innerHTML = html;
+}
+
+// ============ AI Tab ============
+function renderAIDefault() {
+// Top recommendations
+var filtered = getFilteredOffers();
+var top = filtered.slice(0, 6);
+
+var topGrid = document.getElementById('aiTopGrid');
+var topHtml = '';
+top.forEach(function(o) {
+var isFav = _v6Favs.some(function(f){return f.id === o.id;});
+topHtml += '<div class="ai-top-card">';
+topHtml += '<span class="ai-match">' + o.amount + '</span>';
+topHtml += '<div class="ai-offer-bank">' + o.bank + '</div>';
+topHtml += '<span class="ai-offer-type type-' + o.type + '">' + o.typeLabel + '</span>';
+topHtml += '<div class="ai-offer-detail">' + o.platform + ' · ' + o.detail + '</div>';
+topHtml += '<div class="ai-offer-amount">' + o.amount + '</div>';
+topHtml += '</div>';
+});
+topGrid.innerHTML = topHtml;
+
+// Stack content
+var stackContent = document.getElementById('aiStackContent');
+var stackHtml = '<div class="ai-stack-card"><div class="ai-stack-name">💡 热门叠加方案推荐</div>';
+var plans = [
+{price:5999, name:'iPhone 15 Pro 256G', platSave:200, guobuPct:0.15, guobuCap:500, bankOffer:{bank:'工行', typeName:'分期减', save:300}},
+{price:8999, name:'MacBook Air M2', platSave:300, guobuPct:0.15, guobuCap:500, bankOffer:{bank:'广发', typeName:'分期减', save:500}},
+{price:2999, name:'戴森吹风机', platSave:100, guobuPct:0.15, guobuCap:500, bankOffer:{bank:'浦发', typeName:'分期减', save:300}}
+];
+plans.forEach(function(p) {
+var afterPlat = p.price - p.platSave;
+var guobu = Math.min(afterPlat * p.guobuPct, p.guobuCap);
+var afterGuobu = afterPlat - guobu;
+var final = Math.max(0, afterGuobu - p.bankOffer.save);
+var saved = p.price - final;
+stackHtml += '<div class="ai-stack-flow">';
+stackHtml += '<div class="ai-stack-step"><div class="s-label">原价</div><div class="s-value">¥' + p.price + '</div></div>';
+if(p.platSave > 0) stackHtml += '<span class="ai-stack-arrow">→</span><div class="ai-stack-step"><div class="s-label">平台券</div><div class="s-value">-' + p.platSave + '</div></div>';
+if(guobu > 0) stackHtml += '<span class="ai-stack-arrow">→</span><div class="ai-stack-step"><div class="s-label">国补15%</div><div class="s-value">-' + Math.round(guobu) + '</div></div>';
+if(p.bankOffer.save > 0) stackHtml += '<span class="ai-stack-arrow">→</span><div class="ai-stack-step"><div class="s-label">' + p.bankOffer.bank + '</div><div class="s-value">-' + p.bankOffer.save + '</div></div>';
+stackHtml += '</div>';
+stackHtml += '<div class="ai-stack-result">¥' + Math.round(final) + '<span class="save-detail"> 省 ¥' + Math.round(saved) + '</span></div>';
+});
+stackHtml += '</div>';
+stackContent.innerHTML = stackHtml;
+
+// Insights
+var insightList = document.getElementById('aiInsightList');
+var insights = [
+{icon:'💡', text:'当前<strong>618巅峰期</strong>，全平台优惠叠加进行中，建议货比三家'},
+{icon:'📊', text:'分期优惠力度最大：<strong>广发/浦发京东分期至高500元</strong>'},
+{icon:'🎯', text:'国补+银行+平台三重叠加，家电品类最高可省<strong>30%+</strong>'},
+{icon:'🔥', text:'招行锦鲤活动至高<strong>6180元</strong>返现，值得参与'}
+];
+var insightHtml = '';
+insights.forEach(function(ins) {
+insightHtml += '<div class="ai-insight-item"><span class="ii-icon">' + ins.icon + '</span><span class="ii-text">' + ins.text + '</span></div>';
+});
+insightList.innerHTML = insightHtml;
+}
+
+// ============ AI Chat ============
+function aiSend() {
+var input = document.getElementById('aiInput');
+var q = input.value.trim();
+if(!q) return;
+input.value = '';
+appendUserMsg(q);
+appendThinking();
+setTimeout(function() {
+var result = aiProcessQuery(q);
+removeThinking();
+appendAIMsg(result);
+}, 500);
+}
+
+function aiQuick(q) {
+document.getElementById('aiInput').value = q;
+aiSend();
+}
+
+function aiProcessQuery(q) {
+var filtered = getFilteredOffers();
+var normBank = normalizeBank(q);
+var normPlat = normalizePlatform(q);
+var qLower = q.toLowerCase();
+
+// Filter by query
+var results = filtered.filter(function(o) {
+if(normBank && o.bank.indexOf(normBank) >= 0) return true;
+if(normPlat && (o.platformKey === normPlat || o.platform.indexOf(normPlat) >= 0)) return true;
+if(q.indexOf(o.typeLabel) >= 0) return true;
+if(q.indexOf('分期') >= 0 && (o.type === 'installment' || o.type === 'subsidy')) return true;
+if(q.indexOf('返现') >= 0 && o.type === 'cashback') return true;
+if(q.indexOf('立减') >= 0 && o.type === 'reduce') return true;
+return false;
+}).slice(0, 8);
+
+// Generate response
+var lines = [];
+if(results.length === 0) {
+lines.push('抱歉，没有找到与"' + q + '"相关的优惠。');
+lines.push('请尝试：指定银行（如"招行"）或平台（如"京东"）或优惠类型（如"分期"）');
+} else {
+lines.push('根据"' + q + '"为您找到' + results.length + '条相关优惠：\n');
+results.forEach(function(o, i) {
+lines.push('**' + (i+1) + '. ' + o.bank + ' · ' + o.platform + ' · ' + o.typeLabel + '**');
+lines.push('   ' + o.detail);
+if(o.amount) lines.push('   💰 ' + o.amount);
+});
+var best = results[0];
+lines.push('\n**💡 最推荐：** ' + best.bank + ' ' + best.platform + ' ' + best.typeLabel + '，' + best.detail + '，最高' + best.amount);
+}
+return lines.join('\n');
+}
+
+function appendUserMsg(text) {
+var body = document.getElementById('aiChatBody');
+var welcome = body.querySelector('.ai-welcome');
+if(welcome) welcome.remove();
+var div = document.createElement('div');
+div.className = 'ai-msg ai-msg-user';
+div.innerHTML = '<div class="ai-bubble">' + escapeHtml(text) + '</div>';
+body.appendChild(div);
+body.scrollTop = body.scrollHeight;
+}
+
+function appendThinking() {
+var body = document.getElementById('aiChatBody');
+var div = document.createElement('div');
+div.className = 'ai-msg';
+div.id = 'aiThinking';
+div.innerHTML = '<div class="ai-thinking">🔍 正在检索优惠... <div class="ai-thinking-dots"><span></span><span></span><span></span></div></div>';
+body.appendChild(div);
+body.scrollTop = body.scrollHeight;
+}
+
+function removeThinking() {
+var el = document.getElementById('aiThinking');
+if(el) el.remove();
+}
+
+function appendAIMsg(text) {
+var body = document.getElementById('aiChatBody');
+var div = document.createElement('div');
+div.className = 'ai-msg ai-msg-ai';
+var html = '<div class="ai-avatar">🤖</div><div class="ai-body"><div class="ai-bubble">';
+text.split('\n').forEach(function(line) {
+if(line.startsWith('**') && line.endsWith('**')) {
+html += '<p><strong>' + line.replace(/\*\*/g, '') + '</strong></p>';
+} else {
+html += '<p>' + line + '</p>';
+}
+});
+html += '</div></div>';
+div.innerHTML = html;
+body.appendChild(div);
+body.scrollTop = body.scrollHeight;
+}
+
+// ============ Data Management ============
+function renderDataMgmt() {
+var statsGrid = document.getElementById('dataStatsGrid');
+var active = _v6Offers.filter(function(o){return o.calcStatus === 'active';}).length;
+var expiring = _v6Offers.filter(function(o){return o.calcStatus === 'expiring';}).length;
+var expired = _v6Offers.filter(function(o){return o.calcStatus === 'expired';}).length;
+var upcoming = _v6Offers.filter(function(o){return o.calcStatus === 'upcoming';}).length;
+
+statsGrid.innerHTML = 
+'<div class="data-stat-card"><div class="data-stat-label">进行中</div><div class="data-stat-value active-color">' + active + '</div></div>' +
+'<div class="data-stat-card"><div class="data-stat-label">即将到期</div><div class="data-stat-value expiring-color">' + expiring + '</div></div>' +
+'<div class="data-stat-card"><div class="data-stat-label">已过期</div><div class="data-stat-value expired-color">' + expired + '</div></div>' +
+'<div class="data-stat-card"><div class="data-stat-label">即将开始</div><div class="data-stat-value">' + upcoming + '</div></div>' +
+'<div class="data-stat-card"><div class="data-stat-label">总计</div><div class="data-stat-value">' + _v6Offers.length + '</div></div>';
+
+// Freshness
+var freshnessEl = document.getElementById('dataFreshness');
+var lastFetch = _v6Data.lastUpdated;
+var daysOld = Math.floor((new Date() - new Date(lastFetch)) / (1000*60*60*24));
+var isFresh = daysOld < 7;
+freshnessEl.innerHTML = '<div class="data-freshness ' + (isFresh ? 'fresh' : 'stale') + '">' +
+(isFresh ? '✅ 数据新鲜' : '⚠️ 数据已过期（' + daysOld + '天）') + 
+' | 最后更新：' + new Date(lastFetch).toLocaleString('zh-CN') + '</div>';
+
+// Table
+var tbody = document.getElementById('dataTableBody');
+var html = '';
+_v6Offers.slice(0, 30).forEach(function(o) {
+html += '<tr>';
+html += '<td>' + o.id + '</td>';
+html += '<td>' + o.bank + '</td>';
+html += '<td>' + o.platform + '</td>';
+html += '<td><span class="offer-type type-' + o.type + '">' + o.typeLabel + '</span></td>';
+html += '<td>' + o.amount + '</td>';
+html += '<td>' + o.startDate + ' ~ ' + o.endDate + '</td>';
+html += '<td><span class="status-badge ' + o.calcStatus + '">' + o.calcStatus + '</span></td>';
+html += '<td><select class="manual-status-select" onchange="manualStatus(\'' + o.id + '\', this.value)"><option value="">--</option><option value="active">active</option><option value="expiring">expiring</option><option value="expired">expired</option></select></td>';
+html += '</tr>';
+});
+tbody.innerHTML = html;
+}
+
+function manualStatus(id, status) {
+if(!status) return;
+try {
+var overrides = JSON.parse(localStorage.getItem('pay-v6-data-override') || '{"offers":[]}');
+if(!overrides.offers) overrides.offers = [];
+var idx = overrides.offers.findIndex(function(o){return o.id === id;});
+if(idx >= 0) {
+overrides.offers[idx].status = status;
+} else {
+overrides.offers.push({id: id, status: status});
+}
+localStorage.setItem('pay-v6-data-override', JSON.stringify(overrides));
+alert('已标记 ' + id + ' 为 ' + status);
+location.reload();
+} catch(e) {
+alert('保存失败: ' + e.message);
+}
+}
+
+function exportData() {
+var dataStr = JSON.stringify(_v6Data, null, 2);
+var blob = new Blob([dataStr], {type: 'application/json'});
+var url = URL.createObjectURL(blob);
+var a = document.createElement('a');
+a.href = url;
+a.download = 'pay-marketing-data-v6.json';
+a.click();
+URL.revokeObjectURL(url);
+}
+
+function importData(input) {
+var file = input.files[0];
+if(!file) return;
+var reader = new FileReader();
+reader.onload = function(e) {
+try {
+var data = JSON.parse(e.target.result);
+if(confirm('确认导入 ' + data.offers.length + ' 条优惠数据？将覆盖当前数据。')) {
+_v6Data = data;
+_v6Offers = data.offers.map(function(o) {
+return Object.assign({}, o, {calcStatus: calcOfferStatus(o)});
+});
+alert('导入成功！');
+renderAll();
+}
+} catch(err) {
+alert('导入失败：' + err.message);
 }
 };
 reader.readAsText(file);
 }
-function markAllActive(){
-_data.offers.forEach(function(o){o._status='active';});
-localStorage.setItem('pay-v6-data-override',JSON.stringify(_data));
-updateStats();
-renderCurrentTab();
-}
-function markAllExpired(){
-_data.offers.forEach(function(o){o._status='expired';});
-localStorage.setItem('pay-v6-data-override',JSON.stringify(_data));
-updateStats();
-renderCurrentTab();
-}
-function renderLogTab(el){
-var logs=[];
-var active=0,expiring=0,expired=0;
-_data.offers.forEach(function(o){
-if(o._status==='active')active++;
-else if(o._status==='expiring')expiring++;
-else if(o._status==='expired')expired++;
-if(o._status==='active'){
-logs.push({icon:'✅',title:o.bank+'·'+o.platform+'·'+o.typeLabel,title2:o.amount,desc:'进行中 | 有效期至'+o.endDate,time:'活跃'});
-}
+
+// ============ Monitor Log ============
+function renderMonitorLog() {
+var el = document.getElementById('monitorLogList');
+var logs = generateMonitorLogs();
+
+var filteredLogs = _v6LogFilter === 'all' ? logs : logs.filter(function(l) {
+return l.type === _v6LogFilter;
 });
-var expiringOffers=_data.offers.filter(function(o){return o._status==='expiring';});
-if(expiringOffers.length>0){
-var days=Math.min.apply(null,expiringOffers.map(function(o){return Math.ceil((new Date(o.endDate)-_today)/(1000*60*60*24));}));
-logs.unshift({icon:'⏰',title:'⚠️ '+expiringOffers.length+'条优惠即将到期',desc:'最近 '+days+' 天内结束',time:new Date().toLocaleDateString()});
-}
-if(active>0){
-logs.unshift({icon:'📊',title:'当前数据统计',desc:'进行中: '+active+'条 | 即将到期: '+expiring+'条 | 已过期: '+expired+'条',time:new Date().toLocaleDateString()});
-}
-if(logs.length===0){
-el.innerHTML='<div class="log-empty">暂无监控日志</div>';
+
+if(filteredLogs.length === 0) {
+el.innerHTML = '<div class="log-empty">暂无日志记录</div>';
 return;
 }
-var html='<div class="log-section">';
-logs.forEach(function(log){
-html+='<div class="log-item"><div class="log-icon">'+log.icon+'</div><div class="log-content"><div class="log-title">'+log.title+'</div><div class="log-desc">'+log.desc+'</div><div class="log-time">'+log.time+'</div></div></div>';
+
+var html = '';
+filteredLogs.forEach(function(log) {
+var typeClass = 'log-type-info';
+if(log.type === 'expired') typeClass = 'log-type-expired';
+else if(log.type === 'expiring') typeClass = 'log-type-expiring';
+else if(log.type === 'new') typeClass = 'log-type-new';
+
+html += '<div class="log-item">';
+html += '<span class="log-time">' + log.time + '</span>';
+html += '<span class="log-icon">' + log.icon + '</span>';
+html += '<div class="log-content">';
+html += '<div class="log-title ' + typeClass + '">' + log.title + '</div>';
+if(log.desc) html += '<div class="log-desc">' + log.desc + '</div>';
+html += '</div></div>';
 });
-html+='</div>';
-el.innerHTML=html;
+
+el.innerHTML = html;
 }
-function renderCalendar(){
-document.getElementById('currentDate').textContent=_today.toLocaleDateString();
-var year=_today.getFullYear();
-var startOfYear=new Date(year,0,1);
-var endOfYear=new Date(year,11,31);
-var yearProgress=((_today-startOfYear)/(endOfYear-startOfYear))*100;
-document.getElementById('calendarProgress').style.width=yearProgress+'%';
-var nowPos=yearProgress;
-document.getElementById('calendarNow').style.left='calc('+yearProgress+'% - 6px)';
-var monthsHtml='';
-for(var m=0;m<12;m++){
-var monthPercent=((new Date(year,m,1)-startOfYear)/(endOfYear-startOfYear))*100;
-monthsHtml+='<span style="position:absolute;left:'+monthPercent+'%">'+(m+1)+'月</span>';
-}
-document.getElementById('calendarMonths').innerHTML=monthsHtml;
-var nodesHtml='';
-_data.calendar.forEach(function(ev){
-var evStart=new Date(ev.start);
-var evEnd=new Date(ev.end);
-var evMid=new Date((evStart.getTime()+evEnd.getTime())/2);
-var evPercent=((evMid-startOfYear)/(endOfYear-startOfYear))*100;
-var isPast=evEnd<_today;
-var isCurrent=evStart<=_today&&evEnd>=_today;
-var cls=isPast?'past':isCurrent?'current':'upcoming';
-nodesHtml+='<div class="calendar-node '+cls+'" style="left:'+evPercent+'%"><div class="calendar-node-dot">'+ev.icon+'</div><div class="calendar-node-label">'+ev.name+'</div><div class="calendar-node-info"><div class="info-name">'+ev.name+'</div><div class="info-time">'+ev.start+' ~ '+ev.end+'</div><div class="info-desc">'+ev.desc+'</div></div></div>';
+
+function generateMonitorLogs() {
+var logs = [];
+var now = new Date();
+
+// Active offers
+var active = _v6Offers.filter(function(o){return o.calcStatus === 'active';});
+logs.push({
+time: now.toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}),
+icon: '✅',
+type: 'active',
+title: '当前 ' + active.length + ' 项优惠正在进行中',
+desc: '覆盖 ' + new Set(active.map(function(o){return o.platform;})).size + ' 个平台'
 });
-document.getElementById('calendarNodes').innerHTML=nodesHtml;
-}
-function scrollToTop(){
-window.scrollTo({top:0,behavior:'smooth'});
-}
-window.addEventListener('scroll',function(){
-document.getElementById('scrollTop').classList.toggle('show',window.scrollY>200);
+
+// Expiring offers
+var expiring = _v6Offers.filter(function(o){return o.calcStatus === 'expiring';});
+expiring.forEach(function(o) {
+var end = new Date(o.endDate);
+var daysLeft = Math.ceil((end - now) / (1000*60*60*24));
+logs.push({
+time: end.toLocaleDateString('zh-CN', {month:'short', day:'numeric'}),
+icon: '⏰',
+type: 'expiring',
+title: o.bank + ' · ' + o.platform + ' ' + o.typeLabel + ' 即将到期',
+desc: '剩余 ' + daysLeft + ' 天 (' + o.endDate + ')'
 });
-init();
+});
+
+// Expired offers (last 5)
+var expired = _v6Offers.filter(function(o){return o.calcStatus === 'expired';});
+expired.slice(0, 5).forEach(function(o) {
+logs.push({
+time: o.endDate,
+icon: '❌',
+type: 'expired',
+title: o.bank + ' · ' + o.platform + ' ' + o.typeLabel + ' 已到期',
+desc: '已结束 (有效期至 ' + o.endDate + ')'
+});
+});
+
+// Summary stats
+logs.push({
+time: now.toLocaleDateString('zh-CN'),
+icon: '📊',
+type: 'info',
+title: '数据统计：' + _v6Offers.length + ' 条优惠 | ' + _v6Platforms.length + ' 个平台 | ' + _v6Banks.length + ' 家银行',
+desc: '数据版本: ' + _v6Data.version + ' | 更新于: ' + _v6Data.lastUpdated
+});
+
+return logs;
+}
+
+function filterLogType(type, btn) {
+_v6LogFilter = type;
+document.querySelectorAll('#logFilter .filter-btn').forEach(function(b){b.classList.remove('active');});
+btn.classList.add('active');
+renderMonitorLog();
+}
+
+function refreshMonitorLog() {
+_v6Offers = _v6Data.offers.map(function(o) {
+return Object.assign({}, o, {calcStatus: calcOfferStatus(o)});
+});
+renderAll();
+alert('状态已刷新！');
+}
+
+// ============ Favs ============
+function toggleFav(el, title, detail, id) {
+var idx = _v6Favs.findIndex(function(f){return f.id === id;});
+if(idx >= 0) {
+_v6Favs.splice(idx, 1);
+el.textContent = '☆';
+el.classList.remove('active');
+} else {
+_v6Favs.push({id: id, title: title, detail: detail, time: new Date().toISOString()});
+el.textContent = '★';
+el.classList.add('active');
+}
+try {
+localStorage.setItem('pay-favs', JSON.stringify(_v6Favs));
+} catch(e) {}
+updateFavCount();
+}
+
+function toggleFavRank(el, title, detail, id) {
+toggleFav(el, title, detail, id);
+}
+
+function toggleFavPanel() {
+var panel = document.getElementById('favPanel');
+var overlay = document.getElementById('favOverlay');
+panel.classList.toggle('open');
+overlay.classList.toggle('show');
+renderFavList();
+}
+
+function renderFavList() {
+var el = document.getElementById('favList');
+if(_v6Favs.length === 0) {
+el.innerHTML = '<div class="fav-empty">暂无收藏</div>';
+return;
+}
+var html = '';
+_v6Favs.forEach(function(f) {
+html += '<div class="fav-item">';
+html += '<div class="fav-title">' + f.title + '</div>';
+html += '<div class="fav-desc">' + f.detail + '</div>';
+html += '<span class="fav-remove" onclick="removeFav(\'' + f.id + '\')">删除</span>';
+html += '</div>';
+});
+el.innerHTML = html;
+}
+
+function removeFav(id) {
+_v6Favs = _v6Favs.filter(function(f){return f.id !== id;});
+try {
+localStorage.setItem('pay-favs', JSON.stringify(_v6Favs));
+} catch(e) {}
+renderFavList();
+updateFavCount();
+}
+
+function updateFavCount() {
+document.getElementById('favCountNum').textContent = _v6Favs.length;
+}
+
+function exportFavText() {
+if(_v6Favs.length === 0) {alert('暂无收藏');return;}
+var text = '电商支付优惠收藏\n';
+_v6Favs.forEach(function(f) {
+text += '- ' + f.title + ': ' + f.detail + '\n';
+});
+navigator.clipboard.writeText(text).then(function() {
+alert('已复制到剪贴板');
+}).catch(function() {
+prompt('请手动复制：', text);
+});
+}
+
+function exportFavImage() {
+alert('请使用浏览器截图功能保存');
+}
+
+// ============ Tab Switch ============
+function switchTab(tabId, btn) {
+document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+document.getElementById('tab-' + tabId).classList.add('active');
+btn.classList.add('active');
+}
+
+// ============ Theme ============
+function toggleTheme() {
+document.body.classList.toggle('light');
+var btn = document.getElementById('themeBtn');
+btn.textContent = document.body.classList.contains('light') ? '☀️ 亮色' : '🌙 暗色';
+try {
+localStorage.setItem('pay-theme', document.body.classList.contains('light') ? 'light' : 'dark');
+} catch(e) {}
+}
+
+// ============ Utilities ============
+function escapeHtml(str) {
+var d = document.createElement('div');
+d.textContent = str;
+return d.innerHTML;
+}
+
+// ============ Scroll Top ============
+window.addEventListener('scroll', function() {
+var btn = document.getElementById('scrollTopBtn');
+if(window.scrollY > 300) {
+btn.classList.add('show');
+} else {
+btn.classList.remove('show');
+}
+});
+
+// ============ Init ============
+(function initTheme() {
+try {
+var t = localStorage.getItem('pay-theme');
+if(t === 'light') {
+document.body.classList.add('light');
+document.getElementById('themeBtn').textContent = '☀️ 亮色';
+}
+} catch(e) {}
+})();
+
+window.addEventListener('load', function() {
+loadData();
+});
 </script>
 </body>
 </html>
