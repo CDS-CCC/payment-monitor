@@ -1,0 +1,1847 @@
+{
+  "version": "6.0",
+  "lastUpdated": "2026-06-29T10:00:00+08:00",
+  "offers": [
+    {
+      "id": "offer-001",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "工行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满10元立减1元 / 满100元随机立减至高8.8元",
+      "amount": "至高8.8元",
+      "title": "工行抖音立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-002",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "工行",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "alipay",
+      "detail": "首绑信用卡满10.01元减10元",
+      "amount": "10元",
+      "title": "工行抖音首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-003",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "工行",
+      "type": "points",
+      "typeLabel": "积分",
+      "payMethod": "alipay",
+      "detail": "工银i豆当钱花，至高抵30元",
+      "amount": "至高30元",
+      "title": "工行抖音i豆",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-004",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "兴业",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满200减10 / 满1000减15 / 满2000减20 / 满5000减50",
+      "amount": "至高50元",
+      "title": "兴业抖音立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-005",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "中行",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "alipay",
+      "detail": "满200减2-20元(月限1次) / 满500减10元(限1次)",
+      "amount": "至高20元",
+      "title": "中行抖音随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-006",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "交行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "618狂欢季满减超惠享",
+      "amount": "多档立减",
+      "title": "交行抖音立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-007",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "光大",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "alipay",
+      "detail": "一键绑卡送消费大礼包",
+      "amount": "礼包",
+      "title": "光大抖音首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-008",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "浦发",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "新用户一键绑卡领168元券包 / 消费叠加满减",
+      "amount": "168元券",
+      "title": "浦发抖音立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-009",
+      "platform": "抖音",
+      "platformKey": "dy",
+      "bank": "招行",
+      "type": "cashback",
+      "typeLabel": "返现",
+      "payMethod": "alipay",
+      "detail": "储蓄卡快捷支付达标抽锦鲤，至高6180元返现券",
+      "amount": "至高6180元",
+      "title": "招行抖音返现",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-010",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "工行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满388减8 / 满2888减28",
+      "amount": "至高28元",
+      "title": "工行淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-011",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "兴业",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "支付宝支付：满200减10 / 满2000减20 / 满5000减50",
+      "amount": "至高50元",
+      "title": "兴业淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-012",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "中信",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满200减10 / 满2000减30",
+      "amount": "至高30元",
+      "title": "中信淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-013",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "华夏",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满200减10 / 满2000减30",
+      "amount": "至高30元",
+      "title": "华夏淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-014",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "光大",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满200减10 / 满2000减30(至6.30)",
+      "amount": "至高30元",
+      "title": "光大淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-015",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "浦发",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "满100减6(免密) / 满200减10 / 满2000减20",
+      "amount": "至高20元",
+      "title": "浦发淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-016",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "农行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "88VIP专享：满200减15",
+      "amount": "15元",
+      "title": "农行淘宝立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-017",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "多家",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "alipay",
+      "detail": "中行/建行/光大/交行/招行/邮储 500-25/1500-75/5000-200",
+      "amount": "至高200元",
+      "title": "多家淘宝分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-018",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "广发",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "alipay",
+      "detail": "淘宝分期满额享400元立减",
+      "amount": "400元",
+      "title": "广发淘宝分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-019",
+      "platform": "淘宝",
+      "platformKey": "tb",
+      "bank": "光大借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "alipay",
+      "detail": "支付宝收银台选光大借记卡，0.1-100元随机立减",
+      "amount": "至高100元",
+      "title": "光大借记卡淘宝随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-020",
+      "platform": "天猫",
+      "platformKey": "tm",
+      "bank": "兴业",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "支付宝支付：满200减10 / 满2000减20 / 满5000减50",
+      "amount": "至高50元",
+      "title": "兴业天猫立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-021",
+      "platform": "天猫",
+      "platformKey": "tm",
+      "bank": "光大借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "alipay",
+      "detail": "支付宝收银台选光大借记卡，0.1-100元随机立减",
+      "amount": "至高100元",
+      "title": "光大借记卡天猫随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-022",
+      "platform": "天猫",
+      "platformKey": "tm",
+      "bank": "多家",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "alipay",
+      "detail": "平安/浦发/中信：500-25/1500-75/3000-120/5000-200",
+      "amount": "至高200元",
+      "title": "多家天猫分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-023",
+      "platform": "天猫",
+      "platformKey": "tm",
+      "bank": "多家",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "alipay",
+      "detail": "3C类分期：3000-200/6000-400，农行/建行/平安/浦发/中信/交行/邮储",
+      "amount": "至高400元",
+      "title": "天猫3C分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "3C数码",
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-024",
+      "platform": "天猫",
+      "platformKey": "tm",
+      "bank": "交行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "618狂欢季支付即减",
+      "amount": "多档立减",
+      "title": "交行天猫立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-025",
+      "platform": "天猫",
+      "platformKey": "tm",
+      "bank": "浦发",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "alipay",
+      "detail": "分期最高400元立减+随机满减",
+      "amount": "至高400元",
+      "title": "浦发天猫立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-026",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "工行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "jdpay",
+      "detail": "满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)",
+      "amount": "至高28元",
+      "title": "工行京东立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "黄金珠宝",
+        "3C数码",
+        "PLUS会员"
+      ]
+    },
+    {
+      "id": "offer-027",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "工行",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "jdpay",
+      "detail": "首绑信用卡满10.01元减10元",
+      "amount": "10元",
+      "title": "工行京东首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-028",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "工行",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "分期至高立减300元",
+      "amount": "300元",
+      "title": "工行京东分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-029",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "工行",
+      "type": "points",
+      "typeLabel": "积分",
+      "payMethod": "jdpay",
+      "detail": "工银i豆当钱花，至高抵100元",
+      "amount": "至高100元",
+      "title": "工行京东i豆",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-030",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "广发",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "分期支付达标至高500元立减",
+      "amount": "500元",
+      "title": "广发京东分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-031",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "浦发",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "京东分期购最高减500元 / 首绑立减+随机抹零+外卖神券",
+      "amount": "至高500元",
+      "title": "浦发京东分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "外卖",
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-032",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "交行",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "分期满4000元减80元",
+      "amount": "80元",
+      "title": "交行京东分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-033",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "兴业",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "wx",
+      "detail": "京东微信小程序：满100随机0.5-10 / 满300随机1-30",
+      "amount": "至高30元",
+      "title": "兴业京东随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-034",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "浦发借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "jdpay",
+      "detail": "满200减0.2-10元(月限3次) / 外卖满10减2/满20减3",
+      "amount": "至高10元",
+      "title": "浦发借记卡京东随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "外卖"
+      ]
+    },
+    {
+      "id": "offer-035",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "光大借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "jdpay",
+      "detail": "满10元随机0.3-6.18元",
+      "amount": "至高6.18元",
+      "title": "光大借记卡京东随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-036",
+      "platform": "京东",
+      "platformKey": "jd",
+      "bank": "民生",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "jdpay",
+      "detail": "京东分期满减活动",
+      "amount": "详见活动",
+      "title": "民生京东立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-037",
+      "platform": "拼多多",
+      "platformKey": "pdd",
+      "bank": "工行",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "wx",
+      "detail": "满200元随机至高立减18元 / 满1888元立减18元",
+      "amount": "至高18元",
+      "title": "工行拼多多随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-038",
+      "platform": "拼多多",
+      "platformKey": "pdd",
+      "bank": "工行",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "wx",
+      "detail": "首绑信用卡满8.01元立减8元",
+      "amount": "8元",
+      "title": "工行拼多多首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-039",
+      "platform": "拼多多",
+      "platformKey": "pdd",
+      "bank": "浦发",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "wx",
+      "detail": "满500减3/满1500减12/满4000减25",
+      "amount": "至高25元",
+      "title": "浦发拼多多立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-040",
+      "platform": "拼多多",
+      "platformKey": "pdd",
+      "bank": "交行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "wx",
+      "detail": "618狂欢季支付满减",
+      "amount": "多档立减",
+      "title": "交行拼多多立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-041",
+      "platform": "拼多多",
+      "platformKey": "pdd",
+      "bank": "浦发",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "wx",
+      "detail": "首绑立减+日常满减 / 分期至高166元",
+      "amount": "至高166元",
+      "title": "浦发拼多多首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-042",
+      "platform": "拼多多",
+      "platformKey": "pdd",
+      "bank": "招行",
+      "type": "cashback",
+      "typeLabel": "返现",
+      "payMethod": "wx",
+      "detail": "储蓄卡快捷支付达标抽锦鲤",
+      "amount": "至高6180元",
+      "title": "招行拼多多返现",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-043",
+      "platform": "小红书",
+      "platformKey": "xhs",
+      "bank": "邮储",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "云闪付支付：满100减10元，每日180名额",
+      "amount": "10元",
+      "title": "邮储小红书立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-044",
+      "platform": "小红书",
+      "platformKey": "xhs",
+      "bank": "邮储",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "union",
+      "detail": "满10元随机减1-66元，每日720名额",
+      "amount": "至高66元",
+      "title": "邮储小红书随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-045",
+      "platform": "小红书",
+      "platformKey": "xhs",
+      "bank": "光大",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "union",
+      "detail": "一键绑卡至抖音支付，送消费大礼包",
+      "amount": "礼包",
+      "title": "光大小红书首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-046",
+      "platform": "支付宝",
+      "platformKey": "支付宝",
+      "bank": "工行",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "alipay",
+      "detail": "碰一下满25随机减至高6元 / 天天减满20随机至高6.18元",
+      "amount": "至高6.18元",
+      "title": "工行支付宝随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-047",
+      "platform": "支付宝",
+      "platformKey": "支付宝",
+      "bank": "工行",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "alipay",
+      "detail": "首绑信用卡满15.01元立减15元",
+      "amount": "15元",
+      "title": "工行支付宝首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-048",
+      "platform": "支付宝",
+      "platformKey": "支付宝",
+      "bank": "工行",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "alipay",
+      "detail": "分期至高减200元",
+      "amount": "200元",
+      "title": "工行支付宝分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-049",
+      "platform": "支付宝",
+      "platformKey": "支付宝",
+      "bank": "工行借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "alipay",
+      "detail": "连续10天消费立减，满20即参与",
+      "amount": "随机立减",
+      "title": "工行借记卡支付宝随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-050",
+      "platform": "支付宝",
+      "platformKey": "支付宝",
+      "bank": "多家",
+      "type": "subsidy",
+      "typeLabel": "贴息",
+      "payMethod": "alipay",
+      "detail": "广发/农行/中行/邮储 账单分期年化1%财政贴息，至高3000元",
+      "amount": "至高3000元",
+      "title": "财政贴息",
+      "status": "expiring",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-051",
+      "platform": "支付宝",
+      "platformKey": "支付宝",
+      "bank": "招行",
+      "type": "cashback",
+      "typeLabel": "返现",
+      "payMethod": "alipay",
+      "detail": "砸金蛋：至高500元立减金 / 抽锦鲤：至高6180元返现券",
+      "amount": "至高6180元",
+      "title": "招行支付宝返现",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-052",
+      "platform": "微信",
+      "platformKey": "wx",
+      "bank": "工行",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "wx",
+      "detail": "首绑信用卡满15.01元减15元",
+      "amount": "15元",
+      "title": "工行微信首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-053",
+      "platform": "微信",
+      "platformKey": "wx",
+      "bank": "光大",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "wx",
+      "detail": "首绑微信领立减券",
+      "amount": "立减券",
+      "title": "光大微信首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-054",
+      "platform": "微信",
+      "platformKey": "wx",
+      "bank": "农行",
+      "type": "points",
+      "typeLabel": "积分",
+      "payMethod": "wx",
+      "detail": "微信支付积分惊喜·网购狂欢盛典",
+      "amount": "积分加速",
+      "title": "农行微信积分",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-055",
+      "platform": "微信",
+      "platformKey": "wx",
+      "bank": "招行",
+      "type": "cashback",
+      "typeLabel": "返现",
+      "payMethod": "wx",
+      "detail": "储蓄卡快捷支付达标抽锦鲤",
+      "amount": "至高6180元",
+      "title": "招行微信返现",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-056",
+      "platform": "微信",
+      "platformKey": "wx",
+      "bank": "华夏",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "wx",
+      "detail": "绑卡最高减167元",
+      "amount": "至高167元",
+      "title": "华夏微信立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-057",
+      "platform": "微信",
+      "platformKey": "wx",
+      "bank": "交行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "wx",
+      "detail": "最红星期五·周周5折 / 微信支付宝刷卡金",
+      "amount": "5折",
+      "title": "交行微信立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-058",
+      "platform": "云闪付",
+      "platformKey": "union",
+      "bank": "工行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "中免线下满2000减200 / 62开头信用卡满6.01减6",
+      "amount": "至高200元",
+      "title": "工行云闪付立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-059",
+      "platform": "云闪付",
+      "platformKey": "union",
+      "bank": "邮储",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "小红书满100减10 / 随机减1-66",
+      "amount": "至高66元",
+      "title": "邮储云闪付立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-060",
+      "platform": "云闪付",
+      "platformKey": "union",
+      "bank": "建行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "华润万象满300减26-66 / 奥特莱斯满1666减166",
+      "amount": "至高166元",
+      "title": "建行云闪付立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-061",
+      "platform": "云闪付",
+      "platformKey": "union",
+      "bank": "浦发借记卡",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "携程满100减10 / 滴滴满30减5",
+      "amount": "至高10元",
+      "title": "浦发借记卡云闪付立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-062",
+      "platform": "云闪付",
+      "platformKey": "union",
+      "bank": "浦发",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "国补焕新返现+随机立减",
+      "amount": "返现",
+      "title": "浦发云闪付立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "国补"
+      ]
+    },
+    {
+      "id": "offer-063",
+      "platform": "云闪付",
+      "platformKey": "union",
+      "bank": "江南农商",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "union",
+      "detail": "中石油满100随机5-10元 / 每周四支付立减10元",
+      "amount": "至高10元",
+      "title": "江南农商云闪付",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-064",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "京东金融",
+      "type": "cashback",
+      "typeLabel": "免单",
+      "payMethod": "jdpay",
+      "detail": "搜\"支付免单\"，5.30-6.18每天抽，海量名额，银行卡支付均有机会",
+      "amount": "免单",
+      "title": "京东支付免单",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-065",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "光大借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "jdpay",
+      "detail": "京东支付选光大借记卡，满10元随机立减0.3-6.18元",
+      "amount": "至高6.18元",
+      "title": "光大京东支付随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-066",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "光大信用卡",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "分期支付满100随机减0.1-300元 / 满1000减30(6期+) / 满4000减120(12期+)",
+      "amount": "至高300元",
+      "title": "光大京东支付分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-067",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "工行",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "京东支付分期至高立减300元",
+      "amount": "300元",
+      "title": "工行京东支付分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-068",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "广发",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "京东支付分期至高立减500元",
+      "amount": "500元",
+      "title": "广发京东支付分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-069",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "浦发",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "京东分期购最高减500元",
+      "amount": "500元",
+      "title": "浦发京东支付分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-070",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "交行",
+      "type": "installment",
+      "typeLabel": "分期",
+      "payMethod": "jdpay",
+      "detail": "分期满4000元减80元",
+      "amount": "80元",
+      "title": "交行京东支付分期",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息"
+      ]
+    },
+    {
+      "id": "offer-071",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "工行",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "jdpay",
+      "detail": "满1000减15/满2888减28(3C/黄金)/满588减18(PLUS)",
+      "amount": "至高28元",
+      "title": "工行京东支付立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "黄金珠宝",
+        "3C数码",
+        "PLUS会员"
+      ]
+    },
+    {
+      "id": "offer-072",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "工行",
+      "type": "bind",
+      "typeLabel": "首绑",
+      "payMethod": "jdpay",
+      "detail": "首绑信用卡满10.01减10元",
+      "amount": "10元",
+      "title": "工行京东支付首绑",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "新用户"
+      ]
+    },
+    {
+      "id": "offer-073",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "浦发借记卡",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "jdpay",
+      "detail": "满200减0.2-10元(月限3次)",
+      "amount": "至高10元",
+      "title": "浦发借记卡京东支付随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-074",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "兴业",
+      "type": "random",
+      "typeLabel": "随机减",
+      "payMethod": "jdpay",
+      "detail": "满100随机0.5-10 / 满300随机1-30",
+      "amount": "至高30元",
+      "title": "兴业京东支付随机减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-075",
+      "platform": "京东支付",
+      "platformKey": "jdpay",
+      "bank": "工行",
+      "type": "points",
+      "typeLabel": "积分",
+      "payMethod": "jdpay",
+      "detail": "工银i豆当钱花，至高抵100元",
+      "amount": "至高100元",
+      "title": "工行京东支付i豆",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-076",
+      "platform": "白条支付",
+      "platformKey": "baitiao",
+      "bank": "白条",
+      "type": "installment",
+      "typeLabel": "免息",
+      "payMethod": "baitiao",
+      "detail": "每人每天领1次6期免息券，覆盖3C/家电/美妆/食品等海量商品，618期间可领多张",
+      "amount": "6期免息",
+      "title": "白条全民6期免息",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "美妆个护",
+        "3C数码",
+        "分期免息",
+        "家电"
+      ]
+    },
+    {
+      "id": "offer-077",
+      "platform": "白条支付",
+      "platformKey": "baitiao",
+      "bank": "白条",
+      "type": "installment",
+      "typeLabel": "免息",
+      "payMethod": "baitiao",
+      "detail": "激活白条用户至高享24期免息，部分国补商品可叠加",
+      "amount": "24期免息",
+      "title": "白条至高24期免息",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息",
+        "国补"
+      ]
+    },
+    {
+      "id": "offer-078",
+      "platform": "白条支付",
+      "platformKey": "baitiao",
+      "bank": "白条",
+      "type": "reduce",
+      "typeLabel": "立减",
+      "payMethod": "baitiao",
+      "detail": "新开通白条用户：1张6期免息券+1张立减25元券(可叠免息)",
+      "amount": "25元",
+      "title": "白条新户立减",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-079",
+      "platform": "白条支付",
+      "platformKey": "baitiao",
+      "bank": "白条",
+      "type": "cashback",
+      "typeLabel": "返现",
+      "payMethod": "baitiao",
+      "detail": "\"大牌帮你还白条\"活动，晒单抽8888元还款红包+12期免息神券",
+      "amount": "至高8888元",
+      "title": "大牌帮你还白条",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-080",
+      "platform": "白条支付",
+      "platformKey": "baitiao",
+      "bank": "白条",
+      "type": "cashback",
+      "typeLabel": "提额",
+      "payMethod": "baitiao",
+      "detail": "618期间白条提额，瓜分万亿额度，至高提额到10万",
+      "amount": "至高10万额度",
+      "title": "白条提额",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": []
+    },
+    {
+      "id": "offer-081",
+      "platform": "白条支付",
+      "platformKey": "baitiao",
+      "bank": "白条",
+      "type": "installment",
+      "typeLabel": "免息",
+      "payMethod": "baitiao",
+      "detail": "国补商品叠加白条免息，已接入白条免息的国补商户超60%，转化提升32%",
+      "amount": "国补+免息",
+      "title": "白条国补叠加免息",
+      "status": "active",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30",
+      "source": "618大促",
+      "tags": [
+        "分期免息",
+        "国补"
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "name": "年货节",
+      "icon": "🧧",
+      "start": "2026-01-05",
+      "end": "2026-01-28",
+      "desc": "春节前最后一波大促",
+      "platforms": [
+        "京东",
+        "淘宝",
+        "天猫",
+        "拼多多"
+      ]
+    },
+    {
+      "name": "38女神节",
+      "icon": "🌸",
+      "start": "2026-03-01",
+      "end": "2026-03-08",
+      "desc": "美妆个护、女装专属优惠",
+      "platforms": [
+        "淘宝",
+        "天猫",
+        "抖音",
+        "小红书"
+      ]
+    },
+    {
+      "name": "五一出游季",
+      "icon": "✈️",
+      "start": "2026-04-25",
+      "end": "2026-05-05",
+      "desc": "出行旅游、酒店机票满减",
+      "platforms": [
+        "京东",
+        "淘宝",
+        "飞猪"
+      ]
+    },
+    {
+      "name": "618开门红",
+      "icon": "🚀",
+      "start": "2026-05-31",
+      "end": "2026-06-03",
+      "desc": "京东/天猫第一波爆发",
+      "platforms": [
+        "京东",
+        "天猫",
+        "淘宝"
+      ]
+    },
+    {
+      "name": "618巅峰期",
+      "icon": "🔥",
+      "start": "2026-06-15",
+      "end": "2026-06-18",
+      "desc": "全平台最高优惠叠加期",
+      "platforms": [
+        "京东",
+        "天猫",
+        "淘宝",
+        "抖音",
+        "拼多多",
+        "小红书"
+      ]
+    },
+    {
+      "name": "618返场",
+      "icon": "🔄",
+      "start": "2026-06-19",
+      "end": "2026-06-20",
+      "desc": "部分延续，适合捡漏",
+      "platforms": [
+        "京东",
+        "天猫"
+      ]
+    },
+    {
+      "name": "暑期清凉季",
+      "icon": "🍉",
+      "start": "2026-07-01",
+      "end": "2026-07-15",
+      "desc": "冰品家电、防晒消暑专场",
+      "platforms": [
+        "京东",
+        "天猫",
+        "拼多多"
+      ]
+    },
+    {
+      "name": "7月会员日",
+      "icon": "👑",
+      "start": "2026-07-18",
+      "end": "2026-07-20",
+      "desc": "京东PLUS/淘宝88VIP专属满减",
+      "platforms": [
+        "京东",
+        "淘宝"
+      ]
+    },
+    {
+      "name": "818大促",
+      "icon": "🛒",
+      "start": "2026-08-08",
+      "end": "2026-08-18",
+      "desc": "苏宁/京东818年中主场",
+      "platforms": [
+        "京东",
+        "苏宁"
+      ]
+    },
+    {
+      "name": "开学季",
+      "icon": "📚",
+      "start": "2026-08-25",
+      "end": "2026-09-05",
+      "desc": "数码3C、文具书包满减",
+      "platforms": [
+        "京东",
+        "淘宝",
+        "拼多多"
+      ]
+    },
+    {
+      "name": "9月丰收节",
+      "icon": "🌾",
+      "start": "2026-09-10",
+      "end": "2026-09-17",
+      "desc": "助农专场、生鲜食品满减",
+      "platforms": [
+        "拼多多",
+        "淘宝",
+        "京东"
+      ]
+    },
+    {
+      "name": "国庆出游季",
+      "icon": "🇨🇳",
+      "start": "2026-09-28",
+      "end": "2026-10-07",
+      "desc": "出行旅游、酒店机票满减",
+      "platforms": [
+        "京东",
+        "淘宝",
+        "飞猪",
+        "携程"
+      ]
+    },
+    {
+      "name": "双11预售",
+      "icon": "预售",
+      "start": "2026-10-24",
+      "end": "2026-10-31",
+      "desc": "定金膨胀、早鸟优惠",
+      "platforms": [
+        "京东",
+        "天猫",
+        "淘宝"
+      ]
+    },
+    {
+      "name": "双11狂欢",
+      "icon": "💥",
+      "start": "2026-11-01",
+      "end": "2026-11-11",
+      "desc": "全年最大促销",
+      "platforms": [
+        "京东",
+        "天猫",
+        "淘宝",
+        "抖音",
+        "拼多多",
+        "小红书"
+      ]
+    },
+    {
+      "name": "双12",
+      "icon": "🎁",
+      "start": "2026-12-06",
+      "end": "2026-12-12",
+      "desc": "年终清仓满减",
+      "platforms": [
+        "淘宝",
+        "天猫",
+        "拼多多"
+      ]
+    },
+    {
+      "name": "圣诞元旦",
+      "icon": "🎄",
+      "start": "2026-12-23",
+      "end": "2026-12-31",
+      "desc": "跨年优惠叠加",
+      "platforms": [
+        "京东",
+        "淘宝",
+        "天猫",
+        "拼多多"
+      ]
+    }
+  ],
+  "platforms": [
+    {
+      "key": "jd",
+      "name": "京东",
+      "icon": "京",
+      "color": "#e23a3a",
+      "desc": "自营+3C家电强势"
+    },
+    {
+      "key": "tb",
+      "name": "淘宝",
+      "icon": "淘",
+      "color": "#ff6a00",
+      "desc": "万能集市·中小商家"
+    },
+    {
+      "key": "tm",
+      "name": "天猫",
+      "icon": "猫",
+      "color": "#ff0036",
+      "desc": "品牌旗舰·品质保障"
+    },
+    {
+      "key": "dy",
+      "name": "抖音",
+      "icon": "抖",
+      "color": "#fe2c55",
+      "desc": "直播电商·内容种草"
+    },
+    {
+      "key": "pdd",
+      "name": "拼多多",
+      "icon": "拼",
+      "color": "#e02e24",
+      "desc": "百亿补贴·极致性价比"
+    },
+    {
+      "key": "xhs",
+      "name": "小红书",
+      "icon": "红",
+      "color": "#ff2442",
+      "desc": "种草社区·美妆个护"
+    },
+    {
+      "key": "alipay",
+      "name": "支付宝",
+      "icon": "付",
+      "color": "#1677ff",
+      "desc": "碰一下·生活缴费"
+    },
+    {
+      "key": "wx",
+      "name": "微信",
+      "icon": "微",
+      "color": "#07c160",
+      "desc": "小程序·社交电商"
+    },
+    {
+      "key": "union",
+      "name": "云闪付",
+      "icon": "银",
+      "color": "#e60012",
+      "desc": "62折·交通出行"
+    },
+    {
+      "key": "jdpay",
+      "name": "京东支付",
+      "icon": "付",
+      "color": "#c62828",
+      "desc": "京东官方支付"
+    },
+    {
+      "key": "baitiao",
+      "name": "白条支付",
+      "icon": "白",
+      "color": "#1565c0",
+      "desc": "京东信用消费"
+    }
+  ],
+  "banks": [
+    {
+      "name": "工商银行",
+      "alias": [
+        "工行",
+        "工商"
+      ],
+      "tier": 1
+    },
+    {
+      "name": "招商银行",
+      "alias": [
+        "招行",
+        "招商"
+      ],
+      "tier": 1
+    },
+    {
+      "name": "广发银行",
+      "alias": [
+        "广发"
+      ],
+      "tier": 1
+    },
+    {
+      "name": "浦发银行",
+      "alias": [
+        "浦发"
+      ],
+      "tier": 1
+    },
+    {
+      "name": "交通银行",
+      "alias": [
+        "交行"
+      ],
+      "tier": 1
+    },
+    {
+      "name": "兴业银行",
+      "alias": [
+        "兴业"
+      ],
+      "tier": 1
+    },
+    {
+      "name": "光大银行",
+      "alias": [
+        "光大",
+        "光大信用卡",
+        "光大借记卡"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "中信银行",
+      "alias": [
+        "中信"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "中国银行",
+      "alias": [
+        "中行"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "建设银行",
+      "alias": [
+        "建行"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "农业银行",
+      "alias": [
+        "农行"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "邮储银行",
+      "alias": [
+        "邮储"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "华夏银行",
+      "alias": [
+        "华夏"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "民生银行",
+      "alias": [
+        "民生"
+      ],
+      "tier": 2
+    },
+    {
+      "name": "江南农商行",
+      "alias": [
+        "江南农商"
+      ],
+      "tier": 3
+    }
+  ]
+}
